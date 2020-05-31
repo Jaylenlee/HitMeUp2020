@@ -11,7 +11,7 @@ export default class Login extends React.Component {
                 <View style = {styles.logoContainer}>
                     <Image
                         style = {styles.logo} 
-                        source ={require('../../pic/pic.JPG')}
+                        source ={require('../../pic/phoventlogo.png')}
                     />
                     <Text stye = {styles.title}>
                         Phovent is the best
