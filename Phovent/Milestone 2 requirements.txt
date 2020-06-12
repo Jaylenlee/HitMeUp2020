@@ -1,9 +1,0 @@
-Milestone 2 requirements
-Video progress
-System log for bugs
-User guide
-
-Problems:
-BreadCrumbs where to learn
-Where to learn messaging
-How to publish app
