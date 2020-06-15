@@ -1,0 +1,4 @@
+Dependencies:
+navigation stack
+react navigation
+native-base
