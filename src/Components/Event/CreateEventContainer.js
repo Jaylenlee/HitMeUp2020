@@ -56,6 +56,7 @@ class CreateEventContainer extends React.Component {
         return (
             <KeyboardAvoidingView behavior="padding">
                 <Header title = "Create Event"/>
+                <Text style={{padding: 10}}>Personalise your own event!</Text>
                 <View style={styles.contentStyle}>
                     <TextInput
                         style={styles.textInput}
