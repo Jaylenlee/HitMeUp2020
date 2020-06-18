@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, Image, TextInput, Text, StyleSheet,
          KeyboardAvoidingView, StatusBar, TouchableOpacity } from 'react-native';
-import BlueButton from '../GlobalStyles/BlueButton';
-import firebaseDb from '../Database/firebaseDb';
-import Header from '../GlobalStyles/Header';
+import BlueButton from '../component/BlueButton';
+import firebaseDb from '../database/firebaseDb';
+import Header from '../component/Header';
 
 class CreateEventContainer extends React.Component {
     state = {
@@ -28,7 +28,7 @@ class CreateEventContainer extends React.Component {
 
     handleCreateUser = () =>
         firebaseDb
-            .db
+            .firestore()
             .collection('events')
             .add({
                 eventName: this.state.eventName,
@@ -54,9 +54,12 @@ class CreateEventContainer extends React.Component {
                 activityDetails, isPlanned, createSuccessful } = this.state
 
         return (
-            <KeyboardAvoidingView behavior="padding">
+            <KeyboardAvoidingView behavior="padding" style={{backgroundColor: '#9eddff', flex: 1}}>
                 <Header title = "Create Event"/>
-                <Text style={{padding: 10}}>Personalise your own event!</Text>
+                <View style={{alignItems: 'center', backgroundColor: '#ffec70'}}>
+                    <Text style={{padding: 10}}>Personalise your own event!</Text>
+                </View>
+
                 <View style={styles.contentStyle}>
                     <TextInput
                         style={styles.textInput}
@@ -122,7 +125,7 @@ class CreateEventContainer extends React.Component {
                         returnKeyType="next"
                         ref={(detailsInput) => this.detailsInput = detailsInput}
                     />
-                    <Text style={{paddingBottom: 10}}>
+                    <Text style={{paddingBottom: 10, paddingTop: 25}}>
                         Activity planned out?
                     </Text>
                     </View>
@@ -158,7 +161,7 @@ class CreateEventContainer extends React.Component {
                     </View>
                     {
                         createSuccessful &&
-                        (alert('Successful Event Creation') && this.setState({createSuccessful: false}))
+                        (alert('Successful Event Creation'))
                     }
             </KeyboardAvoidingView>
         );
@@ -168,16 +171,17 @@ class CreateEventContainer extends React.Component {
 const styles = StyleSheet.create({
     contentStyle: {
         alignItems: 'center',
-        paddingTop: 10
+        paddingTop: 30
     },
     textInput: {
         borderWidth: 1,
         borderColor: 'black',
+        backgroundColor: 'white',
         color: 'black',
         fontSize: 15,
-        marginBottom: 8,
+        marginBottom: 10,
         width: 200,
-        height: 30,
+        height: 35,
         padding: 5
     },
     button: {
@@ -189,7 +193,7 @@ const styles = StyleSheet.create({
     },
     addButtonS: {
         width: 80,
-        backgroundColor: 'rgba(163, 196, 255, 0.5)',
+        backgroundColor: 'rgba(163, 196, 255, 0.3)',
         alignItems: 'center',
         justifyContent: 'center',
         height: 35
@@ -203,7 +207,7 @@ const styles = StyleSheet.create({
     },
     addButtonText: {
         color: 'black',
-        fontSize: 18,
+        fontSize: '18',
         fontWeight: '700'
     },
     tabStyle: {
