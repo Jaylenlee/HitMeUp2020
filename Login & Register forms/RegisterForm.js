@@ -117,6 +117,7 @@ class RegisterForm extends React.Component {
                                     onChangeText={this.handleUpdateUsername}
                                     value={username}
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.emailInput.focus()}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
@@ -129,6 +130,8 @@ class RegisterForm extends React.Component {
                                     value={email}
                                     keyboardType="email-address"
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.passwordInput.focus()}
+                                    ref={(input) => this.emailInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
@@ -140,6 +143,8 @@ class RegisterForm extends React.Component {
                                     onChangeText={this.handleUpdatePassword}
                                     value={password}
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.genderInput.focus()}
+                                    ref={(input) => this.passwordInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     secureTextEntry
@@ -152,6 +157,8 @@ class RegisterForm extends React.Component {
                                     onChangeText={this.handleUpdateGender}
                                     value={gender}
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.ageInput.focus()}
+                                    ref={(input) => this.genderInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
@@ -164,6 +171,8 @@ class RegisterForm extends React.Component {
                                     value={age}
                                     keyboardType= "numeric"
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.locationInput.focus()}
+                                    ref={(input) => this.ageInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
@@ -174,8 +183,9 @@ class RegisterForm extends React.Component {
                                 <TextInput
                                     onChangeText={this.handleUpdateLocation}
                                     value={location}
-                                    multiline
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.occupationInput.focus()}
+                                    ref={(input) => this.locationInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
@@ -187,6 +197,8 @@ class RegisterForm extends React.Component {
                                     onChangeText={this.handleUpdateOccupation}
                                     value={occupation}
                                     returnKeyType="next"
+                                    onSubmitEditing={() => this.interestInput.focus()}
+                                    ref={(input) => this.occupationInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
@@ -199,6 +211,7 @@ class RegisterForm extends React.Component {
                                     value={interests}
                                     multiline
                                     returnKeyType="go"
+                                    ref={(input) => this.interestInput = input}
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     style = {styles.input}
