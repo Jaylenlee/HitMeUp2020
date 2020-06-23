@@ -18,6 +18,7 @@ class RegisterForm extends React.Component {
         location: '',
         occupation: '',
         interests: '',
+        photo: null,
     };
 
     handleUpdateUsername = (username) => this.setState({username});
@@ -99,9 +100,9 @@ class RegisterForm extends React.Component {
                         <Text style={styles.greeting}>{'Please fill in your profile particulars.'}</Text>
                         
                         <View style={styles.uploadIcon}>
-                            <TouchableOpacity onPress={() => this.handleUpdatePhoto()}>
-                                <Image source={{uri: this.state.photo}}></Image>
-                                <Ionicons name="ios-add" size={48} color="#00ff55" style={{paddingBottom: 180}} ></Ionicons>
+                            <TouchableOpacity onPress={() => this.handleUpdatePhoto()} style={styles.photoPlaceholder}>
+                                <Image source={{uri: this.state.photo}} style={styles.photo}></Image>
+                                <Ionicons name="ios-add" size={48} color="#00ff55" style={styles.addIcon} ></Ionicons>
                             </TouchableOpacity>
                         </View>
 
@@ -288,6 +289,27 @@ const styles = StyleSheet.create({
     signUpText: {
         fontWeight: '500',
         color: '#E9446A'
+    },
+
+    photo: {
+        position: 'absolute',
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+    },
+
+    photoPlaceholder: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        marginTop: 48,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    addIcon: {
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
