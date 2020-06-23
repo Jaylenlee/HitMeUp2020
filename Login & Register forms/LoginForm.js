@@ -29,7 +29,7 @@ class LoginForm extends React.Component {
                 />
                 <ImageBackground
                     source={{uri: 'https://c7.uihere.com/files/724/409/150/abstract-light-blue-wave-background.jpg'}}
-                    style={{width: undefined, padding: 16, paddingTop: 48}}
+                    style={{width: undefined, padding: 16, flex: 1, paddingTop: 48}}
                 >
                     <Text style={styles.greeting}>{'Hello again.\nWelcome back!'}</Text>
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     },
     greeting: {
         marginTop: 32,
-        fontSIze: 18,
+        fontSize: 18,
         fontWeight: '400',
         textAlign: 'center'
     },
