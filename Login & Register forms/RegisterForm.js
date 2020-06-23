@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, StatusBar, ScrollView, KeyboardAvoidingView, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, StatusBar, ScrollView, KeyboardAvoidingView, ImageBackground, Image } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import firebaseDb from '../Database/firebaseDb';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import UserPermission from './UserPermission';
+import * as ImagePicker from 'expo-image-picker';
 
 class RegisterForm extends React.Component {
     state = {
@@ -26,9 +28,21 @@ class RegisterForm extends React.Component {
     handleUpdateLocation = (location) => this.setState({location});
     handleUpdateOccupation = (occupation) => this.setState({occupation});
     handleUpdateInterests = (interests) => this.setState({interests});
+    handleUpdatePhoto = async () => {
+        UserPermission.getCameraPermission()
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3]
+        })
+
+        if(!result.cancelled) {
+            this.setState({photo: result.uri})
+        }
+    };
 
     handleCreateUser = () => {
-        const {username, email, password, signUpSuccess, errorMessage, gender,age,location,occupation, interests} = this.state;
+        const {username, email, password, signUpSuccess, errorMessage, gender,age,location,occupation, interests, photo} = this.state;
         firebaseDb
             .auth
             .createUserWithEmailAndPassword(email, password)
@@ -45,14 +59,23 @@ class RegisterForm extends React.Component {
                     location: location,
                     occupation: occupation,
                     interests: interests,
-                    photo: "https://cdn4.iconfinder.com/data/icons/political-elections/50/46-512.png",
+                    photo: photo,
                     uid: user.uid,
                 }).catch(error => this.setState({errorMessage: error.message}));
+                
                 firebaseDb.db
                 .collection('friendlist')
                 .doc(user.uid)
                 .set({
                     friendlist: []
+                }).catch(error => this.setState({errorMessage: error.message}));
+
+                firebaseDb.db
+                .collection('notification')
+                .doc(user.uid)
+                .set({
+                    friendRequest: [],
+                    eventInvite: []
                 }).catch(error => this.setState({errorMessage: error.message}));
 
                 return user.updateProfile({
@@ -74,9 +97,12 @@ class RegisterForm extends React.Component {
                         style={{width: undefined, padding: 16, paddingTop: 48}}
                     >
                         <Text style={styles.greeting}>{'Please fill in your profile particulars.'}</Text>
-
+                        
                         <View style={styles.uploadIcon}>
-                            <Ionicons name="ios-add" size={48} color="#00ff55" style={{paddingBottom: 80}} ></Ionicons>
+                            <TouchableOpacity onPress={() => this.handleUpdatePhoto()}>
+                                <Image source={{uri: this.state.photo}}></Image>
+                                <Ionicons name="ios-add" size={48} color="#00ff55" style={{paddingBottom: 180}} ></Ionicons>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styles.errorMessage}>
@@ -211,7 +237,7 @@ const styles = StyleSheet.create({
     },
     greeting: {
         marginTop: 32,
-        fontSIze: 18,
+        fontSize: 18,
         fontWeight: '400',
         textAlign: 'center'
     },
