@@ -3,6 +3,8 @@ import {StyleSheet, View, Text, TextInput, SafeAreaView, Image, ScrollView, Touc
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
 import {Thumbnail} from 'native-base';
+import UserPermission from '../Login/UserPermission';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EditProfile({navigation}) {
     
@@ -15,48 +17,7 @@ export default function EditProfile({navigation}) {
     const [occupation, setOccupation] = useState(navigation.getParam("info", "").occupation);
     const [interests, setInterests] = useState(navigation.getParam("info", "").interests);
     const [photo, setPhoto] = useState(navigation.getParam("info", "").photo);
-
-    /*handleUpdateProfile = () => {
-        firebaseDb.db
-        .collection('profile')
-        .add({
-            username: username,
-            email: email,
-            gender: gender,
-            age: age,
-            location: location,
-            occupation: occupation,
-            interest: interest
-        }).catch(err => console.error(err))
-    }*/    
     
-    /*const[info, setInfo] = useState[(
-        {placeholder: 'Username', keyboardType: 'default', multiline: false},
-        {placeholder: 'Email', keyboardType: 'email-adress', multiline: false},
-        {placeholder: 'Gender', keyboardType: 'default', multiline: false},
-        {placeholder: 'Age', keyboardType: 'numeric', multiline: false},
-        {placeholder: 'Location', keyboardType: 'default', multiline: true},
-        {placeholder: 'Occupation', keyboardType: 'default', multiline: false},
-        {placeholder: 'Interests/Hobbies', keyboardType: 'default', multiline: true}
-    )]
-
-    <FlatList
-        data = {info}
-        renderItem={({item}) => (
-            <TextInput
-                placeholder="Username"  
-                //onChangeText={this.handleUpdateUsername}
-                //value={username}
-                placeholderTextColor = "rgba(255,255,255,0.7)"
-                returnKeyType="next"
-                //onSubmitEditing={() => this.emailInput.focus()}
-                autoCapitalize="none"
-                autoCorrect={false}
-                style = {styles.input}
-            />
-        )}
-    />*/
-     
     return(
         <SafeAreaView style={styles.container}>
             <ScrollView showVerticalScrollIndicator={false}>
@@ -70,8 +31,19 @@ export default function EditProfile({navigation}) {
                     </View>
                     <View style={styles.active}></View>
                     <View style={styles.add}>
-                        <TouchableOpacity>
-                               <Ionicons name="ios-add" size={48} color="#00ff55" style={{marginTop: 6, marginLeft:2}}></Ionicons>
+                        <TouchableOpacity style={styles.photoPlaceholder} onPress={() => {
+                            UserPermission.getCameraPermission()
+                            let result = ImagePicker.launchImageLibraryAsync({
+                                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                                allowsEditing: true,
+                                aspect: [4, 3]
+                            })
+
+                            if(!result.cancelled) {
+                                this.setPhoto(result.uri)
+                            }
+                        }}>
+                               <Ionicons name="ios-add" size={48} color="#00ff55" style={styles.addIcon}></Ionicons>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -82,7 +54,7 @@ export default function EditProfile({navigation}) {
                         value={username}
                         placeholderTextColor = "rgba(0,0,0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.emailInput.focus()}
+                        onSubmitEditing={() => this.emailInput.focus()}
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
@@ -93,12 +65,12 @@ export default function EditProfile({navigation}) {
                         value={email}
                         placeholderTextColor = "rgba(0, 0, 0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.passwordInput.focus()}
+                        onSubmitEditing={() => this.genderInput.focus()}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
-                        //ref={(input) => this.emailInput = input}
+                        ref={(input) => this.emailInput = input}
                     />
                     <TextInput
                         placeholder="Gender"
@@ -106,12 +78,11 @@ export default function EditProfile({navigation}) {
                         value={gender}
                         placeholderTextColor = "rgba(0,0,0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.passwordInput.focus()}
-                        //keyboardType="email-address"
+                        onSubmitEditing={() => this.ageInput.focus()}
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
-                        //ref={(input) => this.emailInput = input}
+                        ref={(input) => this.genderInput = input}
                     />
                     <TextInput
                         placeholder="Age"
@@ -119,26 +90,25 @@ export default function EditProfile({navigation}) {
                         value={Number(age).toString()}
                         placeholderTextColor = "rgba(0,0,0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.passwordInput.focus()}
+                        onSubmitEditing={() => this.locationInput.focus()}
                         keyboardType="numeric"
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
-                        //ref={(input) => this.emailInput = input}
+                        ref={(input) => this.ageInput = input}
                     />
                     <TextInput
                         placeholder="Location"
-                        multiline
                         onChangeText={(value) => setLocation(value)}
                         value={location}
                         placeholderTextColor = "rgba(0,0,0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.passwordInput.focus()}
+                        onSubmitEditing={() => this.occupationInput.focus()}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
-                        //ref={(input) => this.emailInput = input}
+                        ref={(input) => this.locationInput = input}
                     />
                     <TextInput
                         placeholder="Occupation"
@@ -146,12 +116,12 @@ export default function EditProfile({navigation}) {
                         value={occupation}
                         placeholderTextColor = "rgba(0,0,0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.passwordInput.focus()}
+                        onSubmitEditing={() => this.interestInput.focus()}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
-                        //ref={(input) => this.emailInput = input}
+                        ref={(input) => this.occupationInput = input}
                     />
                     <TextInput
                         placeholder="Interests/Hobbies"
@@ -160,12 +130,11 @@ export default function EditProfile({navigation}) {
                         value={interests}
                         placeholderTextColor = "rgba(0,0,0,0.9)"
                         returnKeyType="next"
-                        //onSubmitEditing={() => this.passwordInput.focus()}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoCorrect={false}
                         style = {styles.input}
-                        //ref={(input) => this.emailInput = input}
+                        ref={(input) => this.interestInput = input}
                     />
                     
                     <TouchableOpacity style = {styles.buttonContainer} 
@@ -292,5 +261,26 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontWeight: '700',
         width: 300,
+    },
+
+    photo: {
+        position: 'absolute',
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+    },
+
+    photoPlaceholder: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        marginTop: 48,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    addIcon: {
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

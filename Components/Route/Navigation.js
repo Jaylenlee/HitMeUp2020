@@ -1,7 +1,7 @@
+import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import LoadingScreen from "../Loading/LoadingScreen";
-import Login from '../Login/Login';
 import LoginForm from '../Login/LoginForm';
 import RegisterForm from '../Login/RegisterForm';
 import EditProfile from '../ProfilePage/EditProfile';
@@ -15,12 +15,11 @@ import NewsFeedContainer from '../Feeds/NewsFeedContainer' ;
 import PPSelectionContainer from '../Event/PPSelectionContainer';
 import PrivateInviteContainer from '../Event/PrivateInviteContainer';
 import PublicInviteContainer from '../Event/PublicInviteContainer';
+import SplashContainer from '../Loading/SplashContainer';
+import {createBottomTabNavigator} from "react-navigation-tabs";
+import {Ionicons} from "@expo/vector-icons";
 
 const AuthScreens = {
-    
-    Phovent: {
-        screen: Login
-    },
 
     Login: {
         screen: LoginForm
@@ -36,7 +35,9 @@ const AppScreens = {
     HomeScreen: {
         screen: HomeScreen
     },
+}
 
+const ProfileScreens = {
     Profile: {
         screen: Profile
     },
@@ -44,25 +45,25 @@ const AppScreens = {
     EditProfile: {
         screen: EditProfile
     },
+}
 
-    ViewProfile: {
-        screen: ViewProfile
-    },
-
+const FriendScreens = {
     FriendList: {
         screen: FriendListContainer
+    },
+    
+    ViewProfile: {
+        screen: ViewProfile
     },
     
     SearchFriend: {
         screen: SearchFilterContainer
     },
+}
 
+const EventScreens = {
     EventCreate: {
         screen: CreateEventContainer
-    },
-
-    Feeds: {
-        screen: NewsFeedContainer
     },
 
     PP: {
@@ -78,16 +79,61 @@ const AppScreens = {
     }
 }
 
-const AuthStackNavigator = createStackNavigator(AuthScreens)
-const AppStackNavigator = createStackNavigator(AppScreens)
+const FeedScreens = {
+    Feeds: {
+        screen: NewsFeedContainer
+    },
+}
 
+const AuthStackNavigator = createStackNavigator(AuthScreens)
+const ProfileStackNavigator = createStackNavigator(ProfileScreens)
+const FriendStackNavigator = createStackNavigator(FriendScreens)
+const EventStackNavigator = createStackNavigator(EventScreens)
+const FeedStackNavigator = createStackNavigator(FeedScreens)
+
+const AppTabNavigator = createBottomTabNavigator({
+    Home: {
+        screen: HomeScreen,
+    },
+    
+    Profile: {
+        screen: ProfileStackNavigator,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => <Ionicons name="md-contact" size={24} color={tintColor}></Ionicons>
+        }
+    },
+
+    Friend: {
+        screen: FriendStackNavigator,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => <Ionicons name="md-people" size={24} color={tintColor}></Ionicons>
+        }
+    },
+
+    Event: {
+        screen: EventStackNavigator,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => <Ionicons name="ios-bookmarks" size={24} color={tintColor}></Ionicons>
+        }
+    },
+
+    Feed: {
+        screen: FeedStackNavigator,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => <Ionicons name="ios-home" size={24} color={tintColor}></Ionicons>
+        }
+    },
+})
+
+//export default AppTabNavigator;
 export default createAppContainer(
     createSwitchNavigator({
             Loading: LoadingScreen,
-            App: AppStackNavigator,
-            Auth: AuthStackNavigator
+            Splash: SplashContainer,
+            Auth: AuthStackNavigator,
+            App: AppTabNavigator,
         }, {
-            initialRouteName: "Loading"
+            initialRouteName: "Splash"
         }
     )
 );

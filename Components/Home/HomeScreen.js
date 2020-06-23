@@ -16,19 +16,14 @@ export default class HomeScreen extends React.Component {
         const user = firebaseDb.auth.currentUser;
         const displayName = user.displayName;
         const uid = user.uid;
-        this.setState({displayName: displayName, uid: uid})
+        this.setState({displayName: displayName, uid: uid}, () => console.log(this.state.uid))
+        console.log(uid);
+        console.log(this.state.uid)
     }
 
     handleSignOutUser = () => {
         firebaseDb.auth.signOut();
     }
-
-    /*<ModalNavigation navigation={this.props.navigation} 
-                    displayName = {this.state.displayName}
-                    uid = {this.state.uid}
-                    modalOpen = {this.state.modalOpen}
-                >   
-                </ModalNavigation>*/ // initiation of Modal??? WIP
 
     render() {
 
@@ -45,6 +40,7 @@ export default class HomeScreen extends React.Component {
                         />
                         <TouchableOpacity style = {styles.buttonContainer} 
                                     onPress={() => {
+                                        console.log(this.state.uid)
                                         this.props.navigation.navigate('Profile', {displayName: displayName, uid: uid});
                                     }}>
                                     <Text style={styles.buttonText}>Go Profile</Text>

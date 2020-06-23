@@ -1,11 +1,10 @@
 import React from 'react';
-import {StyleSheet, View, Text, TextInput, TouchableOpacity, StatusBar} from 'react-native';
-import {withNavigation} from 'react-navigation';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, StatusBar, KeyboardAvoidingView, ImageBackground } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import firebaseDb from '../Database/firebaseDb';
 import { BorderlessButton } from 'react-native-gesture-handler';
 
 class LoginForm extends React.Component {
-
     state = {
         email: '',
         password: '',
@@ -20,110 +19,124 @@ class LoginForm extends React.Component {
                 .signInWithEmailAndPassword(email, password)
                 .catch(error => this.setState({errorMessage: error.message}))
     }
-        
+
     render(){
-
         const {email, password, errorMessage} = this.state
-
         return(
-            <View style = {styles.container}>
+            <KeyboardAvoidingView style = {styles.container}>
                 <StatusBar
                     barstyle="light-content"
                 />
-                <View style={styles.errorMessage}>
-                    {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
-                </View>
-                <TextInput
-                    placeholder="Email"
-                    onChangeText={this.handleUpdateEmail}
-                    value={email}
-                    placeholderTextColor = "rgba(255,255,255,0.9)"
-                    returnKeyType="next"
-                    //onSubmitEditing={() => this.passwordInput.focus()}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style = {styles.input}
-                    //ref={(input) => this.emailInput = input}
-                />
+                <ImageBackground
+                    source={{uri: 'https://c7.uihere.com/files/724/409/150/abstract-light-blue-wave-background.jpg'}}
+                    style={{width: undefined, padding: 16, flex: 1, paddingTop: 48}}
+                >
+                    <Text style={styles.greeting}>{'Hello again.\nWelcome back!'}</Text>
 
-                <TextInput
-                    placeholder="Password"
-                    onChangeText={this.handleUpdatePassword}
-                    value={password}
-                    placeholderTextColor = "rgba(255,255,255,0.9)"
-                    returnKeyType="go"
-                    //onSubmitEditing={() => this.login.focus()}
-                    secureTextEntry
-                    style = {styles.input}
-                    //ref={(input) => this.passwordInput = input}
-                />
-            
-                <TouchableOpacity style = {styles.buttonContainer}
-                    onPress={() => {
-                        this.handleLoginUser()
-                    }}
-                    /*ref={(input) => this.login = input}*/>
-                    <Text style={styles.buttonText}>LOGIN</Text> 
-                </TouchableOpacity>
-                
-                <View style={{paddingTop: 20, flexDirection: "row", justifyContent: "center"}}>
-                <Text style={styles.buttonText}>New to Phovent? </Text>
-                <TouchableOpacity  
-                    onPress={() => {
-                        this.props.navigation.navigate('Register');
-                    }}>
-                    <Text style={styles.signUpText}> Sign Up here!</Text>
-                </TouchableOpacity>
-                </View>
-                
-            </View>
+                    <View style={styles.errorMessage}>
+                        {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
+                    </View>
+
+                    <View style={styles.form}>
+                        <View style={{ marginTop: 32 }}>
+                            <Text style={styles.inputTitle}>Email Address</Text>
+                            <TextInput
+                                onChangeText={this.handleUpdateEmail}
+                                value={email}
+                                returnKeyType="next"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                style = {styles.input}
+                            />
+                        </View>
+
+                        <View style={{ marginTop: 32 }}>
+                            <Text style={styles.inputTitle}>Password</Text>
+                            <TextInput
+                                onChangeText={this.handleUpdatePassword}
+                                value={password}
+                                returnKeyType="go"
+                                secureTextEntry
+                                style = {styles.input}
+                            />
+                        </View>
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.buttonContainer}
+                        onPress={() => this.handleLoginUser()}
+                    >
+                        <Text style={styles.buttonText}>Sign in</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{ alignSelf: 'center', marginTop: 32 }}
+                        onPress={() => this.props.navigation.navigate('Register')}
+                    >
+                        <Text style={styles.buttonText}>
+                            New to Phovent? <Text style={styles.signUpText}>Sign Up here!</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </ImageBackground>
+            </KeyboardAvoidingView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        flex: 1
     },
-
-    input: {
-        height: 40,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        marginBottom: 10,
-        color: "#FFF",
-        paddingHorizontal: 10,
+    greeting: {
+        marginTop: 32,
+        fontSize: 18,
+        fontWeight: '400',
+        textAlign: 'center'
     },
-
-    buttonContainer: {
-        marginTop: 10,
-        backgroundColor: '#34d9eb',
-        paddingVertical: 15
-    },
-
-    buttonText: {
-        textAlign: 'center',
-        color: '#FFFFFF',
-        fontWeight: '700'
-    },
-
     errorMessage: {
         height: 72,
         alignItems: "center",
         justifyContent: "center",
         marginHorizontal: 30
     },
-
     error: {
         color: "#E9446A",
         fontSize: 13,
         fontWeight: "600",
         textAlign: "center"
     },
+    form: {
+        marginBottom: 48,
+        marginHorizontal: 30
+    },
+    inputTitle: {
+        fontSize: 10,
+        color: '#8A8F9E',
+        textTransform:'uppercase'
+    },
+    input: {
+        borderBottomColor: '#8A8F9E',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        height: 40,
+        fontSize: 15,
+        color: '#161F3D'
+    },
+    buttonContainer: {
+        marginHorizontal: 30,
+        backgroundColor: '#E9446A',
+        borderRadius: 4,
+        height: 52,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#414959',
+        fontSize: 13
+    },
     signUpText: {
-        textAlign: 'center',
-        color: 'red',
-        fontWeight: '700'
+        fontWeight: '500',
+        color: '#E9446A'
     }
 })
 

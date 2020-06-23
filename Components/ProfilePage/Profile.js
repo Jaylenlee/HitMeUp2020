@@ -21,8 +21,10 @@ export default class Profile extends React.Component {
     }
 
     componentDidMount() {
+        const user = firebaseDb.auth.currentUser;
+        const uid = user.uid;
         
-        firebaseDb.db.collection('profile').doc(this.state.uid).onSnapshot(docSnapshot => {
+        firebaseDb.db.collection('profile').doc(/*this.state.*/uid).onSnapshot(docSnapshot => {
             const info = docSnapshot.data()
             this.setState({
                 username: info.username,
