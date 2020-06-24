@@ -11,6 +11,24 @@ class NewsFeedContainer extends React.Component {
     }
 
     componentDidMount() {
+        const user = firebaseDb.auth.currentUser;
+        const uid = user.uid;
+        firebaseDb.db.collection('notification').doc(uid).onSnapshot(docSnapshot => {
+            const events = [];
+            const info = docSnapshot.data().ongoingEvent;
+
+            const eventCollection = firebaseDb.db.collection('events');
+
+            for(let eventUID in info) {
+                const docRef = eventCollection.doc(info.friendlist[uid]);
+                docRef.get().then(docSnapshot => {
+                    events.push(docSnapshot.data())
+                })
+            }
+
+            this.setState({events: events})
+        })
+        
         firebaseDb.db.collection('events').get().then(querySnapshot => {
             const results = []
             querySnapshot.docs.map(documentSnapshot => results.push(documentSnapshot.data()))
@@ -44,9 +62,14 @@ class NewsFeedContainer extends React.Component {
 
     render() {
         const { isLoading, events } = this.state
-        if (isLoading)
-            return <ActivityIndicator />;
-
+        if (isLoading) {
+            return( 
+                <View style = {styles.loading}>
+                    <ActivityIndicator size="large"></ActivityIndicator>
+                    <Text>Loading</Text>
+                </View>
+            );
+        }
         return(
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("HomeScreen")}>
@@ -122,7 +145,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#838899',
         paddingLeft: 10
-    }
+    },
+    
+    loading: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
 })
 
 export default NewsFeedContainer;
