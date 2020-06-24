@@ -34,18 +34,19 @@ class FriendListContainer extends React.Component {
     }
 
     componentWillMount() {
-    
-        firebaseDb.db.collection('friendlist').doc(this.props.navigation.getParam("uid","")).onSnapshot(docSnapshot => {
+        const user = firebaseDb.auth.currentUser;
+        const uid = user.uid;
+        firebaseDb.db.collection('friendlist').doc(uid/*this.props.navigation.getParam("uid","")*/).onSnapshot(docSnapshot => {
             const allFriends = [];
             const info = docSnapshot.data()
             this.setState({
                 allFriendsUID: info.friendlist,
             })
-            
+           
             const profileCollection = firebaseDb.db.collection('profile');
 
-            for(let uid in this.state.allFriendsUID) {
-                const docRef = profileCollection.doc(this.state.allFriendsUID[uid]);
+            for(let uid in info.friendlist/*this.state.allFriendsUID*/) {
+                const docRef = profileCollection.doc(info.friendlist[uid] /*this.state.allFriendsUID[uid]*/);
                 docRef.get().then(docSnapshot => {
                     allFriends.push(docSnapshot.data())
                 })

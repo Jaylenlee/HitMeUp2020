@@ -6,7 +6,7 @@ import LoginForm from '../Login/LoginForm';
 import RegisterForm from '../Login/RegisterForm';
 import EditProfile from '../ProfilePage/EditProfile';
 import Profile from '../ProfilePage/Profile';
-import ViewProfile from '../ProfilePage/ViewProfile';
+import ViewProfile from '../Friend/ViewProfile';
 import HomeScreen from '../Home/HomeScreen';
 import FriendListContainer from '../Friend/FriendListContainer';
 import SearchFilterContainer from '../Friend/SearchFilterContainer';
@@ -15,73 +15,138 @@ import NewsFeedContainer from '../Feeds/NewsFeedContainer' ;
 import PPSelectionContainer from '../Event/PPSelectionContainer';
 import PrivateInviteContainer from '../Event/PrivateInviteContainer';
 import PublicInviteContainer from '../Event/PublicInviteContainer';
+import FriendRequest from '../Notification/FriendRequest';
+import EventInvite from '../Notification/EventInvite';
 import SplashContainer from '../Loading/SplashContainer';
 import {createBottomTabNavigator} from "react-navigation-tabs";
 import {Ionicons} from "@expo/vector-icons";
+import ViewEvent from '../Event/ViewEvent';
 
 const AuthScreens = {
 
     Login: {
-        screen: LoginForm
+        screen: LoginForm,
+        navigationOptions: {
+            header: null,
+        }
     },
 
     Register: {
-        screen: RegisterForm
+        screen: RegisterForm,
+        navigationOptions: {
+            header: null,
+        }
     },
 }
 
 const AppScreens = {
 
     HomeScreen: {
-        screen: HomeScreen
+        screen: HomeScreen,
+        navigationOptions: {
+            header: null,
+        }
     },
 }
 
 const ProfileScreens = {
     Profile: {
-        screen: Profile
+        screen: Profile,
+        navigationOptions: {
+            header: null,
+        }
     },
 
     EditProfile: {
-        screen: EditProfile
+        screen: EditProfile,
+        navigationOptions: {
+            header: null,
+        }
     },
 }
 
 const FriendScreens = {
     FriendList: {
-        screen: FriendListContainer
+        screen: FriendListContainer,
+        navigationOptions: {
+            header: null,
+        }
     },
     
     ViewProfile: {
-        screen: ViewProfile
+        screen: ViewProfile,
+        navigationOptions: {
+            header: null,
+        }
     },
     
     SearchFriend: {
-        screen: SearchFilterContainer
+        screen: SearchFilterContainer,
+        navigationOptions: {
+            header: null,
+        }
     },
 }
 
 const EventScreens = {
     EventCreate: {
-        screen: CreateEventContainer
+        screen: CreateEventContainer,
+        navigationOptions: {
+            header: null,
+        }
     },
 
     PP: {
-        screen: PPSelectionContainer
+        screen: PPSelectionContainer,
+        navigationOptions: {
+            header: null,
+        }
     },
 
     Private: {
-        screen: PrivateInviteContainer
+        screen: PrivateInviteContainer,
+        navigationOptions: {
+            header: null,
+        }
     },
 
     Public: {
-        screen: PublicInviteContainer
+        screen: PublicInviteContainer,
+        navigationOptions: {
+            header: null,
+        }
+    },
+
+    View: {
+        screen: ViewEvent,
+        navigationOptions: {
+            header: null,
+        }
     }
 }
 
 const FeedScreens = {
     Feeds: {
-        screen: NewsFeedContainer
+        screen: NewsFeedContainer,
+        navigationOptions: {
+            header: null,
+        }
+    },
+}
+
+const NotificationScreens = {
+    EventInvite: {
+        screen: EventInvite,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    
+    FriendRequest: {
+        screen: FriendRequest,
+        navigationOptions: {
+            header: null,
+        }
     },
 }
 
@@ -90,12 +155,16 @@ const ProfileStackNavigator = createStackNavigator(ProfileScreens)
 const FriendStackNavigator = createStackNavigator(FriendScreens)
 const EventStackNavigator = createStackNavigator(EventScreens)
 const FeedStackNavigator = createStackNavigator(FeedScreens)
+const NotificationStackNavigator = createStackNavigator(NotificationScreens)
 
 const AppTabNavigator = createBottomTabNavigator({
-    Home: {
-        screen: HomeScreen,
+    Feed: {
+        screen: FeedStackNavigator,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => <Ionicons name="ios-home" size={24} color={tintColor}></Ionicons>,
+        }
     },
-    
+
     Profile: {
         screen: ProfileStackNavigator,
         navigationOptions: {
@@ -117,10 +186,10 @@ const AppTabNavigator = createBottomTabNavigator({
         }
     },
 
-    Feed: {
-        screen: FeedStackNavigator,
+    Notification: {
+        screen: NotificationStackNavigator,
         navigationOptions: {
-            tabBarIcon: ({tintColor}) => <Ionicons name="ios-home" size={24} color={tintColor}></Ionicons>
+            tabBarIcon: ({tintColor}) => <Ionicons name="ios-notifications" size={24} color={tintColor}></Ionicons>
         }
     },
 })

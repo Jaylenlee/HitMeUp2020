@@ -5,8 +5,6 @@ import { Container, Header, Title, Content, Button, Left, Right, Body, Icon,
 import Header1 from '../GlobalStyles/Header';
 import SubHeader from '../GlobalStyles/SubHeader';
 
-let helperArray = require('../Friend/SampleUserList.json');
-
 class PrivateInviteContainer extends React.Component {
     constructor(props) {
         super(props)
