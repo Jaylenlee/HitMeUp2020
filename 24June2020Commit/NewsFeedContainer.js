@@ -23,15 +23,21 @@ class NewsFeedContainer extends React.Component {
             <View style={styles.eventItem}>
                 <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View>
+                        <View style={{flex: 1}}>
                             <Text style={styles.eventTitle}>{event.eventName}</Text>
-                            <Text style={styles.eventTime}>{event.date}</Text>
-                            <Text style={styles.eventTime}>{event.time}</Text>
+                            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+                                <View>
+                                    <Text style={styles.eventTime}>{event.date}</Text>
+                                    <Text style={styles.eventTime}>{event.time}</Text>
+                                </View>
+                                <Text style={styles.details}>{event.activityDetails}</Text>
+                            </View>
+                            <View style={{alignItems: 'flex-end'}}>
+                                <Ionicons name="ios-more" size={24} color="#73788B" />
+                            </View>
                         </View>
-                        <Ionicons name="ios-more" size={24} color="#73788B" />
                     </View>
                 </View>
-                <Text style={styles.details}>{event.activityDetails}</Text>
             </View>
         );
     };
@@ -43,12 +49,11 @@ class NewsFeedContainer extends React.Component {
 
         return(
             <View style={styles.container}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("HomeScreen")}>
+                    <Ionicons name="md-arrow-back" size={24} color='#D8D9DB'></Ionicons>
+                </TouchableOpacity>
+
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate("HomeScreen")}>
-                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-start'}}>
-                            <Ionicons name="md-arrow-back" size={24} color='#D8D9DB'></Ionicons>
-                        </View>
-                    </TouchableOpacity>
                     <Text style={styles.headerTitle}>Feeds</Text>
                 </View>
 
@@ -66,11 +71,13 @@ class NewsFeedContainer extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#EFECF4'
     },
     header: {
+        flex: 1,
         flexDirection: 'row',
-        paddingTop: 64,
+        paddingTop: 16,
         paddingBottom: 16,
         backgroundColor: '#FFF',
         alignItems: 'center',
@@ -85,7 +92,7 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
-        fontWeight: '500'
+        fontWeight: '500',
     },
     textStyle: {
         padding: 10
@@ -103,7 +110,8 @@ const styles = StyleSheet.create({
     eventTitle: {
         fontSize: 15,
         fontWeight: '500',
-        color: '#454D65'
+        color: '#454D65',
+        paddingBottom: 5
     },
     eventTime: {
         fontSize: 11,
@@ -111,9 +119,9 @@ const styles = StyleSheet.create({
         marginTop: 4
     },
     details: {
-        marginTop: 16,
         fontSize: 14,
-        color: '#838899'
+        color: '#838899',
+        paddingLeft: 10
     }
 })
 
