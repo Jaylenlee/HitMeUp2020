@@ -6,7 +6,7 @@ import LoginForm from '../Login/LoginForm';
 import RegisterForm from '../Login/RegisterForm';
 import EditProfile from '../ProfilePage/EditProfile';
 import Profile from '../ProfilePage/Profile';
-import ViewProfile from '../Friend/ViewProfile';
+import ViewProfile from '../Friend/ViewProfileDelete';
 import HomeScreen from '../Home/HomeScreen';
 import FriendListContainer from '../Friend/FriendListContainer';
 import SearchFilterContainer from '../Friend/SearchFilterContainer';
@@ -20,7 +20,11 @@ import EventInvite from '../Notification/EventInvite';
 import SplashContainer from '../Loading/SplashContainer';
 import {createBottomTabNavigator} from "react-navigation-tabs";
 import {Ionicons} from "@expo/vector-icons";
-import ViewEvent from '../Event/ViewEvent';
+import ViewEvent from '../Feeds/ViewEvent';
+import ViewProfileRequest from '../Notification/ViewProfileRequest';
+import ViewProfileDelete from '../Friend/ViewProfileDelete';
+import ViewProfileAdd from '../Friend/ViewProfileAdd';
+import ViewEventInvite from '../Notification/ViewEventInvite';
 
 const AuthScreens = {
 
@@ -73,8 +77,8 @@ const FriendScreens = {
         }
     },
     
-    ViewProfile: {
-        screen: ViewProfile,
+    ViewProfileDelete: {
+        screen: ViewProfileDelete,
         navigationOptions: {
             header: null,
         }
@@ -82,6 +86,13 @@ const FriendScreens = {
     
     SearchFriend: {
         screen: SearchFilterContainer,
+        navigationOptions: {
+            header: null,
+        }
+    },
+
+    ViewProfileAdd: {
+        screen: ViewProfileAdd,
         navigationOptions: {
             header: null,
         }
@@ -116,13 +127,6 @@ const EventScreens = {
             header: null,
         }
     },
-
-    View: {
-        screen: ViewEvent,
-        navigationOptions: {
-            header: null,
-        }
-    }
 }
 
 const FeedScreens = {
@@ -132,6 +136,13 @@ const FeedScreens = {
             header: null,
         }
     },
+
+    View: {
+        screen: ViewEvent,
+        navigationOptions: {
+            header: null,
+        }
+    }
 }
 
 const NotificationScreens = {
@@ -141,9 +152,23 @@ const NotificationScreens = {
             header: null,
         }
     },
+
+    ViewEventInvite: {
+        screen: ViewEventInvite,
+        navigationOptions: {
+            header: null,
+        }
+    },
     
     FriendRequest: {
         screen: FriendRequest,
+        navigationOptions: {
+            header: null,
+        }
+    },
+
+    ViewProfileRequest: {
+        screen: ViewProfileRequest,
         navigationOptions: {
             header: null,
         }

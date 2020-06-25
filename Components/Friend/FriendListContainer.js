@@ -36,7 +36,7 @@ class FriendListContainer extends React.Component {
     componentWillMount() {
         const user = firebaseDb.auth.currentUser;
         const uid = user.uid;
-        firebaseDb.db.collection('friendlist').doc(uid/*this.props.navigation.getParam("uid","")*/).onSnapshot(docSnapshot => {
+        firebaseDb.db.collection('friendlist').doc(uid).onSnapshot(docSnapshot => {
             const allFriends = [];
             const info = docSnapshot.data()
             this.setState({
@@ -45,7 +45,7 @@ class FriendListContainer extends React.Component {
            
             const profileCollection = firebaseDb.db.collection('profile');
 
-            for(let uid in info.friendlist/*this.state.allFriendsUID*/) {
+            for(let uid in info.friendlist) {
                 const docRef = profileCollection.doc(info.friendlist[uid] /*this.state.allFriendsUID[uid]*/);
                 docRef.get().then(docSnapshot => {
                     allFriends.push(docSnapshot.data())
@@ -78,7 +78,7 @@ class FriendListContainer extends React.Component {
                                 <Text note>{profile.email}</Text>
                             </Body>
                             <TouchableOpacity style={styles.addButton}
-                                onPress = {() => {this.props.navigation.navigate("ViewProfile", {displayName: profile.username, uid: profile.uid})}}
+                                onPress = {() => {this.props.navigation.navigate("ViewProfileDelete", {displayName: profile.username, uid: profile.uid})}}
                             >
                                 <Text style={styles.addButtonText}>View</Text>
                             </TouchableOpacity>
@@ -89,6 +89,11 @@ class FriendListContainer extends React.Component {
                         onPress= {() => {this.updateFriends()}}
                     >
                         <Text>Refresh</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress= {() => {this.props.navigation.navigate("SearchFriend")}}
+                    >
+                        <Text>Search User</Text>
                     </TouchableOpacity>
                 </Content>
             </Container>

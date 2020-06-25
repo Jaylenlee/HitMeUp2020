@@ -26,9 +26,10 @@ class CreateEventContainer extends React.Component {
     handleUpdateIsPlanned = (isPlanned) => this.setState({ isPlanned: true });
     handleUpdateNotPlanned = (isPlanned) => this.setState({ isPlanned: false });
 
-    handleCreateEvent = () =>
-        firebaseDb
-            .firestore()
+    handleCreateEvent = () => {
+        this.props.navigation.navigate("PP", {event: this.state})
+        /*firebaseDb
+            .db
             .collection('events')
             .add({
                 eventName: this.state.eventName,
@@ -47,7 +48,8 @@ class CreateEventContainer extends React.Component {
                 activityDetails: '',
                 isPlanned: '',
                 createSuccessful: true
-            })).catch(err => console.error(err))
+            })).catch(err => console.error(err))*/
+    }       
 
     render() {
         const { eventName, date, time, location, estimatedSize,
@@ -59,7 +61,9 @@ class CreateEventContainer extends React.Component {
                 <View style={{alignItems: 'center', backgroundColor: '#ffec70'}}>
                     <Text style={{padding: 10}}>Personalise your own event!</Text>
                 </View>
-
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("PP", {event: this.state})}>
+                    <Text>PPSelection</Text>
+                </TouchableOpacity>
                 <View style={styles.contentStyle}>
                     <TextInput
                         style={styles.textInput}

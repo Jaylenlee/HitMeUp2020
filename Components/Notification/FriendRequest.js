@@ -3,7 +3,6 @@ import {StyleSheet, View, Text, TextInput, SafeAreaView, Image, ScrollView, Touc
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
-import {NavigationActions} from 'react-navigation';
 
 export default class FriendRequest extends React.Component {
     
@@ -54,7 +53,7 @@ export default class FriendRequest extends React.Component {
                             </View>
                             <View style={{alignItems: 'flex-end'}}>
                                 <TouchableOpacity onPress={() => 
-                                    this.props.navigation.navigate('ViewProfile',{uid: profile.uid}/*, NavigationActions.navigate({routeName: 'ViewProfile'})*/)} >
+                                    this.props.navigation.navigate('ViewProfileRequest',{uid: profile.uid})} >
                                     <Ionicons name="ios-more" size={24} color="#73788B" />
                                 </TouchableOpacity>
                             </View>

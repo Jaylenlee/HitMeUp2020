@@ -3,51 +3,66 @@ import { StyleSheet, View, Text, TextInput, SafeAreaView, Image,
          ScrollView, TouchableOpacity, AsyncStorage, StatusBar, ImageBackground } from 'react-native';
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
+import * as firebase from 'firebase';
 import {Thumbnail} from 'native-base';
 
 
-export default class Profile extends React.Component {
+export default class ViewEventInvite extends React.Component {
     state = {
-        uid: this.props.navigation.getParam("uid",""),
-        username: this.props.navigation.getParam("displayName",""),
-        email:"",
-        gender: "",
-        age: "",
-        location: "",
-        occupation: "",
-        interests: "",
-        photo: "",
+        eventUID: this.props.navigation.getParam("eventUID",""),
+        eventName: '',
+        date: '',
+        time: '',
+        location: '',
+        estimatedSize: '',
+        activityDetails: '',
+        isPlanned: false,
     }
 
     componentDidMount() {
-        const user = firebaseDb.auth.currentUser;
-        const uid = user.uid;
-        this.setState({uid: uid})
-        firebaseDb.db.collection('profile').doc(uid).onSnapshot(docSnapshot => {
+        firebaseDb.db.collection('events').doc(this.state.eventUID).onSnapshot(docSnapshot => {
             const info = docSnapshot.data()
             this.setState({
-                username: info.username,
-                email: info.email,
-                gender: info.gender,
-                age: info.age,
-                location: info.location,
-                occupation: info.occupation,
-                interests: info.interests,
-                photo: info.photo
+                eventName: info.eventName,
+                date: info.date,
+                time: info.time,
+                location: info.location, 
+                estimatedSize: info.estimatedSize,
+                activityDetails: info.activityDetails,
+                isPlanned: info.isPlanned,
             })
         })
     }
 
-    handleSignOutUser = () => {
-        firebaseDb.auth.signOut();
+    pressHandleAccept = () => {
+        const currUser = firebaseDb.auth.currentUser;
+        var notification = firebaseDb.db.collection('notification')
+        
+        var promise1 = notification.doc(currUser.uid).update({
+            eventOngoing: firebase.firestore.FieldValue.arrayUnion(this.state.eventUID)
+        }).catch(err => console.error(err));
+
+        var promise2 = notification.doc(currUser.uid).update({
+            eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
+        }).catch(err => console.error(err));
+        
+        Promise.all([promise1, promise2]).then(() => this.props.navigation.navigate("EventInvite")).catch(err => console.error(err));
+    }
+
+
+
+    pressHandleReject = () => {
+        console.log("reject")
+        const currUser = firebaseDb.auth.currentUser;
+        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
+        currNotification.update({
+            eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
+        }).then(() => this.props.navigation.navigate("EventInvite")).catch(err => console.error(err));
     }
 
     render(){
-        const pressHandle = () => {
-            this.props.navigation.navigate('EditProfile', {info: this.state});
-        }
 
-        const {username, email, gender, age, location, occupation, interests, photo} = this.state;//.profile;
+        const {eventName, date, time, location, estimatedSize, activityDetails, isPlanned} = this.state;
         return(
             <SafeAreaView style={styles.container}>
                 <ScrollView>
@@ -59,53 +74,50 @@ export default class Profile extends React.Component {
                     </TouchableOpacity>
 
                     <View style={{marginTop: 24, alignItems: 'center'}}>
-                        <View style={styles.avatarContainer}>
-                            <Image
-                               source={photo? {uri: photo} :
-                                      {uri: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png'}}
-                               style={styles.profileImage}
-                            />
-                        </View>
 
-                        <Text style={styles.userStyle}>{username}</Text>
+                        <Text style={styles.userStyle}>{eventName}</Text>
 
                         <View style={styles.infoContainer}>
                             <View style={styles.info}>
-                                <Text style={styles.title}>Gender</Text>
-                                <Text style={styles.text}>{gender}</Text>
+                                <Text style={styles.title}>Date</Text>
+                                <Text style={styles.text}>{date}</Text>
+                            </View>
+                            <View style={styles.info}>
+                                <Text style={styles.title}>Time</Text>
+                                <Text style={styles.text}>{time}</Text>
                             </View>
                             <View style={styles.info}>
                                 <Text style={styles.title}>Location</Text>
                                 <Text style={styles.text}>{location}</Text>
                             </View>
                             <View style={styles.info}>
-                                <Text style={styles.title}>Occupation</Text>
-                                <Text style={styles.text}>{occupation}</Text>
-                            </View>
-                            <View style={styles.info}>
-                                <Text style={styles.title}>Age</Text>
-                                <Text style={styles.text}>{age}</Text>
+                                <Text style={styles.title}>Size</Text>
+                                <Text style={styles.text}>{estimatedSize}</Text>
                             </View>
                         </View>
                         <View style={styles.info}>
-                            <Text style={styles.title}>Interests/Hobbies</Text>
-                            <Text style={styles.text}>{interests}</Text>
+                            <Text style={styles.title}>Activity</Text>
+                            <Text style={styles.text}>{activityDetails}</Text>
+                        </View>
+                        <View style={styles.info}>
+                            <Text style={styles.title}>Planned</Text>
+                            <Text style={styles.text}>{isPlanned ? "Yes" : "No"}</Text>
                         </View>
 
                         <View style={styles.logoutS}>
                             <TouchableOpacity
-                                onPress={this.handleSignOutUser}
+                                onPress={() => this.pressHandleAccept()}
                             >
-                                <Text style={styles.logoutText}>Log Out</Text>
+                                <Text style={styles.logoutText}>Accept</Text>
                             </TouchableOpacity>
                         </View>
                         
 
                         <View style={styles.buttonsContainer}>
                             <TouchableOpacity style = {styles.buttonContainer}
-                                onPress={pressHandle}
+                                onPress={() => this.pressHandleReject()}
                             >
-                                <Text style={styles.buttonText}>Edit</Text>
+                                <Text style={styles.buttonText}>Reject</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

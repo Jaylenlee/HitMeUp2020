@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Button, Text } from 'react-native';
 import Header from '../GlobalStyles/Header';
 import SubHeader from '../GlobalStyles/SubHeader';
 import BlueButton from '../GlobalStyles/BlueButton';
+import firebaseDb from '../Database/firebaseDb';
 
 class PublicInviteContainer extends React.Component {
     state = {
@@ -11,8 +12,19 @@ class PublicInviteContainer extends React.Component {
         gender: false,
         occupation: false,
         hobbies: false,
-        isToggled: false
+        isToggled: false,
+        allUsers: []
     };
+
+    componentWillMount() {
+        const allUsers = [];
+    
+        firebaseDb.db.collection('profile').get().then(querySnapshot => {
+            querySnapshot.docs.map(documentSnapshot => allUsers.push(documentSnapshot.data()))
+        }).catch(err => console.error(err))
+
+        this.setState({allUsers: allUsers})
+    }
 
     handleUpdateAgeNS = (age) => this.setState({ age: true })
     handleUpdateAgeS = (age) => this.setState({ age: false })

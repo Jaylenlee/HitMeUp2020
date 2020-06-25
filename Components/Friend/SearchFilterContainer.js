@@ -4,6 +4,7 @@ import { Container, Header, Title, Content, Button, Left, Right, Body, Icon,
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import firebaseDb from '../Database/firebaseDb';
+import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 
 class SearchFilterContainer extends React.Component {
     constructor(props) {
@@ -45,6 +46,9 @@ class SearchFilterContainer extends React.Component {
     render() {
         return(
             <Container>
+                <TouchableOpacity onPress={() => {this.props.navigation.goBack()}}>
+                    <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
+                </TouchableOpacity>
                 <Header searchBar rounded>
                     <Item>
                         <Icon name='search' />
@@ -64,7 +68,7 @@ class SearchFilterContainer extends React.Component {
                                 <Text note>{profile.email}</Text>
                             </Body>
                             <TouchableOpacity style={styles.addButton}
-                                onPress = {() => {this.props.navigation.navigate("ViewProfile", {displayName: profile.username, uid: profile.uid})}}
+                                onPress = {() => {this.props.navigation.navigate("ViewProfileAdd", {displayName: profile.username, uid: profile.uid})}}
                             >
                                 <Text style={styles.addButtonText}>View</Text>
                             </TouchableOpacity>

@@ -16,38 +16,21 @@ export default class EventInvite extends React.Component {
         const uid = user.uid;
         firebaseDb.db.collection('notification').doc(uid).onSnapshot(docSnapshot => {
             const invites = [];
+            const promise = [];
             const info = docSnapshot.data().eventInvite;
-
             const eventCollection = firebaseDb.db.collection('events');
 
             for(let eventUID in info) {
                 const docRef = eventCollection.doc(info[eventUID]);
-                docRef.get().then(docSnapshot => {
-                    invites.push(docSnapshot.data())
-                })
+                promise.push(
+                    docRef.get().then(docSnapshot => {
+                        invites.push(docSnapshot.data())
+                    })
+                )
             }
-
-            this.setState({isLoading: false, invites: invites})
+            Promise.all(promise).then(() => this.setState({isLoading: false, invites: invites}))
         })
     }
-
-    /// Direct adding // no request
-    /*pressHandleAccept = () => {
-        const currUser = firebaseDb.auth.currentUser;
-        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
-        currNotification.update({
-            eventOngoing: firebase.firestore.FieldValue.arrayUnion(this.state.eventUID),
-            eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID),
-        }).catch(err => console.error(err));
-    }
-
-    pressHandleReject = () => {
-        const currUser = firebaseDb.auth.currentUser;
-        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
-        currNotification.update({
-            eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID),
-        }).catch(err => console.error(err));
-    }*/
     renderEvent = event => {
         return (
             <View style={styles.eventItem}>
@@ -63,7 +46,9 @@ export default class EventInvite extends React.Component {
                                 <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
                             <View style={{alignItems: 'flex-end'}}>
-                                <Ionicons name="ios-more" size={24} color="#73788B" />
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate("ViewEventInvite", {eventUID: event.eventUID})}>
+                                    <Ionicons name="ios-more" size={24} color="#73788B" />
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>

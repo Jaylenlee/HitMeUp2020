@@ -3,12 +3,12 @@ import { StyleSheet, View, Text, TextInput, SafeAreaView, Image,
          ScrollView, TouchableOpacity, AsyncStorage, StatusBar, ImageBackground } from 'react-native';
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
+import * as firebase from 'firebase';
 import {Thumbnail} from 'native-base';
 
 
-export default class Profile extends React.Component {
+export default class ViewProfileDelete extends React.Component {
     state = {
-        uid: this.props.navigation.getParam("uid",""),
         username: this.props.navigation.getParam("displayName",""),
         email:"",
         gender: "",
@@ -17,13 +17,11 @@ export default class Profile extends React.Component {
         occupation: "",
         interests: "",
         photo: "",
+        viewingUID: this.props.navigation.getParam("uid",""),
     }
 
     componentDidMount() {
-        const user = firebaseDb.auth.currentUser;
-        const uid = user.uid;
-        this.setState({uid: uid})
-        firebaseDb.db.collection('profile').doc(uid).onSnapshot(docSnapshot => {
+        firebaseDb.db.collection('profile').doc(this.state.viewingUID).onSnapshot(docSnapshot => {
             const info = docSnapshot.data()
             this.setState({
                 username: info.username,
@@ -33,21 +31,22 @@ export default class Profile extends React.Component {
                 location: info.location,
                 occupation: info.occupation,
                 interests: info.interests,
-                photo: info.photo
+                photo: info.photo,
             })
         })
     }
 
-    handleSignOutUser = () => {
-        firebaseDb.auth.signOut();
+    pressHandleDelete = () => {
+        const currUser = firebaseDb.auth.currentUser;
+        var currFriendlist = firebaseDb.db.collection('friendlist').doc(currUser.uid);
+        currFriendlist.update({
+            friendlist: firebase.firestore.FieldValue.arrayRemove(this.state.viewingUID)
+        }).then(() => this.props.navigation.goBack()).catch(err => console.error(err));
     }
 
     render(){
-        const pressHandle = () => {
-            this.props.navigation.navigate('EditProfile', {info: this.state});
-        }
 
-        const {username, email, gender, age, location, occupation, interests, photo} = this.state;//.profile;
+        const {username, email, gender, age, location, occupation, interests, photo} = this.state;
         return(
             <SafeAreaView style={styles.container}>
                 <ScrollView>
@@ -92,20 +91,11 @@ export default class Profile extends React.Component {
                             <Text style={styles.text}>{interests}</Text>
                         </View>
 
-                        <View style={styles.logoutS}>
-                            <TouchableOpacity
-                                onPress={this.handleSignOutUser}
-                            >
-                                <Text style={styles.logoutText}>Log Out</Text>
-                            </TouchableOpacity>
-                        </View>
-                        
-
                         <View style={styles.buttonsContainer}>
                             <TouchableOpacity style = {styles.buttonContainer}
-                                onPress={pressHandle}
+                                onPress={() => this.pressHandleDelete()}
                             >
-                                <Text style={styles.buttonText}>Edit</Text>
+                                <Text style={styles.buttonText}>Delete</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
