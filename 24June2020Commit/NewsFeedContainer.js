@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, ActivityIndicator, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
 import { Header, Item, Icon, Input } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,7 +28,7 @@ class NewsFeedContainer extends React.Component {
 
             this.setState({events: events})
         })
-        
+
         firebaseDb.db.collection('events').get().then(querySnapshot => {
             const results = []
             querySnapshot.docs.map(documentSnapshot => results.push(documentSnapshot.data()))
@@ -51,7 +51,7 @@ class NewsFeedContainer extends React.Component {
                                 <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
                             <View style={{alignItems: 'flex-end'}}>
-                                <Ionicons name="ios-more" size={24} color="#73788B" />
+                                <Ionicons name="ios-more" size={24} color="#bee0ff" />
                             </View>
                         </View>
                     </View>
@@ -63,7 +63,7 @@ class NewsFeedContainer extends React.Component {
     render() {
         const { isLoading, events } = this.state
         if (isLoading) {
-            return( 
+            return(
                 <View style = {styles.loading}>
                     <ActivityIndicator size="large"></ActivityIndicator>
                     <Text>Loading</Text>
@@ -72,21 +72,25 @@ class NewsFeedContainer extends React.Component {
         }
         return(
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("HomeScreen")}>
-                    <Ionicons name="md-arrow-back" size={24} color='#D8D9DB'></Ionicons>
-                </TouchableOpacity>
-
                 <View style={styles.header}>
+                    <TouchableOpacity
+                        style={styles.backArrow}
+                        onPress={() => this.props.navigation.navigate("HomeScreen")}>
+                        <Ionicons name="md-arrow-back" size={24} color='#D8D9DB'></Ionicons>
+                    </TouchableOpacity>
+
                     <Text style={styles.headerTitle}>Feeds</Text>
                 </View>
 
-                <FlatList
-                    style={styles.feed}
-                    data={events}
-                    renderItem={({ item }) => this.renderEvent(item)}
-                    keyExtractor={item => item.eventName}
-                    showsVerticalScrollIndicator={false}
-                />
+                <ScrollView>
+                    <FlatList
+                        style={styles.feed}
+                        data={events}
+                        renderItem={({ item }) => this.renderEvent(item)}
+                        keyExtractor={item => item.eventName}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </ScrollView>
             </View>
         );
     }
@@ -95,58 +99,66 @@ class NewsFeedContainer extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#EFECF4'
+        backgroundColor: '#f2f9ff'
+    },
+    backArrow: {
+        flex: 1,
+        alignSelf: 'flex-start',
+        marginTop: -8
     },
     header: {
         flex: 1,
+        padding: 16,
         flexDirection: 'row',
-        paddingTop: 16,
-        paddingBottom: 16,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
         backgroundColor: '#FFF',
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderBottomColor: '#EBECF4',
-        shadowColor: '#454D65',
+        shadowColor: '#011f4b',
         shadowOffset: {height: 5},
-        shadowRadius: 15,
-        shadowOpacity: 0.2,
-        zIndex: 10
+        shadowOpacity: 0.4,
+        zIndex: 10,
     },
     headerTitle: {
         fontSize: 20,
         fontWeight: '500',
+        alignSelf: 'center',
+        position: 'absolute'
     },
     textStyle: {
         padding: 10
     },
     feed: {
-        marginHorizontal: 16
+        paddingHorizontal: 16
     },
     eventItem: {
         backgroundColor: '#FFF',
         borderRadius: 5,
-        padding: 8,
+        padding: 10,
         flexDirection: 'row',
-        marginVertical: 8
+        marginVertical: 8,
+        shadowOpacity: 0.1,
+        shadowOffset: {height: 2, width: 2}
     },
     eventTitle: {
         fontSize: 15,
         fontWeight: '500',
-        color: '#454D65',
+        color: '#03396c',
         paddingBottom: 5
     },
     eventTime: {
         fontSize: 11,
-        color: '#C4C6CE',
+        color: '#9fcffb',
         marginTop: 4
     },
     details: {
         fontSize: 14,
-        color: '#838899',
-        paddingLeft: 10
+        color: '#6497b1',
+        paddingLeft: 15
     },
-    
     loading: {
         flex: 1,
         justifyContent: "center",
