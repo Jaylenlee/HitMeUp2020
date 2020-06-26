@@ -15,25 +15,20 @@ class NewsFeedContainer extends React.Component {
         const uid = user.uid;
         firebaseDb.db.collection('notification').doc(uid).onSnapshot(docSnapshot => {
             const events = [];
-            const info = docSnapshot.data().ongoingEvent;
+            const promise = [];
+            const info = docSnapshot.data().eventOngoing;
 
             const eventCollection = firebaseDb.db.collection('events');
 
             for(let eventUID in info) {
-                const docRef = eventCollection.doc(info.friendlist[uid]);
-                docRef.get().then(docSnapshot => {
+                const docRef = eventCollection.doc(info[eventUID]);
+                promise.push(docRef.get().then(docSnapshot => {
                     events.push(docSnapshot.data())
-                })
+                }))
             }
 
-            this.setState({events: events})
+            Promise.all(promise).then(() => this.setState({isLoading: false, events: events}))
         })
-
-        firebaseDb.db.collection('events').get().then(querySnapshot => {
-            const results = []
-            querySnapshot.docs.map(documentSnapshot => results.push(documentSnapshot.data()))
-            this.setState({isLoading: false, events: results})
-        }).catch(err => console.error(err))
     }
 
     renderEvent = event => {
@@ -51,7 +46,9 @@ class NewsFeedContainer extends React.Component {
                                 <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
                             <View style={{alignItems: 'flex-end'}}>
-                                <Ionicons name="ios-more" size={24} color="#bee0ff" />
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
+                                    <Ionicons name="ios-more" size={24} color="#bee0ff" />
+                                </TouchableOpacity>        
                             </View>
                         </View>
                     </View>
