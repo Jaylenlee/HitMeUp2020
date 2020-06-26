@@ -207,9 +207,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#edfcfc',
         padding: 5,
         paddingHorizontal: 10,
-        borderColor: 'grey',
-        borderBottomWidth: 1,
-        borderRightWidth: 1,
+        shadowOffset: {height: 1, width: 1},
+        shadowColor: '#455A64',
+        shadowOpacity: 0.6,
         borderRadius: 3
     },
     textStyle: {
