@@ -1,9 +1,8 @@
 import React from 'react'
-import { View, Image, TextInput, Text, StyleSheet,
+import { View, Image, TextInput, Text, StyleSheet, ScrollView,
          KeyboardAvoidingView, StatusBar, TouchableOpacity } from 'react-native';
-import BlueButton from '../GlobalStyles/BlueButton';
 import firebaseDb from '../Database/firebaseDb';
-import Header from '../GlobalStyles/Header';
+import { Ionicons } from '@expo/vector-icons';
 
 class CreateEventContainer extends React.Component {
     state = {
@@ -13,8 +12,10 @@ class CreateEventContainer extends React.Component {
         location: '',
         estimatedSize: '',
         activityDetails: '',
-        isPlanned: false,
-        createSuccessful: false
+        createSuccessful: false,
+        privacyInput: '',
+        isPublic: false,
+        isPrivate: false
     };
 
     handleUpdateEventName = (eventName) => this.setState({ eventName });
@@ -23,204 +24,283 @@ class CreateEventContainer extends React.Component {
     handleUpdateLocation = (location) => this.setState({ location });
     handleUpdateEstimatedSize = (estimatedSize) => this.setState({ estimatedSize });
     handleUpdateActivityDetails = (activityDetails) => this.setState({ activityDetails });
-    handleUpdateIsPlanned = (isPlanned) => this.setState({ isPlanned: true });
-    handleUpdateNotPlanned = (isPlanned) => this.setState({ isPlanned: false });
+    handleUpdatePublic = (privacy) => this.setState({ privacyInput: 'Public', isPublic: true, isPrivate: false });
+    handleUpdatePrivate = (privacy) => this.setState({ privacyInput: 'Private', isPrivate: true, isPublic: false });
 
-    handleCreateEvent = () => {
-        this.props.navigation.navigate("PP", {event: this.state})
-        /*firebaseDb
-            .db
-            .collection('events')
-            .add({
-                eventName: this.state.eventName,
-                date: this.state.date,
-                time: this.state.time,
-                location: this.state.location,
-                estimatedSize: this.state.estimatedSize,
-                activityDetails: this.state.activityDetails,
-                isPlanned: this.state.isPlanned
-            }).then(() => this.setState({
-                eventName: '',
-                date: '',
-                time: '',
-                location: '',
-                estimatedSize: '',
-                activityDetails: '',
-                isPlanned: '',
-                createSuccessful: true
-            })).catch(err => console.error(err))*/
-    }       
+    handleSelectInvitees = () => {
+        if (this.state.isPublic) {
+            this.props.navigation.navigate("Private", {event: this.state.event})
+        } else {
+            this.props.navigation.navigate("Private", {event: this.state.event})
+        }
+    }
 
     render() {
         const { eventName, date, time, location, estimatedSize,
                 activityDetails, isPlanned, createSuccessful } = this.state
-
         return (
-            <KeyboardAvoidingView behavior="padding" style={{backgroundColor: '#9eddff', flex: 1}}>
-                <Header title = "Create Event"/>
-                <View style={{alignItems: 'center', backgroundColor: '#ffec70'}}>
-                    <Text style={{padding: 10}}>Personalise your own event!</Text>
-                </View>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("PP", {event: this.state})}>
-                    <Text>PPSelection</Text>
-                </TouchableOpacity>
-                <View style={styles.contentStyle}>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Event Name"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={this.handleUpdateEventName}
-                        value={eventName}
-                        returnKeyType="next"
-                        onSubmitEditing={() => this.dateInput.focus()}
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Date"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={this.handleUpdateDate}
-                        value={date}
-                        returnKeyType="next"
-                        ref={(dateInput) => this.dateInput = dateInput}
-                        onSubmitEditing={() => this.timeInput.focus()}
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Time"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={this.handleUpdateTime}
-                        value={time}
-                        returnKeyType="next"
-                        ref={(timeInput) => this.timeInput = timeInput}
-                        onSubmitEditing={() => this.locationInput.focus()}
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Location"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={this.handleUpdateLocation}
-                        value={location}
-                        returnKeyType="next"
-                        ref={(locationInput) => this.locationInput = locationInput}
-                        onSubmitEditing={() => this.sizeInput.focus()}
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Estimated Size"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={this.handleUpdateEstimatedSize}
-                        value={estimatedSize}
-                        returnKeyType="next"
-                        ref={(sizeInput) => this.sizeInput = sizeInput}
-                        onSubmitEditing={() => this.detailsInput.focus()}
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Activity Details"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={this.handleUpdateActivityDetails}
-                        value={activityDetails}
-                        returnKeyType="next"
-                        ref={(detailsInput) => this.detailsInput = detailsInput}
-                    />
-                    <Text style={{paddingBottom: 10, paddingTop: 25}}>
-                        Activity planned out?
-                    </Text>
-                    </View>
+            <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+                <ScrollView style={{flex: 1}}>
+                    <View style={styles.container}>
+                        <View style={styles.top}>
+                            <View style={styles.header}>
+                                <Text style={styles.headerTitle}>Create Event</Text>
+                            </View>
+                        </View>
 
-                    <View style={styles.tabStyle}>
-                        <TouchableOpacity
-                            style={[this.state.isPlanned? styles.addButtonS: styles.addButtonNS]}
-                            onPress={this.handleUpdateIsPlanned}
-                        >
-                            <Text style={styles.addButtonText}>Yes</Text>
-                        </TouchableOpacity>
+                        <View style={styles.form}>
+                            <View style={{ marginTop: 32 }}>
+                                <Text style={styles.inputTitle}>Event Name</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateEventName}
+                                    value={eventName}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => this.dateInput.focus()}
+                                />
+                            </View>
+                            <View style={{ marginTop: 32 }}>
+                                <Text style={styles.inputTitle}>Date</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateDate}
+                                    value={date}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => this.timeInput.focus()}
+                                />
+                            </View>
+                            <View style={{ marginTop: 32 }}>
+                                <Text style={styles.inputTitle}>Time</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateTime}
+                                    value={time}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => this.locationInput.focus()}
+                                />
+                            </View>
+                            <View style={{ marginTop: 32 }}>
+                                <Text style={styles.inputTitle}>Location</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateLocation}
+                                    value={location}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => this.sizeInput.focus()}
+                                />
+                            </View>
+                            <View style={{ marginTop: 32 }}>
+                                <Text style={styles.inputTitle}>Size</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateEstimatedSize}
+                                    value={estimatedSize}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => this.detailsInput.focus()}
+                                />
+                            </View>
+                            <View style={{ marginTop: 32 }}>
+                                <Text style={styles.inputTitle}>Activity Details</Text>
+                                <TextInput
+                                    style={styles.inputLast}
+                                    autoCapitalize="none"
+                                    multiline
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateActivityDetails}
+                                    value={activityDetails}
+                                    returnKeyType="go"
+                                />
+                            </View>
+                        </View>
 
-                        <TouchableOpacity
-                            style={[this.state.isPlanned? styles.addButtonNS: styles.addButtonS]}
-                            onPress={this.handleUpdateNotPlanned}
-                        >
-                            <Text style={styles.addButtonText}>No</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={styles.divider} />
+                            <View style={styles.displayPrivacy}>
+                                <Text style={styles.privacyText}>{this.state.privacyInput}</Text>
+                            </View>
+                            <View style={styles.divider} />
+                        </View>
 
-                    <View style={styles.buttonPosition}>
-                    <BlueButton
-                        style={styles.button}
-                        onPress={() => {
-                            if (eventName.length && date.length && time.length && location.length &&
-                                estimatedSize.length && activityDetails.length) {
-                                this.handleCreateEvent()
-                            }
-                        }}
-                    >
-                        Create
-                    </BlueButton>
+                        <View style={styles.tabStyle}>
+                            <TouchableOpacity
+                                style={[this.state.isPublic? styles.addButtonS: styles.addButtonNS]}
+                                onPress={this.handleUpdatePublic}
+                            >
+                                <Text style={styles.toggButtonText}>Public</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[this.state.isPrivate? styles.addButtonS: styles.addButtonNS]}
+                                onPress={this.handleUpdatePrivate}
+                            >
+                                <Text style={styles.toggButtonText}>Private</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.buttonPosition}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    if (eventName.length && date.length && time.length && location.length &&
+                                        estimatedSize.length && activityDetails.length) {
+                                        this.handleSelectInvitees()
+                                    }
+                                }}
+                            >
+                                <Text style={styles.nextButtonText}>Next</Text>
+                                <Ionicons name="md-arrow-forward" size={16} color='#73788B'></Ionicons>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    {
-                        createSuccessful &&
-                        (alert('Successful Event Creation'))
-                    }
+                </ScrollView>
             </KeyboardAvoidingView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    contentStyle: {
-        alignItems: 'center',
-        paddingTop: 30
+    container: {
+        flex: 1,
+        backgroundColor: '#FFEBEE'
     },
-    textInput: {
-        borderWidth: 1,
-        borderColor: 'black',
-        backgroundColor: 'white',
-        color: 'black',
+    backArrow: {
+        flex: 1,
+        alignSelf: 'flex-start'
+    },
+    top: {
+        backgroundColor: '#FFF',
+        borderBottomWidth: 2,
+        borderBottomColor: '#EBECF4',
+        shadowColor: '#011f4b',
+        shadowOffset: {height: 5},
+        shadowOpacity: 0.4,
+        zIndex: 10,
+        padding: 10
+    },
+    header: {
+        flex: 1,
+        padding: 16,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+    },
+    headerTitle: {
+        fontSize: 20,
+        fontWeight: '500',
+        alignSelf: 'center',
+        position: 'absolute'
+    },
+    form: {
+        marginBottom: 48,
+        marginHorizontal: 30
+    },
+    inputTitle: {
+        fontSize: 12,
+        color: '#8A8F9E',
+        textTransform:'uppercase',
+        marginBottom: 5
+    },
+    input: {
+        borderBottomColor: '#8A8F9E',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        height: 40,
         fontSize: 15,
-        marginBottom: 10,
+        color: '#161F3D',
+        paddingLeft: 5,
+        backgroundColor: 'rgba(255, 255, 255, 0.6)'
+    },
+    inputLast: {
+        borderBottomColor: '#8A8F9E',
+        borderWidth: StyleSheet.hairlineWidth,
+        height: 80,
+        fontSize: 15,
+        color: '#161F3D',
+        paddingLeft: 5,
+        borderRadius: 5,
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        paddingTop: 5
+    },
+    divider: {
+        backgroundColor: '#F06292',
+        height: 2,
+        flex: 1,
+        alignSelf: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#BBDEFB'
+    },
+    displayPrivacy: {
+        height: 30,
         width: 200,
-        height: 35,
-        padding: 5
+        alignItems: 'center'
     },
-    button: {
-        marginTop: 25,
+    privacyText: {
+        fontWeight: '300',
+        color: '#B71C1C',
+        fontSize: 18,
+        paddingHorizontal: 64,
+        textTransform:'uppercase'
     },
-    buttonPosition: {
-        alignItems: 'flex-end',
-        paddingRight: 10
+    tabStyle: {
+        marginTop: 32,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingHorizontal: '20%'
     },
     addButtonS: {
         width: 80,
-        backgroundColor: 'rgba(163, 196, 255, 0.3)',
+        backgroundColor: 'rgba(239, 154, 154, 0.3)',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 35
+        height: 35,
+        borderRadius: 20,
     },
     addButtonNS: {
         width: 80,
-        backgroundColor: 'rgba(163, 196, 255, 1)',
+        backgroundColor: '#EF9A9A',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 35
+        height: 35,
+        borderRadius: 20,
+        shadowOffset: {height: 1, width: 1},
+        shadowColor: '#455A64',
+        shadowOpacity: 0.6
     },
-    addButtonText: {
+    toggButtonText: {
         color: 'black',
-        fontSize: 18,
-        fontWeight: '700'
+        fontSize: 14,
+        fontWeight: '300'
     },
-    tabStyle: {
+    buttonPosition: {
+        alignItems: 'flex-end',
+        marginTop: 10
+    },
+    button: {
         flexDirection: 'row',
-        alignItems: 'center',
+        margin: 25,
+        padding: 10,
+        backgroundColor: '#E0E0E0',
+        borderRadius: 7,
         justifyContent: 'center',
-        backgroundColor: '#d1e2ff'
+        alignItems: 'center',
+        shadowOffset: {height: 1, width: 1},
+        shadowOpacity: 0.3
+    },
+    nextButtonText: {
+        fontSize: 16,
+        fontWeight: '400',
+        marginRight: 10
     }
-
 });
 
 export default CreateEventContainer;
