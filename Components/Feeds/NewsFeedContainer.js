@@ -1,151 +1,168 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, SafeAreaView, Image,
-         ScrollView, TouchableOpacity, AsyncStorage, StatusBar, ImageBackground } from 'react-native';
-import {Ionicons, MaterialIcons} from "@expo/vector-icons";
+import { View, FlatList, ActivityIndicator, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
-import * as firebase from 'firebase';
-import {Thumbnail} from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 
-
-export default class ViewEvent extends React.Component {
+class NewsFeedContainer extends React.Component {
     state = {
-        eventUID: this.props.navigation.getParam("eventUID",""),
-        eventName: '',
-        date: '',
-        time: '',
-        location: '',
-        estimatedSize: '',
-        activityDetails: '',
-        isPlanned: false,
+        isLoading: true,
+        events: null
     }
 
     componentDidMount() {
-        firebaseDb.db.collection('events').doc(this.state.eventUID).onSnapshot(docSnapshot => {
-            const info = docSnapshot.data()
-            this.setState({
-                eventName: info.eventName,
-                date: info.date,
-                time: info.time,
-                location: info.location,
-                estimatedSize: info.estimatedSize,
-                activityDetails: info.activityDetails,
-                isPlanned: info.isPlanned,
-            })
+        const user = firebaseDb.auth.currentUser;
+        const uid = user.uid;
+        firebaseDb.db.collection('notification').doc(uid).onSnapshot(docSnapshot => {
+            const events = [];
+            const info = docSnapshot.data().ongoingEvent;
+
+            const eventCollection = firebaseDb.db.collection('events');
+
+            for(let eventUID in info) {
+                const docRef = eventCollection.doc(info.friendlist[uid]);
+                docRef.get().then(docSnapshot => {
+                    events.push(docSnapshot.data())
+                })
+            }
+
+            this.setState({events: events})
         })
+
+        firebaseDb.db.collection('events').get().then(querySnapshot => {
+            const results = []
+            querySnapshot.docs.map(documentSnapshot => results.push(documentSnapshot.data()))
+            this.setState({isLoading: false, events: results})
+        }).catch(err => console.error(err))
     }
 
-    render(){
-
-        const {eventName, date, time, location, estimatedSize, activityDetails, isPlanned} = this.state;
-        return(
-            <SafeAreaView style={styles.container}>
-                <ScrollView>
-                    <TouchableOpacity
-                        style={styles.backArrow}
-                        onPress={() => this.props.navigation.goBack()}
-                    >
-                        <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
-                    </TouchableOpacity>
-
-                    <View style={{marginTop: -5, flex: 1, padding: 20}}>
-                        <Text style={styles.userStyle}>{eventName}</Text>
-
-                        <View style={styles.infoContainer}>
-                            <View style={styles.info}>
-                                <Text style={styles.title}>Organiser</Text>
-                                <Text style={styles.text}>Jue Shi Tang Men</Text>
+    renderEvent = event => {
+        return (
+            <View style={styles.eventItem}>
+                <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <View style={{flex: 1}}>
+                            <Text style={styles.eventTitle}>{event.eventName}</Text>
+                            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+                                <View>
+                                    <Text style={styles.eventTime}>{event.date}</Text>
+                                    <Text style={styles.eventTime}>{event.time}</Text>
+                                </View>
+                                <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
-                            <View style={styles.info}>
-                                <Text style={styles.title}>Date</Text>
-                                <Text style={styles.text}>{date}</Text>
+                            <View style={{alignItems: 'flex-end'}}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
+                                    <Ionicons name="ios-more" size={24} color="#bee0ff" />
+                                </TouchableOpacity>
                             </View>
-                            <View style={styles.info}>
-                                <Text style={styles.title}>Time</Text>
-                                <Text style={styles.text}>{time}</Text>
-                            </View>
-
-                        </View>
-                        <View style={styles.infoB}>
-                            <Text style={styles.titleB}>Event Type</Text>
-                            <Text style={styles.textB}>{isPlanned ? "Public" : "Private"}</Text>
-                        </View>
-                        <View style={styles.infoB}>
-                            <Text style={styles.titleB}>Location</Text>
-                            <Text style={styles.textB}>{location}</Text>
-                        </View>
-                        <View style={styles.infoB}>
-                            <Text style={styles.titleB}>Activity Details</Text>
-                            <Text style={styles.textB}>{activityDetails}</Text>
-                        </View>
-                        <View style={styles.infoB}>
-                            <Text style={styles.titleB}>Participants</Text>
-                            <Text style={styles.textB}>{estimatedSize}</Text>
                         </View>
                     </View>
+                </View>
+            </View>
+        );
+    };
+
+    render() {
+        const { isLoading, events } = this.state
+        if (isLoading) {
+            return(
+                <View style = {styles.loading}>
+                    <ActivityIndicator size="large"></ActivityIndicator>
+                    <Text>Loading</Text>
+                </View>
+            );
+        }
+        return(
+            <View style={styles.container}>
+                <View style={styles.top}>
+                    <View style={styles.header}>
+                        <TouchableOpacity
+                            style={styles.backArrow}
+                            onPress={() => this.props.navigation.navigate("HomeScreen")}>
+                            <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
+                        </TouchableOpacity>
+
+                        <Text style={styles.headerTitle}>Feeds</Text>
+                    </View>
+                </View>
+
+                <ScrollView>
+                    <FlatList
+                        style={styles.feed}
+                        data={events}
+                        renderItem={({ item }) => this.renderEvent(item)}
+                        keyExtractor={item => item.eventName}
+                        showsVerticalScrollIndicator={false}
+                    />
                 </ScrollView>
-            </SafeAreaView>
-        )
+            </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E1F5FE'
+        backgroundColor: '#f2f9ff'
     },
     backArrow: {
-        padding: 10
-    },
-    userStyle: {
-        fontSize: 20,
-        fontWeight: '400',
-        alignSelf: 'center',
-        textTransform: 'uppercase',
-    },
-    infoContainer: {
         flex: 1,
+        alignSelf: 'flex-start'
+    },
+    top: {
+        backgroundColor: '#FFF',
+        borderBottomWidth: 2,
+        borderBottomColor: '#EBECF4',
+        shadowColor: '#011f4b',
+        shadowOffset: {height: 5},
+        shadowOpacity: 0.4,
+        zIndex: 10,
+    },
+    header: {
+        flex: 1,
+        padding: 16,
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'space-around',
-        marginHorizontal: 32,
-        marginTop: 20
-    },
-    info: {
         alignItems: 'flex-start',
-        marginLeft: 10
+        justifyContent: 'center'
     },
-    title: {
-        color: '#C3C5CD',
-        fontSize: 15,
-        fontWeight: '500'
+    headerTitle: {
+        fontSize: 20,
+        fontWeight: '500',
+        alignSelf: 'center',
+        position: 'absolute'
     },
-    text: {
-        marginTop: 4,
-        color: '#4F566D',
-        fontSize: 18,
-        fontWeight: '300'
+    feed: {
+        paddingHorizontal: 16
     },
-    infoB: {
-        marginTop: 30,
-        alignItems: 'flex-start',
-        marginHorizontal: 50,
-        borderWidth: 1,
-        borderRadius: 10,
-        shadowOffset: {height: 2, width: 2},
-        shadowOpacity: 0.2,
-        borderColor: '#039BE5',
+    eventItem: {
+        backgroundColor: '#FFF',
+        borderRadius: 5,
         padding: 10,
-        backgroundColor: '#f5f5f5'
+        flexDirection: 'row',
+        marginVertical: 8,
+        shadowOpacity: 0.1,
+        shadowOffset: {height: 2, width: 2}
     },
-    titleB: {
-        color: '#90A4AE',
-        fontSize: 13,
-        fontWeight: '400'
-    },
-    textB: {
-        marginTop: 5,
-        color: '#4F566D',
+    eventTitle: {
         fontSize: 15,
-        fontWeight: '300'
-    }
-});
+        fontWeight: '500',
+        color: '#03396c',
+        paddingBottom: 5
+    },
+    eventTime: {
+        fontSize: 11,
+        color: '#9fcffb',
+        marginTop: 4
+    },
+    details: {
+        fontSize: 14,
+        color: '#6497b1',
+        paddingLeft: 15
+    },
+    loading: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+})
+
+export default NewsFeedContainer;
