@@ -41,17 +41,20 @@ class NewsFeedContainer extends React.Component {
                 <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{flex: 1}}>
-                            <Text style={styles.eventTitle}>{event.eventName}</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-                                <View>
-                                    <Text style={styles.eventTime}>{event.date}</Text>
+                            <View style={styles.titleBar}>
+                                <Text style={styles.eventTitle}>{event.eventName}</Text>
+                            </View>
+
+                            <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
+                                <View style={{width: 80}}>
+                                    <Text style={styles.eventDate}>{event.date}</Text>
                                     <Text style={styles.eventTime}>{event.time}</Text>
                                 </View>
                                 <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
                             <View style={{alignItems: 'flex-end'}}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={24} color="#bee0ff" />
+                                    <Ionicons name="ios-more" size={24} color="#607D8B" />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -136,27 +139,40 @@ const styles = StyleSheet.create({
     eventItem: {
         backgroundColor: '#FFF',
         borderRadius: 5,
-        padding: 10,
+        padding: 15,
+        paddingHorizontal: 20,
         flexDirection: 'row',
         marginVertical: 8,
         shadowOpacity: 0.1,
-        shadowOffset: {height: 2, width: 2}
+        shadowOffset: {height: 3, width: 3},
+        shadowRadius: 5
+    },
+    titleBar: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#B0BEC5',
+        paddingBottom: 8
     },
     eventTitle: {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: '500',
-        color: '#03396c',
-        paddingBottom: 5
+        color: '#607D8B',
+        paddingBottom: 5,
+        textTransform: 'uppercase'
+    },
+    eventDate: {
+        fontSize: 12,
+        color: '#0097A7',
+        marginTop: 4
     },
     eventTime: {
-        fontSize: 11,
+        fontSize: 12,
         color: '#9fcffb',
         marginTop: 4
     },
     details: {
         fontSize: 14,
-        color: '#6497b1',
-        paddingLeft: 15
+        color: '#455A64',
+        paddingLeft: 20
     },
     loading: {
         flex: 1,
