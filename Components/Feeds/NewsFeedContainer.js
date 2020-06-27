@@ -1,494 +1,151 @@
 import React from 'react';
-import { View, FlatList, ActivityIndicator, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import firebaseDb from '../Database/firebaseDb';
-import { Header, Item, Icon, Input } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
-
-class NewsFeedContainer extends React.Component {
-    state = {
-        isLoading: true,
-        events: null
-    }
-
-    componentDidMount() {
-        const user = firebaseDb.auth.currentUser;
-        const uid = user.uid;
-        firebaseDb.db.collection('notification').doc(uid).onSnapshot(docSnapshot => {
-            const events = [];
-            const promise = [];
-            const info = docSnapshot.data().eventOngoing;
-
-            const eventCollection = firebaseDb.db.collection('events');
-
-            for(let eventUID in info) {
-                const docRef = eventCollection.doc(info[eventUID]);
-                promise.push(docRef.get().then(docSnapshot => {
-                    events.push(docSnapshot.data())
-                }))
-            }
-
-            Promise.all(promise).then(() => this.setState({isLoading: false, events: events}))
-        })
-    }
-
-    renderEvent = event => {
-        return (
-            <View style={styles.eventItem}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View style={{flex: 1}}>
-                            <Text style={styles.eventTitle}>{event.eventName}</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-                                <View>
-                                    <Text style={styles.eventTime}>{event.date}</Text>
-                                    <Text style={styles.eventTime}>{event.time}</Text>
-                                </View>
-                                <Text style={styles.details}>{event.activityDetails}</Text>
-                            </View>
-                            <View style={{alignItems: 'flex-end'}}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={24} color="#bee0ff" />
-                                </TouchableOpacity>        
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
-    };
-
-    render() {
-        const { isLoading, events } = this.state
-        if (isLoading) {
-            return(
-                <View style = {styles.loading}>
-                    <ActivityIndicator size="large"></ActivityIndicator>
-                    <Text>Loading</Text>
-                </View>
-            );
-        }
-        return(
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        style={styles.backArrow}
-                        onPress={() => this.props.navigation.navigate("HomeScreen")}>
-                        <Ionicons name="md-arrow-back" size={24} color='#D8D9DB'></Ionicons>
-                    </TouchableOpacity>
-
-                    <Text style={styles.headerTitle}>Feeds</Text>
-                </View>
-
-                <ScrollView>
-                    <FlatList
-                        style={styles.feed}
-                        data={events}
-                        renderItem={({ item }) => this.renderEvent(item)}
-                        keyExtractor={item => item.eventName}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </ScrollView>
-            </View>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f2f9ff'
-    },
-    backArrow: {
-        flex: 1,
-        alignSelf: 'flex-start',
-        marginTop: -8
-    },
-    header: {
-        flex: 1,
-        padding: 16,
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottomWidth: 2,
-        borderBottomColor: '#EBECF4',
-        shadowColor: '#011f4b',
-        shadowOffset: {height: 5},
-        shadowOpacity: 0.4,
-        zIndex: 10,
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: '500',
-        alignSelf: 'center',
-        position: 'absolute'
-    },
-    textStyle: {
-        padding: 10
-    },
-    feed: {
-        paddingHorizontal: 16
-    },
-    eventItem: {
-        backgroundColor: '#FFF',
-        borderRadius: 5,
-        padding: 10,
-        flexDirection: 'row',
-        marginVertical: 8,
-        shadowOpacity: 0.1,
-        shadowOffset: {height: 2, width: 2}
-    },
-    eventTitle: {
-        fontSize: 15,
-        fontWeight: '500',
-        color: '#03396c',
-        paddingBottom: 5
-    },
-    eventTime: {
-        fontSize: 11,
-        color: '#9fcffb',
-        marginTop: 4
-    },
-    details: {
-        fontSize: 14,
-        color: '#6497b1',
-        paddingLeft: 15
-    },
-    loading: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-})
-
-export default NewsFeedContainer;
-
-/*import React from 'react';
-import { View, FlatList, ActivityIndicator, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import firebaseDb from '../Database/firebaseDb';
-import { Header, Item, Icon, Input } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
-
-class NewsFeedContainer extends React.Component {
-    state = {
-        isLoading: true,
-        events: null
-    }
-
-    componentDidMount() {
-        const user = firebaseDb.auth.currentUser;
-        const uid = user.uid;
-        firebaseDb.db.collection('notification').doc(uid).onSnapshot(docSnapshot => {
-            const events = [];
-            const promise = [];
-            const info = docSnapshot.data().eventOngoing;
-
-            const eventCollection = firebaseDb.db.collection('events');
-
-            for(let eventUID in info) {
-                const docRef = eventCollection.doc(info[eventUID]);
-                promise.push(docRef.get().then(docSnapshot => {
-                    events.push(docSnapshot.data())
-                }))
-            }
-
-            Promise.all(promise).then(() => this.setState({isLoading: false, events: events}))
-        })
-    }
-
-    renderEvent = event => {
-        return (
-            <View style={styles.eventItem}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View style={{flex: 1}}>
-                            <Text style={styles.eventTitle}>{event.eventName}</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-                                <View>
-                                    <Text style={styles.eventTime}>{event.date}</Text>
-                                    <Text style={styles.eventTime}>{event.time}</Text>
-                                </View>
-                                <Text style={styles.details}>{event.activityDetails}</Text>
-                            </View>
-                            <View style={{alignItems: 'flex-end'}}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={24} color="#73788B" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
-    };
-
-    render() {
-        const { isLoading, events } = this.state
-        if (isLoading) {
-            return( 
-                <View style = {styles.loading}>
-                    <ActivityIndicator size="large"></ActivityIndicator>
-                    <Text>Loading</Text>
-                </View>
-            );
-        }
-        return(
-            <View style={styles.container}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("HomeScreen")}>
-                    <Ionicons name="md-arrow-back" size={24} color='#D8D9DB'></Ionicons>
-                </TouchableOpacity>
-
-                <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Feeds</Text>
-                </View>
-                <ScrollView>
-                    <FlatList
-                        style={styles.feed}
-                        data={events}
-                        renderItem={({ item }) => this.renderEvent(item)}
-                        keyExtractor={item => item.eventName}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </ScrollView>
-            </View>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#EFECF4'
-    },
-    header: {
-        flex: 1,
-        flexDirection: 'row',
-        paddingTop: 16,
-        paddingBottom: 16,
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#EBECF4',
-        shadowColor: '#454D65',
-        shadowOffset: {height: 5},
-        shadowRadius: 15,
-        shadowOpacity: 0.2,
-        zIndex: 10
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: '500',
-    },
-    textStyle: {
-        padding: 10
-    },
-    feed: {
-        marginHorizontal: 16
-    },
-    eventItem: {
-        backgroundColor: '#FFF',
-        borderRadius: 5,
-        padding: 8,
-        flexDirection: 'row',
-        marginVertical: 8
-    },
-    eventTitle: {
-        fontSize: 15,
-        fontWeight: '500',
-        color: '#454D65',
-        paddingBottom: 5
-    },
-    eventTime: {
-        fontSize: 11,
-        color: '#C4C6CE',
-        marginTop: 4
-    },
-    details: {
-        fontSize: 14,
-        color: '#838899',
-        paddingLeft: 10
-    },
-    
-    loading: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-})
-
-export default NewsFeedContainer;
-*/
-
-/*import React from 'react';
-import { View, FlatList, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, TextInput, SafeAreaView, Image,
+         ScrollView, TouchableOpacity, AsyncStorage, StatusBar, ImageBackground } from 'react-native';
+import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
-import Header1 from '../GlobalStyles/Header';
-import { Header, Item, Icon, Input } from 'native-base';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Thumbnail} from 'native-base';
 
-class NewsFeedContainer extends React.Component {
+
+export default class ViewEvent extends React.Component {
     state = {
-        isLoading: true,
-        events: null,
-        requests: [],
-        uid: "",//this.props.navigation.getParam('uid', ''),
+        eventUID: this.props.navigation.getParam("eventUID",""),
+        eventName: '',
+        date: '',
+        time: '',
+        location: '',
+        estimatedSize: '',
+        activityDetails: '',
+        isPlanned: false,
     }
 
     componentDidMount() {
-
-        // took all events// should make it personal
-        firebaseDb.db.collection('events').get().then(querySnapshot => {
-            const results = []
-            querySnapshot.docs.map(documentSnapshot => results.push(documentSnapshot.data()))
-            this.setState({isLoading: false, events: results})
-        }).catch(err => console.error(err))
-
-        const currUser = firebaseDb.auth.currentUser;
-        this.setState({uid: currUser.uid})
-
-        firebaseDb.db.collection('notification').doc(currUser.uid).onSnapshot(docSnapshot => {
-            const info = docSnapshot.data();
-            
-            const friendRequests = info.friendRequest;
-            const profileCollection = firebaseDb.db.collection('profile');
-            const requests = [];
-            console.log(friendRequests)
-            for(let uid in friendRequests) {
-                console.log(friendRequests[uid])
-                const docRef = profileCollection.doc(friendRequests[uid]);
-                docRef.get().then(docSnapshot => {
-                    console.log(docSnapshot.data())
-                    requests.push(docSnapshot.data())
-                    this.state.requests.push(docSnapshot.data())
-                    console.log(this.state.requests)
-                })
-                
-            }
-           // this.setState({requests: requests}) // async problem // need check other component too
+        firebaseDb.db.collection('events').doc(this.state.eventUID).onSnapshot(docSnapshot => {
+            const info = docSnapshot.data()
+            this.setState({
+                eventName: info.eventName,
+                date: info.date,
+                time: info.time,
+                location: info.location,
+                estimatedSize: info.estimatedSize,
+                activityDetails: info.activityDetails,
+                isPlanned: info.isPlanned,
+            })
         })
     }
-    handleSignOutUser = () => {
-        firebaseDb.auth.signOut();
-    }
 
-    handleAccept = (uid) => {
-        const currUser = firebaseDb.auth.currentUser;
-        var currFriendlist = firebaseDb.db.collection('friendlist').doc(currUser.uid);
-        currFriendlist.update({
-            friendlist: firebase.firestore.FieldValue.arrayUnion(uid)
-        }).catch(err => console.error(err));
+    render(){
 
-        var currFriendlist2 = firebaseDb.db.collection('friendlist').doc(uid);
-        currFriendlist2.update({
-            friendlist: firebase.firestore.FieldValue.arrayUnion(currUser.uid)
-        }).catch(err => console.error(err));
-
-        this.handleReject(uid);
-    }
-
-    handleReject = (uid) => {
-        const currUser = firebaseDb.auth.currentUser;
-        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
-        currNotification.update({
-            friendRequest: firebase.firestore.FieldValue.arrayRemove(uid)
-        }).catch(err => console.error(err));
-
-        for(let index in this.state.requests) {
-            if(this.state.requests[index] == uid) {
-                this.state.requests.splice(index, 1);
-            }
-        }
-    }
-
-    render() {
-        const {isLoading, events, requests, uid} = this.state
-        if (isLoading) {
-            return( 
-                <View style = {styles.loading}>
-                    <ActivityIndicator size="large"></ActivityIndicator>
-                    <Text>Loading</Text>
-                </View>
-            );
-        }
+        const {eventName, date, time, location, estimatedSize, activityDetails, isPlanned} = this.state;
         return(
-            <View>
-                <Header1 title="News Feed" />
-                <Header searchBar rounded style={{backgroundColor: '#c425e8'}}>
-                    <Item>
-                        <Icon name='search' />
-                        <Input placeholder="Search Event"
-                        />
-                    </Item>
-                    <TouchableOpacity onPress={() => this.handleSignOutUser()} style={styles.signOut}>
-                        <Text>Logout</Text>
+            <SafeAreaView style={styles.container}>
+                <ScrollView>
+                    <TouchableOpacity
+                        style={styles.backArrow}
+                        onPress={() => this.props.navigation.goBack()}
+                    >
+                        <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                     </TouchableOpacity>
-                </Header>
-                <FlatList
-                    data={requests}
-                    renderItem={({ item }) => {
-                   
-                        return (
-                            <View style={styles.itemContainer}>
-                                <Text style={styles.textStyle}>{"Userame: " + item.username}</Text>
-                                <TouchableOpacity onPress={() => {this.handleAccept(item.uid)}}>
-                                    <Text>Accept</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.handleReject(item.uid)}}>
-                                    <Text>Reject</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.props.navigation.navigate("ViewProfile", {displayName: item.username, uid: item.uid})}}>
-                                    <Text>View</Text>
-                                </TouchableOpacity>
+
+                    <View style={{marginTop: -5, flex: 1, padding: 20}}>
+                        <Text style={styles.userStyle}>{eventName}</Text>
+
+                        <View style={styles.infoContainer}>
+                            <View style={styles.info}>
+                                <Text style={styles.title}>Organiser</Text>
+                                <Text style={styles.text}>Jue Shi Tang Men</Text>
                             </View>
-                        );
-                    }}
-                    keyExtractor={item => item.username}
-                />
-                
-                <FlatList
-                    data={events}
-                    renderItem={({ item }) => {
-                        return (
-                            <View style={styles.itemContainer}>
-                                <Text style={styles.textStyle}>{"Event Name: " + item.eventName}</Text>
-                                <Text style={styles.textStyle}>{"Date: " + item.date}</Text>
-                                <Text style={styles.textStyle}>{"Time: " + item.time}</Text>
-                                <Text style={styles.textStyle}>{"Location: " + item.location}</Text>
-                                <Text style={styles.textStyle}>{"Estimated Size: " + item.estimatedSize}</Text>
-                                <Text style={styles.textStyle}>{"Activity Details: " + item.activityDetails}</Text>
-                                <Text style={styles.textStyle}>{"Activity Planned?: " + item.isPlanned}</Text>
+                            <View style={styles.info}>
+                                <Text style={styles.title}>Date</Text>
+                                <Text style={styles.text}>{date}</Text>
                             </View>
-                        );
-                    }}
-                    keyExtractor={item => item.eventName}
-                />
-            </View>
-        );
+                            <View style={styles.info}>
+                                <Text style={styles.title}>Time</Text>
+                                <Text style={styles.text}>{time}</Text>
+                            </View>
+
+                        </View>
+                        <View style={styles.infoB}>
+                            <Text style={styles.titleB}>Event Type</Text>
+                            <Text style={styles.textB}>{isPlanned ? "Public" : "Private"}</Text>
+                        </View>
+                        <View style={styles.infoB}>
+                            <Text style={styles.titleB}>Location</Text>
+                            <Text style={styles.textB}>{location}</Text>
+                        </View>
+                        <View style={styles.infoB}>
+                            <Text style={styles.titleB}>Activity Details</Text>
+                            <Text style={styles.textB}>{activityDetails}</Text>
+                        </View>
+                        <View style={styles.infoB}>
+                            <Text style={styles.titleB}>Participants</Text>
+                            <Text style={styles.textB}>{estimatedSize}</Text>
+                        </View>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        )
     }
 }
 
 const styles = StyleSheet.create({
-    itemContainer: {
-        paddingTop: 10
+    container: {
+        flex: 1,
+        backgroundColor: '#E1F5FE'
     },
-    textStyle: {
+    backArrow: {
         padding: 10
     },
-
-    loading: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+    userStyle: {
+        fontSize: 20,
+        fontWeight: '400',
+        alignSelf: 'center',
+        textTransform: 'uppercase',
     },
-
-    signOut: {
-        borderBottomWidth: 18,
+    infoContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'space-around',
+        marginHorizontal: 32,
+        marginTop: 20
+    },
+    info: {
+        alignItems: 'flex-start',
+        marginLeft: 10
+    },
+    title: {
+        color: '#C3C5CD',
+        fontSize: 15,
+        fontWeight: '500'
+    },
+    text: {
+        marginTop: 4,
+        color: '#4F566D',
+        fontSize: 18,
+        fontWeight: '300'
+    },
+    infoB: {
+        marginTop: 30,
+        alignItems: 'flex-start',
+        marginHorizontal: 50,
+        borderWidth: 1,
+        borderRadius: 10,
+        shadowOffset: {height: 2, width: 2},
+        shadowOpacity: 0.2,
+        borderColor: '#039BE5',
+        padding: 10,
+        backgroundColor: '#f5f5f5'
+    },
+    titleB: {
+        color: '#90A4AE',
+        fontSize: 13,
+        fontWeight: '400'
+    },
+    textB: {
+        marginTop: 5,
+        color: '#4F566D',
+        fontSize: 15,
+        fontWeight: '300'
     }
-})
-
-export default NewsFeedContainer;*/
+});
