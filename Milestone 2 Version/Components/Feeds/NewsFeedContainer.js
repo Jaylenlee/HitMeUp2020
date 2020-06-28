@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 5},
         shadowOpacity: 0.4,
         zIndex: 10,
+        padding: 11
     },
     header: {
         flex: 1,
