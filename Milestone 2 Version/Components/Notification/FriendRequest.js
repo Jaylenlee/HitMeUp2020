@@ -120,7 +120,7 @@ class FriendRequest extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ECE89A'
+        backgroundColor: '#FFFDE7'
     },
     backArrow: {
         flex: 1,
@@ -201,13 +201,13 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     toggleButtonS: {
-        backgroundColor: '#F7C86B',
+        backgroundColor: '#FFE0B2',
         padding: 5,
         paddingHorizontal: 10,
         borderRadius: 3
     },
     toggleButtonNS: {
-        backgroundColor: '#E6CC94',
+        backgroundColor: '#FFF9C4',
         padding: 5,
         paddingHorizontal: 10,
         borderBottomColor: '#00695C',
