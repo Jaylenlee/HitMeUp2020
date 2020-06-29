@@ -1,0 +1,3 @@
+Dependencies:
+    Google Firebase
+	--save firebase
