@@ -2,9 +2,8 @@ import React from 'react'
 import { View, TextInput, Text, StyleSheet, ScrollView,
          KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import MyDatePicker from '../GlobalStyles/MyDatePicker';
-import TimeApp from '../GlobalStyles/DateTimePickerDemo';
 import { DatePicker, TimePicker } from 'antd';
+import 'antd/dist/antd.css';
 
 class CreateEventContainer extends React.Component {
     state = {
@@ -17,7 +16,7 @@ class CreateEventContainer extends React.Component {
         createSuccessful: false,
         privacyInput: '',
         isPublic: false,
-        isPrivate: false,
+        isPrivate: false
     };
 
     handleUpdateEventName = (eventName) => this.setState({ eventName });
@@ -28,6 +27,8 @@ class CreateEventContainer extends React.Component {
     handleUpdateActivityDetails = (activityDetails) => this.setState({ activityDetails });
     handleUpdatePublic = (privacy) => this.setState({ privacyInput: 'Public', isPublic: true, isPrivate: false });
     handleUpdatePrivate = (privacy) => this.setState({ privacyInput: 'Private', isPrivate: true, isPublic: false });
+    handleDatePickerChange = (date, dateString) => this.setState({ date: dateString });
+    handleTimePickerChange = (time, timeString) => this.setState({ time: timeString });
 
     handleSelectInvitees = () => {
         if (this.state.isPublic) {
@@ -69,6 +70,7 @@ class CreateEventContainer extends React.Component {
                                     placeholder={"Event Start Date"}
                                     style={{ marginRight: "10px"}}
                                     format="YYYY-MM-DD"
+                                    onChange={this.handleDatePickerChange}
                                  />
                             </View>
                             <View style={{ marginTop: 32 }}>
@@ -77,9 +79,8 @@ class CreateEventContainer extends React.Component {
                                     placeholder={"Event Start Time"}
                                     style={{ marginRight: "10px"}}
                                     format="HH:mm:ss"
+                                    onChange={this.handleTimePickerChange}
                                  />
-                                 <MyDatePicker />
-                                 <TimeApp />
                             </View>
                             <View style={{ marginTop: 32 }}>
                                 <Text style={styles.inputTitle}>Location</Text>
