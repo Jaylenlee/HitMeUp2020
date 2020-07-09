@@ -2,6 +2,9 @@ import React from 'react'
 import { View, TextInput, Text, StyleSheet, ScrollView,
          KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import MyDatePicker from '../GlobalStyles/MyDatePicker';
+import TimeApp from '../GlobalStyles/DateTimePickerDemo';
+import { DatePicker, TimePicker } from 'antd';
 
 class CreateEventContainer extends React.Component {
     state = {
@@ -62,29 +65,21 @@ class CreateEventContainer extends React.Component {
                             </View>
                             <View style={{ marginTop: 32 }}>
                                 <Text style={styles.inputTitle}>Date</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    onChangeText={this.handleUpdateDate}
-                                    value={date}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.timeInput.focus()}
-                                    ref={(input) => {this.dateInput = input}}
-                                />
+                                <DatePicker
+                                    placeholder={"Event Start Date"}
+                                    style={{ marginRight: "10px"}}
+                                    format="YYYY-MM-DD"
+                                 />
                             </View>
                             <View style={{ marginTop: 32 }}>
                                 <Text style={styles.inputTitle}>Time</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    onChangeText={this.handleUpdateTime}
-                                    value={time}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.locationInput.focus()}
-                                    ref={(input) => {this.timeInput = input}}
-                                />
+                                <TimePicker
+                                    placeholder={"Event Start Time"}
+                                    style={{ marginRight: "10px"}}
+                                    format="HH:mm:ss"
+                                 />
+                                 <MyDatePicker />
+                                 <TimeApp />
                             </View>
                             <View style={{ marginTop: 32 }}>
                                 <Text style={styles.inputTitle}>Location</Text>
