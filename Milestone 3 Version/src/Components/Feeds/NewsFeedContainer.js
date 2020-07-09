@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, FlatList, ActivityIndicator, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
+import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
 
 class NewsFeedContainer extends React.Component {
@@ -43,6 +44,14 @@ class NewsFeedContainer extends React.Component {
         })
     }
 
+    pressHandleRemove = (eventUID) => {
+        const currUser = firebaseDb.auth.currentUser;
+        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
+        currNotification.update({
+            eventOngoing: firebase.firestore.FieldValue.arrayRemove(eventUID)
+        })//.then(() => this.props.navigation.navigate("Feeds")).catch(err => console.error(err));
+    }
+
     renderEvent = event => {
         return (
             <View style={styles.eventItem}>
@@ -51,6 +60,10 @@ class NewsFeedContainer extends React.Component {
                         <View style={{flex: 1}}>
                             <View style={styles.titleBar}>
                                 <Text style={styles.eventTitle}>{event.eventName}</Text>
+                                <TouchableOpacity style={{alignSelf: "flex-end"}}
+                                    onPress={() => this.pressHandleRemove(event.eventUID)}>
+                                    <Ionicons name="md-close" size={30}/>
+                                </TouchableOpacity>
                             </View>
 
                             <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
@@ -152,7 +165,8 @@ const styles = StyleSheet.create({
     titleBar: {
         borderBottomWidth: 1,
         borderBottomColor: '#B0BEC5',
-        paddingBottom: 8
+        paddingBottom: 8,
+        flexDirection: "row",
     },
     eventTitle: {
         fontSize: 14,
