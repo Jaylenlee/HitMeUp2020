@@ -1,0 +1,30 @@
+Dependencies:
+    Stack navigation (app stack and bottom tab)
+	react-native-gesture-handler 
+	react-native-reanimated 
+	react-native-screens 
+	react-native-safe-area-context 
+	@react-native-community/masked-view
+	@react-navigation/native
+	react-native-reanimated
+	react-navigation-tabs
+
+    Quick Styling
+	native-base
+
+    User Upload Photo from phone
+	expo-constants
+	expo-permissions
+	expo-image-picker
+
+    Google Firebase
+	--save firebase
+
+    Date & Time Picker
+	@react-native-community/datetimepicker --save
+	react-native-datepicker --save
+
+    Ant design (dropdown for date time picker)
+	antd
+	@ant-design/react-native --save
+	@react-native-community/cameraroll @react-native-community/picker @react-native-community/segmented-control @react-native-community/slider @react-native-community/viewpager
