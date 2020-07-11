@@ -55,24 +55,29 @@ class EditEvent extends React.Component {
             const promise = [];
             const info = docSnapshot.data()
             const invitees = info.invitees;
+            const attendees = info.attendees;
             const currNotification = firebaseDb.db.collection("notification")
             
             //removing this event from all invited users feeds/notification
-            Promise.all(invitees).then(() => {
+            Promise.all(invitees, attendees).then(() => {
+                //removing those pending
                 for(let uid in invitees) {
                     promise.push(
                         currNotification.doc(invitees[uid]).update({
-                            eventOngoing: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID),
                             eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
                         })
                     )
                 }
-                //removing this event from the creator
-                promise.push(
-                    currNotification.doc(info.creatorUID).update({
-                        eventOngoing: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID),
-                    })
-                )
+
+                //removing those accepted (including creator)
+                for(let uid in attendees) {
+                    promise.push(
+                        currNotification.doc(attendees[uid]).update({
+                            eventOngoing: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID),
+                        })
+                    )
+                }
+        
                 Promise.all(promise).then(() => {
                     firebaseDb
                         .db
@@ -244,7 +249,7 @@ class EditEvent extends React.Component {
                                     this.handleCancel();
                                 }}
                             >
-                                <Text style={styles.nextButtonText}>Cancel</Text>
+                                <Text style={styles.nextButtonText}>Cancel the Event</Text>
                             </TouchableOpacity>
                         </View>
 

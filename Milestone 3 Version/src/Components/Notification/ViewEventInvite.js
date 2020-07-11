@@ -38,6 +38,7 @@ export default class ViewEventInvite extends React.Component {
         this.setState({isLoading: true});
         const currUser = firebaseDb.auth.currentUser;
         var notification = firebaseDb.db.collection('notification')
+        var currEvent = firebaseDb.db.collection('events').doc(this.state.eventUID);
         
         var promise1 = notification.doc(currUser.uid).update({
             eventOngoing: firebase.firestore.FieldValue.arrayUnion(this.state.eventUID)
@@ -47,18 +48,35 @@ export default class ViewEventInvite extends React.Component {
             eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
         }).catch(err => console.error(err));
         
-        Promise.all([promise1, promise2]).then(() => this.props.navigation.navigate("EventInvite")).catch(err => console.error(err));
+        var promise3 = currEvent.update({
+            attendees: firebase.firestore.FieldValue.arrayUnion(currUser.uid),
+            invitees: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
+        })
+
+        Promise.all([promise1, promise2, promise3]).then(() => this.props.navigation.navigate("EventInvite")).catch(err => console.error(err));
     }
 
 
 
     pressHandleReject = () => {
         this.setState({isLoading: true});
+        const promise = [];
         const currUser = firebaseDb.auth.currentUser;
         var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
-        currNotification.update({
+        var currEvent = firebaseDb.db.collection('events').doc(this.state.eventUID);
+        promise.push(currNotification.update({
             eventInvite: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
-        }).then(() => this.props.navigation.navigate("EventInvite")).catch(err => console.error(err));
+        }))
+        
+        promise.push(currEvent.update({
+            nonAttendees: firebase.firestore.FieldValue.arrayUnion(currUser.uid),
+            invitees: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
+        }))
+        Promise.all(promise).then(() => this.props.navigation.navigate("EventInvite")).catch(err => console.error(err));
+    }
+
+    pressHandleAttendance = () => {
+        this.props.navigation.navigate("ViewInviteAttendance", {eventUID: this.state.eventUID});
     }
 
     render(){
@@ -119,6 +137,11 @@ export default class ViewEventInvite extends React.Component {
                             onPress={() => this.pressHandleReject()}
                         >
                             <Text style={styles.buttonText}>Reject</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.buttonContainer}
+                            onPress={() => this.pressHandleAttendance()}
+                        >
+                            <Text style={styles.buttonText}>View Attendance</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

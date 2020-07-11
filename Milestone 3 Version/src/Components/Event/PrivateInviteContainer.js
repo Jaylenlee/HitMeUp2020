@@ -36,6 +36,7 @@ class PrivateInviteContainer extends React.Component {
     }
 
     createEvent() {
+        this.setState({isLoading: true});
         const user = firebaseDb.auth.currentUser;
         const uid = user.uid;
         const username = user.displayName;
@@ -53,6 +54,8 @@ class PrivateInviteContainer extends React.Component {
                 creator: username,
                 creatorUID: uid,
                 invitees: this.state.invitees,
+                attendees: [uid],
+                nonAttendees: [],
             }).then((docRef) => {
                 const notificationRef = firebaseDb.db.collection('notification');
                 const promise = []
@@ -137,7 +140,7 @@ class PrivateInviteContainer extends React.Component {
                                                 this.addToInviteList(friend.uid);
                                             }
                                         }}
-                                    >
+                                    > 
                                         <Text style={styles.addButtonText}>{this.state.mapTF[friend.uid] ? "Don't Invite" : "Send Invite"}</Text>
                                     </TouchableOpacity>
                                 </View>

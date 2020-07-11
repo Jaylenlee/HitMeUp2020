@@ -25,6 +25,7 @@ import ViewProfileAdd from '../Friend/ViewProfileAdd';
 import ViewEventInvite from '../Notification/ViewEventInvite';
 import EditEvent from '../Feeds/EditEvent';
 import ViewAttendance from '../Feeds/ViewAttendance';
+import ViewInviteAttendance from '../Notification/ViewInviteAttendance';
 
 const AuthScreens = {
 
@@ -166,6 +167,13 @@ const NotificationScreens = {
 
     ViewProfileRequest: {
         screen: ViewProfileRequest,
+        navigationOptions: {
+            header: null,
+        }
+    },
+
+    ViewInviteAttendance : {
+        screen: ViewInviteAttendance,
         navigationOptions: {
             header: null,
         }

@@ -4,7 +4,7 @@ import {PieChart} from 'react-native-chart-kit';
 import {Ionicons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
 
-export default class ViewAttendance extends React.Component{
+export default class ViewInviteAttendance extends React.Component{
 
     state = {
         isLoading: true,

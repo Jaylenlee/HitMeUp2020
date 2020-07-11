@@ -41,15 +41,6 @@ export default class ViewEvent extends React.Component {
         })
     }
 
-    pressHandleRemove = () => {
-        this.setState({isLoading: true});
-        const currUser = firebaseDb.auth.currentUser;
-        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
-        currNotification.update({
-            eventOngoing: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
-        }).then(() => this.props.navigation.navigate("Feeds")).catch(err => console.error(err));
-    }
-
     pressHandleUnattend = (currUID) => {
         this.setState({isLoading: true});
         const currUser = firebaseDb.auth.currentUser;
@@ -69,7 +60,7 @@ export default class ViewEvent extends React.Component {
     }
 
     pressHandleViewAttendance = () => {
-        this.props.navigation.navigate("Attendance");
+        this.props.navigation.navigate("Attendance", {eventUID: this.state.eventUID});
     }
 
     render(){
@@ -140,11 +131,6 @@ export default class ViewEvent extends React.Component {
                             <Text style={styles.buttonText}>
                                 {isCreator ? "Edit" : "Unattend"}
                             </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.buttonContainer}
-                            onPress={() => this.pressHandleRemove()}
-                        >
-                            <Text style={styles.buttonText}>Remove from Feeds</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style = {styles.buttonContainer}
                             onPress={() => this.pressHandleViewAttendance()}
