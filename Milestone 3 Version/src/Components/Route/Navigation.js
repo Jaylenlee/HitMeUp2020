@@ -26,6 +26,7 @@ import ViewEventInvite from '../Notification/ViewEventInvite';
 import EditEvent from '../Feeds/EditEvent';
 import ViewAttendance from '../Feeds/ViewAttendance';
 import ViewInviteAttendance from '../Notification/ViewInviteAttendance';
+import History from '../Feeds/History';
 
 const AuthScreens = {
 
@@ -140,7 +141,14 @@ const FeedScreens = {
         navigationOptions: {
             header: null,
         }
-    }
+    },
+
+    History: {
+        screen: History,
+        navigationOptions: {
+            header: null,
+        }
+    },
 }
 
 const NotificationScreens = {

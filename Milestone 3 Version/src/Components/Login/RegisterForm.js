@@ -76,7 +76,9 @@ class RegisterForm extends React.Component {
                 .doc(user.uid)
                 .set({
                     friendRequest: [],
-                    eventInvite: []
+                    eventInvite: [],
+                    eventOngoing: [],
+                    history: [],
                 }).catch(error => this.setState({errorMessage: error.message}));
 
                 return user.updateProfile({

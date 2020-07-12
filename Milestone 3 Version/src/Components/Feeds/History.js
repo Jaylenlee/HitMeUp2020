@@ -4,7 +4,7 @@ import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
 
-class NewsFeedContainer extends React.Component {
+class History extends React.Component {
     state = {
         isLoading: true,
         events: null
@@ -29,7 +29,7 @@ class NewsFeedContainer extends React.Component {
             const events = [];
             const promise = [];
         
-            const info = docSnapshot.data().eventOngoing;
+            const info = docSnapshot.data().history;
 
             const eventCollection = firebaseDb.db.collection('events');
            
@@ -48,10 +48,7 @@ class NewsFeedContainer extends React.Component {
         const currUser = firebaseDb.auth.currentUser;
         var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
         currNotification.update({
-            eventOngoing: firebase.firestore.FieldValue.arrayRemove(eventUID)
-        })
-        currNotification.update({
-            history: firebase.firestore.FieldValue.arrayUnion(eventUID)
+            history: firebase.firestore.FieldValue.arrayRemove(eventUID)
         })
     }
 
@@ -102,20 +99,20 @@ class NewsFeedContainer extends React.Component {
             <View style={styles.container}>
                 <View style={styles.top}>
                     <View style={styles.header}>
-                        <Text style={styles.headerTitle}>Feeds</Text>
+                        <Text style={styles.headerTitle}>History</Text>
                     </View>
                 </View>
                 <View style={styles.toggleTabs}>
-                    <TouchableOpacity style={styles.toggleButtonNS}>
-                        <Text style={styles.textStyle}>My Feeds</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.toggleButtonS}
-                        onPress= {() => {this.props.navigation.navigate('History')}}
-                    >
-                        <Text style={styles.textStyle}>History</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity
+                            style={styles.toggleButtonS}
+                            onPress= {() => {this.props.navigation.navigate('Feeds')}}
+                        >
+                            <Text style={styles.textStyle}>My Feeds</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.toggleButtonNS}>
+                            <Text style={styles.textStyle}>History</Text>
+                        </TouchableOpacity>
+                    </View>
                 <ScrollView>
                     <FlatList
                         style={styles.feed}
@@ -236,4 +233,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default NewsFeedContainer;
+export default History;
