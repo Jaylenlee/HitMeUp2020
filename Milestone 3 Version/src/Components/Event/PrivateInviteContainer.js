@@ -5,6 +5,7 @@ import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import FlatListComponent from './FlatListComponent';
 
 class PrivateInviteContainer extends React.Component {
     state = {
@@ -13,26 +14,15 @@ class PrivateInviteContainer extends React.Component {
         invitees: [],
         event: this.props.navigation.getParam("event", null),
         isLoading: true,
-        mapTF: null,
     }
 
     addToInviteList(uid) {
-        this.state.mapTF[uid] = true;
         this.state.invitees.push(uid);
-        console.log("Invite")
-        console.log(this.state.mapTF[uid])
-        console.log(uid)
-        console.log(this.state.invitees)
     }
 
     removeFromInviteList(uid) {
-        this.state.mapTF[uid] = false;
         const idx = this.state.invitees.indexOf(uid);
         this.state.invitees.splice(idx, 1);
-        console.log("remove")
-        console.log(this.state.mapTF[uid])
-        console.log(uid)
-        console.log(this.state.invitees)
     }
 
     createEvent() {
@@ -82,14 +72,12 @@ class PrivateInviteContainer extends React.Component {
     
         firebaseDb.db.collection('friendlist').doc(uid).onSnapshot(docSnapshot => {
             const allFriends = [];
-            const mapTF = {};
             const promise = [];
             const friendlist = docSnapshot.data().friendlist
            
             const profileCollection = firebaseDb.db.collection('profile');
 
             for(let uid in friendlist) {
-                mapTF[uid] = false;
                 const docRef = profileCollection.doc(friendlist[uid]);
                 promise.push(docRef.get().then(docSnapshot => {
                     allFriends.push(docSnapshot.data())
@@ -99,7 +87,6 @@ class PrivateInviteContainer extends React.Component {
             Promise.all(promise).then(() => this.setState({
                 allFriends: allFriends, 
                 friendsFiltered: allFriends, 
-                mapTF: mapTF, 
                 isLoading: false
             }))
         })
@@ -113,43 +100,11 @@ class PrivateInviteContainer extends React.Component {
     }
 
     renderFriend = friend => {
-        return (
-            <View style={styles.eventItem}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View style={{flex: 1}}>
-
-                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-                                <View style={styles.avatarContainer}>
-                                    <Image
-                                        style={styles.thumbnail}
-                                        source={{uri: friend.photo}}
-                                    />
-                                </View>
-                                <View style={styles.details}>
-                                    <Text style={styles.eventTitle}>{friend.username}</Text>
-                                    <Text style={styles.eventTime}>{friend.email}</Text>
-                                </View>
-                                <View style={styles.buttonPos}>
-                                    <TouchableOpacity
-                                        style={this.state.mapTF[friend.uid] ? styles.addButton2 : styles.addButton}
-                                        onPress = {() => {
-                                            if(this.state.mapTF[friend.uid]) {
-                                                this.removeFromInviteList(friend.uid);
-                                            } else {
-                                                this.addToInviteList(friend.uid);
-                                            }
-                                        }}
-                                    > 
-                                        <Text style={styles.addButtonText}>{this.state.mapTF[friend.uid] ? "Don't Invite" : "Send Invite"}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
+        return(
+            <FlatListComponent friend={friend} 
+            invite={() => this.addToInviteList(friend.uid)} 
+            remove={() => this.removeFromInviteList(friend.uid)}/>
+        )
     };
    
     render() {

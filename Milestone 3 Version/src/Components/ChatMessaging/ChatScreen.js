@@ -16,11 +16,13 @@ class ChatScreen extends React.Component {
     };
 
     componentDidMount() {
-        Fire.get(message =>
+        
+        
+        /*Fire.get(message =>
             this.setState(previous => ({
                 messages: GiftedChat.append(previous.messages, message)
             }))
-        );
+        );*/
     };
 
     componentWillUnmount() {

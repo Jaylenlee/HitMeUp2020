@@ -27,7 +27,7 @@ import EditEvent from '../Feeds/EditEvent';
 import ViewAttendance from '../Feeds/ViewAttendance';
 import ViewInviteAttendance from '../Notification/ViewInviteAttendance';
 import History from '../Feeds/History';
-import ChatScreen from '../ChatMessaging/ChatScreen';
+//import ChatScreen from '../ChatMessaging/ChatScreen';
 
 const AuthScreens = {
 
@@ -231,13 +231,13 @@ const AppTabNavigator = createBottomTabNavigator({
             tabBarIcon: ({tintColor}) => <Ionicons name="ios-notifications" size={24} color={tintColor}></Ionicons>
         }
     },
-        
-    Chat: {
+
+    /*Chat: {
         screen: ChatScreen,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => <Ionicons name="md-chatboxes" size={24} color={tintColor}></Ionicons>
         }
-    }
+    }*/
 })
 
 export default createAppContainer(
