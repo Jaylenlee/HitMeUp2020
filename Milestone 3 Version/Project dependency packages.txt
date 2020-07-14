@@ -28,3 +28,9 @@ Dependencies:
 	antd
 	@ant-design/react-native --save
 	@react-native-community/cameraroll @react-native-community/picker @react-native-community/segmented-control @react-native-community/slider @react-native-community/viewpager
+
+    Charts
+        react-native-chart-kit
+	
+    Chat
+        react-native-gifted-chat
