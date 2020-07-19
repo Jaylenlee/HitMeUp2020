@@ -27,6 +27,12 @@ import EditEvent from '../Feeds/EditEvent';
 import ViewAttendance from '../Feeds/ViewAttendance';
 import ViewInviteAttendance from '../Notification/ViewInviteAttendance';
 import History from '../Feeds/History';
+import PublicFeedFilter from '../Feeds/PublicFeedFilter';
+import ViewPublicEvent from '../Feeds/ViewPublicEvent';
+import ChatScreen from '../ChatMessaging/ChatScreen';
+import ChatList from '../ChatMessaging/ChatList';
+import GroupChat from '../ChatMessaging/GroupChat';
+import IndivChat from '../ChatMessaging/IndivChat';
 //import ChatScreen from '../ChatMessaging/ChatScreen';
 
 const AuthScreens = {
@@ -150,6 +156,20 @@ const FeedScreens = {
             header: null,
         }
     },
+
+    PublicFeedFilter: {
+        screen: PublicFeedFilter,
+        navigationOptions: {
+            header: null,
+        }
+    },
+
+    ViewPublicEvent: {
+        screen: ViewPublicEvent,
+        navigationOptions: {
+            header: null,
+        }
+    }
 }
 
 const NotificationScreens = {
@@ -189,12 +209,40 @@ const NotificationScreens = {
     },
 }
 
+const ChatScreens = {
+    ChatList: {
+        screen: ChatList,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    ChatScreen: {
+        screen: ChatScreen,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    GroupChat: {
+        screen: GroupChat,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    IndivChat: {
+        screen: IndivChat,
+        navigationOptions: {
+            header: null,
+        }
+    },
+}
+
 const AuthStackNavigator = createStackNavigator(AuthScreens)
 const ProfileStackNavigator = createStackNavigator(ProfileScreens)
 const FriendStackNavigator = createStackNavigator(FriendScreens)
 const EventStackNavigator = createStackNavigator(EventScreens)
 const FeedStackNavigator = createStackNavigator(FeedScreens)
 const NotificationStackNavigator = createStackNavigator(NotificationScreens)
+const ChatStackNavigator = createStackNavigator(ChatScreens)
 
 const AppTabNavigator = createBottomTabNavigator({
     Feed: {
@@ -232,12 +280,12 @@ const AppTabNavigator = createBottomTabNavigator({
         }
     },
 
-    /*Chat: {
-        screen: ChatScreen,
+    Chat: {
+        screen: ChatStackNavigator,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => <Ionicons name="md-chatboxes" size={24} color={tintColor}></Ionicons>
         }
-    }*/
+    }
 })
 
 export default createAppContainer(

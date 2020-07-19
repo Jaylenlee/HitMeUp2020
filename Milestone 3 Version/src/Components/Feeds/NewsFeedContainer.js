@@ -115,6 +115,12 @@ class NewsFeedContainer extends React.Component {
                     >
                         <Text style={styles.textStyle}>History</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.toggleButtonS}
+                        onPress= {() => {this.props.navigation.navigate('PublicFeedFilter')}}
+                    >
+                        <Text style={styles.textStyle}>Public Feeds</Text>
+                    </TouchableOpacity>
                 </View>
                 <ScrollView>
                     <FlatList

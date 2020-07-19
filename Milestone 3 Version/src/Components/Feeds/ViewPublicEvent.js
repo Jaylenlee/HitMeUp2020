@@ -5,7 +5,7 @@ import {Ionicons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
 
-export default class ViewEvent extends React.Component {
+export default class ViewPublicEvent extends React.Component {
     state = {
         eventUID: this.props.navigation.getParam("eventUID",""),
         eventName: '',
@@ -18,24 +18,41 @@ export default class ViewEvent extends React.Component {
         creator: "",
         isCreator: null,
         isLoading: true,
+        currUser: '',
+        isAttending: false,
     }
 
     componentDidMount() {
-        const currEvent = firebaseDb.db.collection('events').doc(this.state.eventUID);
+        const currUser = firebaseDb.auth.currentUser;
+        const eventUID = this.state.eventUID;
+        const currEvent = firebaseDb.db.collection('events').doc(eventUID);
+        const currAttending = firebaseDb.db.collection('notification').doc(currUser.uid); 
         currEvent.onSnapshot(docSnapshot => {
             if(docSnapshot.exists){
                 const info = docSnapshot.data()
-                this.setState({
-                    eventName: info.eventName,
-                    date: info.date,
-                    time: info.time,
-                    location: info.location,
-                    estimatedSize: info.estimatedSize,
-                    activityDetails: info.activityDetails,
-                    isPrivate: info.isPrivate,
-                    creator: info.creator,
-                    isCreator: info.creatorUID == firebaseDb.auth.currentUser.uid,
-                    isLoading: false,
+                currAttending.onSnapshot(docSnapshot2 => {
+                    const ongoing = docSnapshot2.data().eventOngoing;
+                    var contains = false;
+                    for(let uid in ongoing) {
+                        if(ongoing[uid] == eventUID) {
+                            contains = true;
+                            break;
+                        }
+                    }
+                    this.setState({
+                        isAttending: contains,
+                        eventName: info.eventName,
+                        date: info.date,
+                        time: info.time,
+                        location: info.location,
+                        estimatedSize: info.estimatedSize,
+                        activityDetails: info.activityDetails,
+                        isPrivate: info.isPrivate,
+                        creator: info.creator,
+                        isCreator: info.creatorUID == firebaseDb.auth.currentUser.uid,
+                        currUser: currUser,
+                        isLoading: false,
+                    })
                 })
             }
         })
@@ -43,7 +60,7 @@ export default class ViewEvent extends React.Component {
 
     pressHandleUnattend = () => {
         this.setState({isLoading: true});
-        const currUser = firebaseDb.auth.currentUser;
+        const currUser = this.state.currUser;
 
         firebaseDb.db.collection('events').doc(this.state.eventUID).update({
             invitees: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
@@ -52,6 +69,20 @@ export default class ViewEvent extends React.Component {
         var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
         currNotification.update({
             eventOngoing: firebase.firestore.FieldValue.arrayRemove(this.state.eventUID)
+        }).then(() => this.props.navigation.navigate("Feeds")).catch(err => console.error(err));
+    }
+
+    pressHandleAttend = () => {
+        this.setState({isLoading: true});
+        const currUser = this.state.currUser;
+        
+        firebaseDb.db.collection('events').doc(this.state.eventUID).update({
+            invitees: firebase.firestore.FieldValue.arrayUnion(currUser.uid)
+        })
+        
+        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
+        currNotification.update({
+            eventOngoing: firebase.firestore.FieldValue.arrayUnion(this.state.eventUID)
         }).then(() => this.props.navigation.navigate("Feeds")).catch(err => console.error(err));
     }
 
@@ -66,7 +97,7 @@ export default class ViewEvent extends React.Component {
     render(){
 
         const {eventName, date, time, location, estimatedSize, activityDetails, 
-            isPrivate, creator, isCreator, isLoading} = this.state;
+            isPrivate, creator, isCreator, isLoading, isAttending} = this.state;
         if (isLoading) {
             return(
                 <View style = {styles.loading}>
@@ -125,11 +156,15 @@ export default class ViewEvent extends React.Component {
                             onPress={() => {
                                 isCreator
                                     ? this.pressHandleEdit() 
-                                    : this.pressHandleUnattend()
+                                    : isAttending 
+                                        ? this.pressHandleUnattend()
+                                        : this.pressHandleAttend()
                             }}
                         >
                             <Text style={styles.buttonText}>
-                                {isCreator ? "Edit" : "Unattend"}
+                                {isCreator ? "Edit" 
+                                            : isAttending ? "Unattend"
+                                                            : "Attend"}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style = {styles.buttonContainer}
@@ -230,4 +265,3 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
 });
-

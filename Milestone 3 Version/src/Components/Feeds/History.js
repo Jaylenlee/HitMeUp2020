@@ -112,6 +112,12 @@ class History extends React.Component {
                         <TouchableOpacity style={styles.toggleButtonNS}>
                             <Text style={styles.textStyle}>History</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.toggleButtonS}
+                            onPress= {() => {this.props.navigation.navigate('PublicFeedFilter')}}
+                        >
+                            <Text style={styles.textStyle}>Public Feeds</Text>
+                        </TouchableOpacity>
                     </View>
                 <ScrollView>
                     <FlatList

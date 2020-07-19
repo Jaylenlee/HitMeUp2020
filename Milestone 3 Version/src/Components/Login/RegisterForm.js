@@ -68,7 +68,8 @@ class RegisterForm extends React.Component {
                 .collection('friendlist')
                 .doc(user.uid)
                 .set({
-                    friendlist: []
+                    friendlist: [],
+                    chatUID: [],
                 }).catch(error => this.setState({errorMessage: error.message}));
 
                 firebaseDb.db

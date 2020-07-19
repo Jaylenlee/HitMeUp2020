@@ -32,7 +32,7 @@ class CreateEventContainer extends React.Component {
 
     handleSelectInvitees = () => {
         if (this.state.isPublic) {
-            this.props.navigation.navigate("Private", {event: this.state})
+            this.props.navigation.navigate("Public", {event: this.state})
         } else {
             this.props.navigation.navigate("Private", {event: this.state})
         }
