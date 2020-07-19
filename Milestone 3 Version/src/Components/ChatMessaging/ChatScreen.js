@@ -1,7 +1,6 @@
 import React from 'react';
-import { Platform, KeyboardAvoidingView, SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { Platform, KeyboardAvoidingView, SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,} from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-//import Fire from './Fire';
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,21 +10,15 @@ export default class ChatScreen extends React.Component {
         chatUID: this.props.navigation.getParam("chatUID", ""),
         user: null,
         messages: [],
-        isLoading: false,
+        isLoading: true,
         chatHeader: this.props.navigation.getParam("chatName", ""),
+        chatPic: this.props.navigation.getParam("chatPic", ""),
     };
 
     componentDidMount() {
+        console.log(this.state.chatPic)
         firebaseDb.db.collection("messages").doc(this.state.chatUID).onSnapshot(docSnapshot => {
             const info = docSnapshot.data();
-
-           /* // to get chat header
-            const groupName = info.groupName;
-            const users = info.users;
-            const chatHeader = groupName ? groupName : users.filter(name => name != this.state.user.name)[0];
-            console.log(this.state.user.name)
-            console.log(chatHeader)*/
-            
             // to get chat messages
             const chat = info.chat;
             const messages = [];
@@ -35,7 +28,6 @@ export default class ChatScreen extends React.Component {
                 messages.push(input)
             })
             this.setState({messages: messages, isLoading: false});
-            console.log(this.state.messages);
         })
     };
 
@@ -45,29 +37,15 @@ export default class ChatScreen extends React.Component {
     }
 
     sendChat(newMessage) {
-        console.log(newMessage);
         const obj = {message: newMessage};
-        console.log(obj);
         firebaseDb.db.collection("messages").doc(this.state.chatUID).update({
             chat: firebase.firestore.FieldValue.arrayUnion(obj)
         })
         this.setState({messages: GiftedChat.append(this.state.messages, newMessage)});
     }
 
-    /*send = messages => {
-        messages.forEach(item => {
-            const message = {
-                text: item.text,
-                timestamp: Date.now(),
-                user: item.user
-            };
-
-            this.db.push(message);
-        });
-    };*/
-
     render() {
-        const {isLoading, chatHeader} = this.state;
+        const {isLoading, chatHeader, chatPic} = this.state;
         if (isLoading) {
             return(
                 <View style = {styles.loading}>
@@ -149,5 +127,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center"
-    }
+    },
+    thumbnail: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+    },
 })

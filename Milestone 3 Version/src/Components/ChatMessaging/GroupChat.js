@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, ActivityIndicator, Text, StyleSheet,
-         TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
+         TouchableOpacity, ScrollView, TextInput} from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,20 +56,26 @@ export default class GroupChat extends React.Component {
         this.setState({isLoading: true});
         const user = firebaseDb.auth.currentUser;
         const uid = user.uid;
-        const username = user.displayName;
+        const people = this.state.invitees;
+        people.push(uid);
         firebaseDb
             .db
             .collection('messages')
             .add({
                 chat: [],
-                groupName: "static test",
-                users: this.state.invitees,
+                groupName: "static test", //change this
+                users: people,
+                groupPic: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png', // change this
             }).then((docRef) => {
                 const friendRef = firebaseDb.db.collection('friendlist');
-                const promise = []
-                //promise.push(firebaseDb.db.collection('events').doc(docRef.id).update({eventUID: docRef.id}))
-
-                const obj = {chatUID: docRef.id, groupName: "static test", users: this.state.invitees}
+                const promise = [];
+                const obj = {
+                    chatUID: docRef.id, 
+                    groupName: "static test",
+                    users: people, 
+                    groupPic: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png' //change this
+                }
+             
                 promise.push(friendRef.doc(uid).update({
                     chatUID: firebase.firestore.FieldValue.arrayUnion(obj)
                 }))

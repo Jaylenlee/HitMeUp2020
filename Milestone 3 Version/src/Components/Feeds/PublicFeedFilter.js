@@ -43,6 +43,9 @@ export default class PublicFeedFilter extends React.Component {
     }
 
     filterTime(text, events) {
+        if(text == "") {
+            // resolve erro later. null time
+        } else {
         const dateTime = text.toString();
         var n = dateTime.indexOf(":");
         const time = dateTime.slice(n-2,n+6);
@@ -58,7 +61,7 @@ export default class PublicFeedFilter extends React.Component {
                             .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
                             .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
                             .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })    
+        })}    
     }
 
     filterLocation(text, events) {
