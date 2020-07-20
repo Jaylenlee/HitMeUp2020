@@ -6,10 +6,14 @@ import { DatePicker, TimePicker } from 'antd';
 import 'antd/dist/antd.css';
 
 export default class PublicFeedFilter extends React.Component {
-    state={
+    state = {
         isLoading: true,
         events: [],
-        keywords: ["","","","","",""],
+        keywords: ["","","",""],
+        startDate:[0,0,0],
+        endDate:[9999,13,32],
+        startTime:[-1,-1,-1],
+        endTime:[24,61,61],
         filtered: [],
     }
 
@@ -29,88 +33,184 @@ export default class PublicFeedFilter extends React.Component {
         this.setState({events: pub, filtered: pub, isLoading: false})
     }
 
-    filterDate(text, events) {
-        this.state.keywords[0] = text.toISOString().slice(0,10);
-        const words = this.state.keywords;
+    setFilter() {
+        const {events, keywords, startDate, endDate, startTime, endTime} = this.state;
+
         this.setState({
-            filtered: events.filter(event => event.date.toLowerCase().includes(words[0]))
-                            .filter(event => event.time.toLowerCase().includes(words[1]))
-                            .filter(event => event.location.toLowerCase().includes(words[2].toLowerCase()))
-                            .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
-                            .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
-                            .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })        
+            filtered: events.filter(event => event.location.toLowerCase().includes(keywords[0].toLowerCase()))
+                            .filter(event => event.activityDetails.toLowerCase().includes(keywords[1].toLowerCase()))
+                            .filter(event => event.eventName.toLowerCase().includes(keywords[2].toLowerCase()))
+                            .filter(event => event.creator.toLowerCase().includes(keywords[3].toLowerCase()))
+                            .filter(event => this.compareStartDate(event.date, startDate))
+                            .filter(event => this.compareEndDate(event.date, endDate))
+                            .filter(event => this.compareStartTime(event.time, startTime))
+                            .filter(event => this.compareEndTime(event.time, endTime))
+                            
+        })  
     }
 
-    filterTime(text, events) {
-        const dateTime = text.toString();
-        var n = dateTime.indexOf(":");
-        const time = dateTime.slice(n-2,n+6);
-        this.state.keywords[1] = time;
-        console.log(text);
-        console.log(text.toString());
-        console.log(time);
-        const words = this.state.keywords;
-        this.setState({
-            filtered: events.filter(event => event.date.toLowerCase().includes(words[0]))
-                            .filter(event => event.time.toLowerCase().includes(words[1]))
-                            .filter(event => event.location.toLowerCase().includes(words[2].toLowerCase()))
-                            .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
-                            .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
-                            .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })    
+    filterDate(startDate, isStart) {
+        console.log(startDate);
+
+        if(startDate != null) {
+            const date = startDate.toISOString().slice(0,10);
+            const dateArr = [Number(date.slice(0,4)), Number(date.slice(5,7)), Number(date.slice(8,10))];
+    
+            if(isStart) {
+                this.state.startDate[0] = dateArr[0];
+                this.state.startDate[1] = dateArr[1];
+                this.state.startDate[2] = dateArr[2];
+            } else {
+                this.state.endDate[0] = dateArr[0];
+                this.state.endDate[1] = dateArr[1];
+                this.state.endDate[2] = dateArr[2];
+            }
+        } else {
+            if(isStart) {
+                this.state.startDate[0] = 0;
+                this.state.startDate[1] = 0;
+                this.state.startDate[2] = 0;
+            } else {
+                this.state.endDate[0] = 9999;
+                this.state.endDate[1] = 13;
+                this.state.endDate[2] = 32;
+            }
+        } 
+        this.setFilter();
     }
 
-    filterLocation(text, events) {
+    //return true if date is greater than dateArr. ie event happens after dateArr.
+    compareStartDate(date, dateArr) {
+        const year = Number(date.slice(0,4));
+        const mth = Number(date.slice(5,7));
+        const day = Number(date.slice(8,10));
+
+        if (year == dateArr[0]) {
+            if (mth > dateArr[1]) {
+                return true;
+            } else if (mth < dateArr[1]) {
+                return false;
+            } else {
+                return day >= dateArr[2];
+            }
+        } else if (year > dateArr[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //return true if date is lesser than dateArr. ie event happens before dateArr.
+    compareEndDate(date, dateArr) {
+        const year = Number(date.slice(0,4));
+        const mth = Number(date.slice(5,7));
+        const day = Number(date.slice(8,10));
+        
+        if (year == dateArr[0]) {
+            if (mth < dateArr[1]) {
+                return true;
+            } else if (mth > dateArr[1]) {
+                return false;
+            } else {
+                return day <= dateArr[2];
+            }
+        } else if (year < dateArr[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    filterTime(timeText, isStart) {
+        if(timeText != null) {
+            const dateTime = timeText.toString();
+            var n = dateTime.indexOf(":");
+            const time = dateTime.slice(n-2,n+6);
+            const timeArr = [Number(time.slice(0,2)), Number(time.slice(3,5)), Number(time.slice(6,8))];
+          
+            if (isStart) {
+                this.state.startTime[0] = timeArr[0];
+                this.state.startTime[1] = timeArr[1];
+                this.state.startTime[2] = timeArr[2];
+            } else {
+                this.state.endTime[0] = timeArr[0];
+                this.state.endTime[1] = timeArr[1];
+                this.state.endTime[2] = timeArr[2];
+            }
+        } else {
+            if (isStart) {
+                this.state.startTime[0] = -1;
+                this.state.startTime[1] = -1;
+                this.state.startTime[2] = -1;
+            } else {
+                this.state.endTime[0] = 24;
+                this.state.endTime[1] = 61;
+                this.state.endTime[2] = 61;
+            }
+        }  
+        this.setFilter();
+    }
+
+    //return true if time is greater than timeArr. ie event happens after timeArr.
+    compareStartTime(time, timeArr) {
+        const hr = Number(time.slice(0,2));
+        const min = Number(time.slice(3,5));
+        const sec = Number(time.slice(6,8));
+        
+        if (hr == timeArr[0]) {
+            if (min > timeArr[1]) {
+                return true;
+            } else if (min < timeArr[1]) {
+                return false;
+            } else {
+                return sec >= timeArr[2];
+            }
+        } else if (hr > timeArr[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //return true if time is lesser than timeArr. ie event happens before timeArr.
+    compareEndTime(time, timeArr) {
+        const hr = Number(time.slice(0,2));
+        const min = Number(time.slice(3,5));
+        const sec = Number(time.slice(6,8));
+        
+        if (hr == timeArr[0]) {
+            if (min < timeArr[1]) {
+                return true;
+            } else if (min > timeArr[1]) {
+                return false;
+            } else {
+                return sec <= timeArr[2];
+            }
+        } else if (hr < timeArr[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    filterLocation(text) {
+        this.state.keywords[0] = text;
+        this.setFilter();    
+    }
+
+    filterActivity(text) {
+        this.state.keywords[1] = text;
+        this.setFilter();   
+    }
+
+    filterEventName(text) {
         this.state.keywords[2] = text;
-        const words = this.state.keywords;
-        this.setState({
-            filtered: events.filter(event => event.date.toLowerCase().includes(words[0]))
-                            .filter(event => event.time.toLowerCase().includes(words[1]))
-                            .filter(event => event.location.toLowerCase().includes(words[2].toLowerCase()))
-                            .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
-                            .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
-                            .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })    
+        this.setFilter(); 
     }
 
-    filterActivity(text, events) {
+    filterOrgainser(text) {
         this.state.keywords[3] = text;
-        const words = this.state.keywords;
-        this.setState({
-            filtered: events.filter(event => event.date.toLowerCase().includes(words[0]))
-                            .filter(event => event.time.toLowerCase().includes(words[1]))
-                            .filter(event => event.location.toLowerCase().includes(words[2].toLowerCase()))
-                            .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
-                            .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
-                            .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })    
-    }
-
-    filterEventName(text, events) {
-        this.state.keywords[4] = text;
-        const words = this.state.keywords;
-        this.setState({
-            filtered: events.filter(event => event.date.toLowerCase().includes(words[0]))
-                            .filter(event => event.time.toLowerCase().includes(words[1]))
-                            .filter(event => event.location.toLowerCase().includes(words[2].toLowerCase()))
-                            .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
-                            .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
-                            .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })    
-    }
-
-    filterOrgainser(text, events) {
-        this.state.keywords[5] = text;
-        const words = this.state.keywords;
-        this.setState({
-            filtered: events.filter(event => event.date.toLowerCase().includes(words[0]))
-                            .filter(event => event.time.toLowerCase().includes(words[1]))
-                            .filter(event => event.location.toLowerCase().includes(words[2].toLowerCase()))
-                            .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
-                            .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
-                            .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })    
+        this.setFilter();   
     }
 
     renderEvent = event => {
@@ -200,13 +300,13 @@ export default class PublicFeedFilter extends React.Component {
                                     placeholder={"Event Start Date"}
                                     style={{ marginRight: "10px"}}
                                     format="YYYY-MM-DD"
-                                    onChange={text => {this.filterDate(text, events)}}
+                                    onChange={text => {this.filterDate(text, true)}}
                                 />
                                 <DatePicker
-                                    placeholder={"Event Start Date"}
+                                    placeholder={"Event End Date"}
                                     style={{ marginRight: "10px"}}
                                     format="YYYY-MM-DD"
-                                    onChange={text => {this.filterDate(text, events)}}
+                                    onChange={text => {this.filterDate(text, false)}}
                                 />
                             </View>
                             <View style={styles.iconSearch}>
@@ -215,13 +315,13 @@ export default class PublicFeedFilter extends React.Component {
                                     placeholder={"Event Start Time"}
                                     style={{ marginRight: "10px"}}
                                     format="HH:mm:ss"
-                                    onChange={text => {this.filterTime(text, events)}}
+                                    onChange={text => {this.filterTime(text, true)}}
                                 />
                                 <TimePicker
-                                    placeholder={"Event Start Time"}
+                                    placeholder={"Event End Time"}
                                     style={{ marginRight: "10px"}}
                                     format="HH:mm:ss"
-                                    onChange={text => {this.filterTime(text, events)}}
+                                    onChange={text => {this.filterTime(text, false)}}
                                 />
                             </View>
                             <View style={styles.iconSearch}>
@@ -229,7 +329,7 @@ export default class PublicFeedFilter extends React.Component {
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Location"
-                                    onChangeText={text => {this.filterLocation(text, events)}}
+                                    onChangeText={text => {this.filterLocation(text)}}
                                 />
                             </View>
                             <View style={styles.iconSearch}>
@@ -237,7 +337,7 @@ export default class PublicFeedFilter extends React.Component {
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Activity"
-                                    onChangeText={text => {this.filterActivity(text, events)}}
+                                    onChangeText={text => {this.filterActivity(text)}}
                                 />
                             </View>
                             <View style={styles.iconSearch}>
@@ -245,7 +345,7 @@ export default class PublicFeedFilter extends React.Component {
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Event Name"
-                                    onChangeText={text => {this.filterEventName(text, events)}}
+                                    onChangeText={text => {this.filterEventName(text)}}
                                 />
                             </View>
                             <View style={styles.iconSearch}>
@@ -253,7 +353,7 @@ export default class PublicFeedFilter extends React.Component {
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Organiser"
-                                    onChangeText={text => {this.filterOrgainser(text, events)}}
+                                    onChangeText={text => {this.filterOrgainser(text)}}
                                 />
                             </View>
                         </View>
