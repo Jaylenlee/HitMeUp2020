@@ -154,11 +154,10 @@ export default class GroupChat extends React.Component {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
-                            this.createChat();
-                            //this.props.navigation.navigate("createGroup", {groupInfo: this.state})
+                            this.props.navigation.navigate("GroupDetail", {groupInfo: this.state})
                         }}
                      >
-                        <Text style={styles.nextButtonText}>Done</Text>
+                        <Text style={styles.nextButtonText}>Next</Text>
                         <Ionicons name="md-arrow-forward" size={16} color='#73788B'></Ionicons>
                     </TouchableOpacity>
                 </View>
@@ -175,8 +174,6 @@ const styles = StyleSheet.create({
     backArrow: {
         flex: 1,
         alignSelf: 'flex-start'
-    },
-    refreshStyle: {
     },
     top: {
         backgroundColor: '#FFF',
