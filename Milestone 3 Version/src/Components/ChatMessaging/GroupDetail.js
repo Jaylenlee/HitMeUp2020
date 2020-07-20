@@ -23,7 +23,7 @@ class GroupDetail extends React.Component {
             aspect: [4, 3]
         })
         if(!result.cancelled) {
-            setPhoto(result.uri)
+            this.setState({ photo: result.uri })
         }
     }
 
@@ -90,7 +90,7 @@ class GroupDetail extends React.Component {
                     </View>
                     <View style={{alignItems: 'flex-end', marginTop: -30}}>
                         <TouchableOpacity style={styles.photoPlaceholder}
-                            onPress={() => updatePhoto()}
+                            onPress={() => this.updatePhoto()}
                         >
                                <Ionicons name="ios-add" size={28} color="#00ff55" style={styles.addIcon}></Ionicons>
                         </TouchableOpacity>

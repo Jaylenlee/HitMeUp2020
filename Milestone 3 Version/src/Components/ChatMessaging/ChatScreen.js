@@ -1,5 +1,6 @@
 import React from 'react';
-import { Platform, KeyboardAvoidingView, SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,} from 'react-native';
+import { Platform, KeyboardAvoidingView, SafeAreaView, View, Text,
+         StyleSheet, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
@@ -83,6 +84,13 @@ export default class ChatScreen extends React.Component {
                                 onPress={() => this.props.navigation.goBack()}>
                                 <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                             </TouchableOpacity>
+
+                            <View style={styles.avatarContainer}>
+                                <Image
+                                    style={styles.thumbnail}
+                                    source={{uri: chatPic}}
+                                />
+                            </View>
                             <Text style={styles.headerTitle}>{chatHeader}</Text>
                         </View>
                     </View>
@@ -116,6 +124,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderBottomColor: '#EBECF4',
         borderBottomWidth: 1
+    },
+    avatarContainer: {
+        shadowColor: '#00695C',
+        shadowOpacity: 0.4,
+        shadowRadius: 10,
+        borderRadius: 35
+    },
+    thumbnail: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
     },
     headerTitle: {
         fontSize: 20,
