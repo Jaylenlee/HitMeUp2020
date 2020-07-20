@@ -93,13 +93,13 @@ class FriendRequest extends React.Component {
                 </View>
                 <View style={styles.toggleTabs}>
                     <TouchableOpacity
-                        style={styles.toggleButtonNS}
+                        style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('EventInvite')}}
                     >
-                        <Text style={styles.textStyle2}>Event Invites</Text>
+                        <Text style={styles.textStyleS}>Event Invites</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.toggleButtonS}>
-                        <Text style={styles.textStyle2}>Friend Request</Text>
+                    <TouchableOpacity style={styles.toggleButtonNS}>
+                        <Text style={styles.textStyleNS}>Friend Request</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -170,24 +170,24 @@ const styles = StyleSheet.create({
     eventTitle: {
         fontSize: 14,
         fontWeight: '500',
-        color: '#607D8B',
+        color: '#7d7000',
         paddingBottom: 5,
         textTransform: 'uppercase'
     },
     profileAge: {
         fontSize: 12,
-        color: '#0097A7',
+        color: '#FFC107',
         marginTop: 4
     },
     profileGender: {
         fontSize: 12,
-        color: '#9fcffb',
+        color: '#ffd452',
         marginTop: 4
     },
     details: {
         fontSize: 14,
         color: '#455A64',
-        paddingLeft: 20
+        paddingLeft: 10
     },
     loading: {
         flex: 1,
@@ -204,20 +204,27 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFE0B2',
         padding: 5,
         paddingHorizontal: 10,
-        borderRadius: 3
+        shadowOffset: {height: 1, width: 1},
+        shadowColor: '#455A64',
+        shadowOpacity: 0.2,
+        borderRadius: 2,
+        borderRightWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: 'rgba(0, 0, 0, 0.4)'
     },
     toggleButtonNS: {
         backgroundColor: '#FFF9C4',
         padding: 5,
         paddingHorizontal: 10,
-        borderBottomColor: '#00695C',
-        borderBottomWidth: 1,
-        borderRightWidth: 1,
-        borderRadius: 3
+        borderRadius: 2
     },
-    textStyle2: {
+    textStyleS: {
         fontSize: 14
     },
+    textStyleNS: {
+        fontSize: 14,
+        color: 'rgba(0, 0, 0, 0.8)'
+    }
 })
 
 export default FriendRequest;

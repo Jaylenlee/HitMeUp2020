@@ -52,7 +52,7 @@ class CreateEventContainer extends React.Component {
                         </View>
 
                         <View style={styles.form}>
-                            <View style={{ marginTop: 32 }}>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Event Name</Text>
                                 <TextInput
                                     style={styles.input}
@@ -64,7 +64,7 @@ class CreateEventContainer extends React.Component {
                                     onSubmitEditing={() => this.dateInput.focus()}
                                 />
                             </View>
-                            <View style={{ marginTop: 32 }}>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Date</Text>
                                 <DatePicker
                                     placeholder={"Event Start Date"}
@@ -73,7 +73,7 @@ class CreateEventContainer extends React.Component {
                                     onChange={this.handleDatePickerChange}
                                  />
                             </View>
-                            <View style={{ marginTop: 32 }}>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Time</Text>
                                 <TimePicker
                                     placeholder={"Event Start Time"}
@@ -82,7 +82,7 @@ class CreateEventContainer extends React.Component {
                                     onChange={this.handleTimePickerChange}
                                  />
                             </View>
-                            <View style={{ marginTop: 32 }}>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Location</Text>
                                 <TextInput
                                     style={styles.input}
@@ -95,7 +95,7 @@ class CreateEventContainer extends React.Component {
                                     ref={(input) => {this.locationInput = input}}
                                 />
                             </View>
-                            <View style={{ marginTop: 32 }}>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Size</Text>
                                 <TextInput
                                     style={styles.input}
@@ -108,7 +108,7 @@ class CreateEventContainer extends React.Component {
                                     ref={(input) => {this.sizeInput = input}}
                                 />
                             </View>
-                            <View style={{ marginTop: 32 }}>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Activity Details</Text>
                                 <TextInput
                                     style={styles.inputLast}
@@ -173,10 +173,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFEBEE'
     },
-    backArrow: {
-        flex: 1,
-        alignSelf: 'flex-start'
-    },
     top: {
         backgroundColor: '#FFF',
         borderBottomWidth: 2,
@@ -184,8 +180,7 @@ const styles = StyleSheet.create({
         shadowColor: '#011f4b',
         shadowOffset: {height: 5},
         shadowOpacity: 0.4,
-        zIndex: 10,
-        padding: 10
+        zIndex: 10
     },
     header: {
         flex: 1,
@@ -201,7 +196,7 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     form: {
-        marginBottom: 48,
+        marginBottom: 36,
         marginHorizontal: 30
     },
     inputTitle: {
@@ -240,7 +235,7 @@ const styles = StyleSheet.create({
     },
     displayPrivacy: {
         height: 30,
-        width: 200,
+        width: 150,
         alignItems: 'center'
     },
     privacyText: {
@@ -255,7 +250,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-        paddingHorizontal: '20%'
+        paddingHorizontal: '15%'
     },
     addButtonS: {
         width: 80,
@@ -289,7 +284,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 25,
         padding: 10,
-        backgroundColor: '#DF476C',
+        backgroundColor: '#eb3f50',
         borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',

@@ -96,36 +96,30 @@ class FriendListContainer extends React.Component {
             <View style={styles.container}>
                 <View style={styles.top}>
                     <View style={styles.header}>
-                        <Text style={styles.headerTitle}>Friend</Text>
-                        <TouchableOpacity
-                            style={styles.refreshStyle}
-                            onPress= {() => {this.updateFriends()}}
-                        >
-                            <Feather name="refresh-cw" size={22} color='#73788B'/>
-                        </TouchableOpacity>
+                        <Text style={styles.headerTitle}>My Friends</Text>
                     </View>
+                </View>
 
-                    <View style={styles.toggleTabs}>
-                        <TouchableOpacity style={styles.toggleButtonNS}>
-                            <Text style={styles.textStyle}>My Friends</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.toggleButtonS}
-                            onPress= {() => {this.props.navigation.navigate('SearchFriend')}}
-                        >
-                            <Text style={styles.textStyle}>Search user</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.toggleTabs}>
+                    <TouchableOpacity style={styles.toggleButtonNS}>
+                        <Text style={styles.textStyleNS}>My Friends</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.toggleButtonS}
+                        onPress= {() => {this.props.navigation.navigate('SearchFriend')}}
+                    >
+                        <Text style={styles.textStyleS}>Search user</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={styles.searchBar}>
-                        <View style={styles.iconSearch}>
-                            <Feather name="search" size={18} style={styles.searchIcon}/>
-                            <TextInput
-                                style={styles.searching}
-                                placeholder="Search Friend"
-                                onChangeText={text => {this.searchFriend(text)}}
-                            />
-                        </View>
+                <View style={styles.searchBar}>
+                    <View style={styles.iconSearch}>
+                        <Feather name="search" size={18} style={styles.searchIcon}/>
+                        <TextInput
+                            style={styles.searching}
+                            placeholder="Search Friend"
+                            onChangeText={text => {this.searchFriend(text)}}
+                        />
                     </View>
                 </View>
 
@@ -146,15 +140,7 @@ class FriendListContainer extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#B2DFDB'
-    },
-    backArrow: {
-        flex: 1,
-        alignSelf: 'flex-start'
-    },
-    refreshStyle: {
-        flex: 1,
-        alignSelf: 'flex-end'
+        backgroundColor: '#e6fffd'
     },
     top: {
         backgroundColor: '#FFF',
@@ -168,12 +154,9 @@ const styles = StyleSheet.create({
     header: {
         flex: 1,
         padding: 16,
-        paddingBottom: 15,
         flexDirection: 'row',
         alignItems: 'flex-start',
-        justifyContent: 'center',
-        borderBottomColor: '#EBECF4',
-        borderBottomWidth: 1
+        justifyContent: 'center'
     },
     headerTitle: {
         fontSize: 20,
@@ -193,24 +176,34 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         shadowOffset: {height: 1, width: 1},
         shadowColor: '#455A64',
-        shadowOpacity: 0.6,
-        borderRadius: 3,
+        shadowOpacity: 0.2,
+        borderRadius: 2,
         borderRightWidth: 1,
+        borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.4)'
     },
     toggleButtonNS: {
-        backgroundColor: '#c7f2f0',
+        backgroundColor: '#c7fffa',
         padding: 5,
         paddingHorizontal: 10,
-        borderRadius: 3
+        borderRadius: 2
     },
-    textStyle: {
+    textStyleS: {
         fontSize: 14
+    },
+    textStyleNS: {
+        fontSize: 14,
+        color: 'rgba(0, 0, 0, 0.8)'
     },
     searchBar: {
         marginTop: 5,
-        backgroundColor: '#80CBC4',
-        padding: 5
+        backgroundColor: '#b0fff9',
+        padding: 5,
+        borderBottomColor: '#4dfff1',
+        borderBottomWidth: 1,
+        shadowOffset: {height: 1},
+        shadowOpacity: 0.1,
+        shadowColor: '#455A64'
     },
     iconSearch: {
         backgroundColor: '#FFF',
@@ -227,8 +220,6 @@ const styles = StyleSheet.create({
     searching: {
         fontSize: 14,
         borderRadius: 15,
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
         paddingLeft: 5,
         height: 30,
         flex: 1

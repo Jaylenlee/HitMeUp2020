@@ -48,7 +48,7 @@ export default class Profile extends React.Component {
         return(
             <SafeAreaView style={styles.container}>
                 <ScrollView>
-                    <View style={{marginTop: 24, alignItems: 'center'}}>
+                    <View style={{marginTop: 24, marginBottom: 16, alignItems: 'center'}}>
                         <View style={styles.avatarContainer}>
                             <Image
                                source={photo? {uri: photo} :
@@ -65,10 +65,6 @@ export default class Profile extends React.Component {
                                 <Text style={styles.text}>{gender}</Text>
                             </View>
                             <View style={styles.info}>
-                                <Text style={styles.title}>Location</Text>
-                                <Text style={styles.text}>{location}</Text>
-                            </View>
-                            <View style={styles.info}>
                                 <Text style={styles.title}>Occupation</Text>
                                 <Text style={styles.text}>{occupation}</Text>
                             </View>
@@ -77,7 +73,13 @@ export default class Profile extends React.Component {
                                 <Text style={styles.text}>{age}</Text>
                             </View>
                         </View>
-                        <View style={styles.info}>
+
+                        <View style={styles.infoB}>
+                            <Text style={styles.title}>Location</Text>
+                            <Text style={styles.text}>{location}</Text>
+                        </View>
+
+                        <View style={styles.infoB}>
                             <Text style={styles.title}>Interests/Hobbies</Text>
                             <Text style={styles.text}>{interests}</Text>
                         </View>
@@ -95,7 +97,7 @@ export default class Profile extends React.Component {
                             <TouchableOpacity style = {styles.buttonContainer}
                                 onPress={pressHandle}
                             >
-                                <Text style={styles.buttonText}>Edit</Text>
+                                <Text style={styles.buttonText}>Edit Profile</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -125,18 +127,28 @@ const styles = StyleSheet.create({
     },
     userStyle: {
         marginTop : 24,
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '600',
     },
     infoContainer: {
         flexDirection: 'row',
         width: 300,
         justifyContent: 'space-between',
-        margin: 32
+        marginHorizontal: 32,
+        marginBottom: 10,
+        marginTop: 16
     },
     info: {
         alignItems: 'center',
         flex: 1,
+        margin: 5
+    },
+    infoB: {
+        alignSelf: 'flex-start',
+        alignItems: 'flex-start',
+        flex: 1,
+        marginHorizontal: 24,
+        marginVertical: 10
     },
     title: {
         color: '#C3C5CD',
@@ -150,7 +162,7 @@ const styles = StyleSheet.create({
         fontWeight: '300'
     },
     logoutS: {
-        marginTop: 50,
+        marginTop: 36,
     },
     logoutText: {
         fontSize: 14,

@@ -92,7 +92,7 @@ class RegisterForm extends React.Component {
         const {username, email, password, signUpSuccess, errorMessage, gender, age, location, occupation, interests} = this.state
         return(
             <KeyboardAvoidingView style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                     <StatusBar
                         barstyle="light-content"
                     />
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     form: {
-        marginBottom: 48,
+        marginBottom: 24,
         marginHorizontal: 30
     },
     inputTitle: {
@@ -326,7 +326,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         height: 40,
         fontSize: 15,
-        color: '#161F3D'
+        color: '#161F3D',
+        paddingLeft: 5
     },
     buttonContainer: {
         marginHorizontal: 30,

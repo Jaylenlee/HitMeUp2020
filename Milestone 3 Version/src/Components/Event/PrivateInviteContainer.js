@@ -127,12 +127,6 @@ class PrivateInviteContainer extends React.Component {
                             <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Private Invite</Text>
-                        <TouchableOpacity
-                            style={styles.refreshStyle}
-                            onPress= {() => {this.updateFriends()}}
-                        >
-                            <Feather name="refresh-cw" size={22} color='#73788B'/>
-                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.searchBar}>
@@ -180,8 +174,6 @@ const styles = StyleSheet.create({
     backArrow: {
         flex: 1,
         alignSelf: 'flex-start'
-    },
-    refreshStyle: {
     },
     top: {
         backgroundColor: '#FFF',

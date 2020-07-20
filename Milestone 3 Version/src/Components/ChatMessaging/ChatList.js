@@ -2,6 +2,8 @@ import React from 'react';
 import { View, FlatList, ActivityIndicator, Text, StyleSheet,
          TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
+import * as firebase from 'firebase';
+import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
 export default class ChatList extends React.Component {
@@ -11,70 +13,65 @@ export default class ChatList extends React.Component {
         filteredChatList: []
     }
 
-    async componentDidMount() {
+    componentWillMount() {
         const currUser = firebaseDb.auth.currentUser;
         const currUID = currUser.uid;
-
-        firebaseDb.db.collection("friendlist").doc(currUID).onSnapshot(docSnapshot => {
-            this.getChat(docSnapshot);
-        })
-    }
-
-    async getChat(docSnapshot) {
-        const info = docSnapshot.data();
-        const chatUID = info.chatUID;
-        const profileRef = firebaseDb.db.collection("profile");
-        const promise = [];
         const chats = [];
-       
-        for(let uid in chatUID) {
-            const chatInfo = chatUID[uid];
-            const groupName = chatInfo.groupName;
-            const users = chatInfo.users;
+        firebaseDb.db.collection("friendlist").doc(currUser.uid).onSnapshot(docSnapshot => {
+            const info = docSnapshot.data();
+            const chatUID = info.chatUID;
+            const profileRef = firebaseDb.db.collection("profile");
+            const promise = [];
+            //console.log("1: " + chatUID);
+            for(let uid in chatUID) {
+                const chatInfo = chatUID[uid];
+                //console.log("2: " + chatInfo);
+                const groupName = chatInfo.groupName;
+                //console.log("3: " + groupName);
+                const users = chatInfo.users;
+                //console.log("4: " + users);
+                
+                if(groupName == "") {
+                    const arr = users.filter(name => name != currUID);
+                    console.log(arr);
+                    console.log(arr[0]);
 
-            if(groupName == "") {
-                await profileRef.doc(users[0]).onSnapshot(docSnapshot => {
-                    promise.push(this.pushIndivChat(chats, docSnapshot, chatInfo))
-                    Promise.all(promise).then(() => this.setState({chatList: chats, filteredChatList: chats, isLoading: false}))
-                })
-            } else {
-                chats.push({
-                    chatName: groupName,
-                    chatUID: chatInfo.chatUID,
-                    chatPic: chatInfo.groupPic,
-                })
+                    promise.push(profileRef.doc(arr[0]).onSnapshot(docSnapshot => {
+                        console.log("??");
+                        const username = docSnapshot.data().username;
+                        chats.push({
+                            chatName: username,
+                            chatUID: chatInfo.chatUID
+                        })
+                    }))
+                    Promise.all(promise).then(() => {})
+                } else {
+                    chats.push({
+                        chatName: groupName,
+                        chatUID: chatInfo.chatUID,
+                    })
+                }
             }
-        }        
-    }
-
-    async pushIndivChat(chats, docSnapshot, chatInfo) {
-        const username = await docSnapshot.data().username;
-        const photo = await docSnapshot.data().photo;
-        chats.push({
-            chatName: username,
-            chatUID: chatInfo.chatUID,
-            chatPic: photo,
+            console.log(chats);
+            this.setState({chatList: chats, isLoading: false});
         })
     }
+
 
     searchChat(searchText) {
         this.setState({
             filteredChatList: this.state.chatList.filter(chat =>
-                           chat.chatName.toLowerCase().includes(searchText.toLowerCase()))
+                           chat.toLowerCase().includes(searchText.toLowerCase()))
         })
     }
 
     renderChat = chat => {
+        console.log(chat);
+        console.log(this.state.chatList);
         return (
             <TouchableOpacity
                 style={styles.eventItem}
-                onPress={() => {
-                    this.props.navigation.navigate('ChatScreen', {
-                        chatUID: chat.chatUID, 
-                        chatName: chat.chatName, 
-                        chatPic: chat.chatPic,
-                    })
-                }}
+                onPress={() => {this.props.navigation.navigate('ChatScreen', {chatUID: chat.chatUID, chatName: chat.chatName})}}
             >
                 <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -83,7 +80,7 @@ export default class ChatList extends React.Component {
                                 <View style={styles.avatarContainer}>
                                     <Image
                                         style={styles.thumbnail}
-                                        source={{uri: chat.chatPic}}
+                                        source={{uri: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png'}}
                                     />
                                 </View>
                                 <Text style={styles.eventTitle}>{chat.chatName}</Text>
@@ -96,7 +93,7 @@ export default class ChatList extends React.Component {
     };
 
     render() {
-        const { isLoading, filteredChatList } = this.state
+        const { isLoading, chatList } = this.state
     
         if (isLoading) {
             return(
@@ -146,7 +143,7 @@ export default class ChatList extends React.Component {
                 <ScrollView>
                     <FlatList
                         style={styles.feed}
-                        data={filteredChatList}
+                        data={chatList}
                         renderItem={({ item }) => this.renderChat(item)}
                         keyExtractor={item => item}
                         showsVerticalScrollIndicator={false}

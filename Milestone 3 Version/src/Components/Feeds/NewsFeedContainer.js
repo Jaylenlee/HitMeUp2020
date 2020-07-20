@@ -63,10 +63,12 @@ class NewsFeedContainer extends React.Component {
                         <View style={{flex: 1}}>
                             <View style={styles.titleBar}>
                                 <Text style={styles.eventTitle}>{event.eventName}</Text>
-                                <TouchableOpacity style={{alignSelf: "flex-end"}}
-                                    onPress={() => this.pressHandleRemove(event.eventUID)}>
-                                    <Ionicons name="md-close" size={30}/>
-                                </TouchableOpacity>
+                                <View style={{flex: 1}}>
+                                    <TouchableOpacity style={{alignSelf: "flex-end"}}
+                                        onPress={() => this.pressHandleRemove(event.eventUID)}>
+                                        <Ionicons name="md-close" size={18}/>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                             <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
@@ -76,12 +78,13 @@ class NewsFeedContainer extends React.Component {
                                 </View>
                                 <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
-                            <View style={{alignItems: 'flex-end'}}>
+                            <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={24} color="#607D8B" />
+                                    <Ionicons name="ios-more" size={20} color="#607D8B" />
                                 </TouchableOpacity>
                             </View>
                         </View>
+
                     </View>
                 </View>
             </View>
@@ -107,19 +110,19 @@ class NewsFeedContainer extends React.Component {
                 </View>
                 <View style={styles.toggleTabs}>
                     <TouchableOpacity style={styles.toggleButtonNS}>
-                        <Text style={styles.textStyle}>My Feeds</Text>
+                        <Text style={styles.textStyleNS}>My Feeds</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('History')}}
                     >
-                        <Text style={styles.textStyle}>History</Text>
+                        <Text style={styles.textStyleS}>History</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('PublicFeedFilter')}}
                     >
-                        <Text style={styles.textStyle}>Public Feeds</Text>
+                        <Text style={styles.textStyleS}>Public Feeds</Text>
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
@@ -185,7 +188,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#B0BEC5',
         paddingBottom: 8,
-        flexDirection: "row",
+        flexDirection: "row"
     },
     eventTitle: {
         fontSize: 14,
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
     details: {
         fontSize: 14,
         color: '#455A64',
-        paddingLeft: 20
+        paddingLeft: 5
     },
     loading: {
         flex: 1,
@@ -226,20 +229,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         shadowOffset: {height: 1, width: 1},
         shadowColor: '#455A64',
-        shadowOpacity: 0.6,
-        borderRadius: 3,
+        shadowOpacity: 0.2,
+        borderRadius: 2,
         borderRightWidth: 1,
+        borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.4)'
     },
     toggleButtonNS: {
         backgroundColor: '#64B5F6',
         padding: 5,
         paddingHorizontal: 10,
-        borderRadius: 3
+        borderRadius: 2
     },
-    textStyle: {
+    textStyleS: {
         fontSize: 14
     },
+    textStyleNS: {
+        fontSize: 14,
+        color: 'rgba(0, 0, 0, 0.8)'
+    }
 })
 
 export default NewsFeedContainer;

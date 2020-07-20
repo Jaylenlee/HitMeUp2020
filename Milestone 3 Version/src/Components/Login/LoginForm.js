@@ -26,11 +26,12 @@ export default class LoginForm extends React.Component {
                     barstyle="light-content"
                 />
 
-                <ScrollView>
+                <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                     <Image
                         source={{uri: 'https://1.bp.blogspot.com/-i5-CeH9AqCI/XvQlWPm6RHI/AAAAAAAAAC0/_zcPawFqEIwN2XRWuRU3y_McIh1RwTKcwCK4BGAsYHg/s540/Capture234.PNG'}}
                         style={styles.logoImg}
                     />
+
                     <Text style={styles.greeting}>{'Welcome to Phovent!'}</Text>
                     <Text style={styles.subGreeting}>{'A place where easy meetup plans are made possible'}</Text>
 
@@ -71,7 +72,7 @@ export default class LoginForm extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={{ alignSelf: 'center', marginTop: 32 }}
+                        style={{ alignSelf: 'center', marginTop: 32, marginBottom: 24 }}
                         onPress={() => this.props.navigation.navigate('Register')}
                     >
                         <Text style={styles.buttonText}>
@@ -135,7 +136,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         height: 40,
         fontSize: 15,
-        color: '#161F3D'
+        color: '#161F3D',
+        paddingLeft: 5
     },
     buttonContainer: {
         marginHorizontal: 30,

@@ -116,7 +116,7 @@ export default class ViewPublicEvent extends React.Component {
                         <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                     </TouchableOpacity>
 
-                    <View style={{marginTop: -5, flex: 1, padding: 20}}>
+                    <View style={{marginTop: -15, flex: 1, padding: 20}}>
                         <Text style={styles.userStyle}>{eventName}</Text>
 
                         <View style={styles.infoContainer}>
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         //alignItems: 'space-around',
-        marginHorizontal: 32,
+        marginHorizontal: 16,
         marginTop: 20
     },
     info: {
@@ -217,9 +217,9 @@ const styles = StyleSheet.create({
         fontWeight: '300'
     },
     infoB: {
-        marginTop: 30,
+        marginTop: 16,
         alignItems: 'flex-start',
-        marginHorizontal: 50,
+        marginHorizontal: 18,
         borderWidth: 1,
         borderRadius: 10,
         shadowOffset: {height: 2, width: 2},
@@ -249,19 +249,20 @@ const styles = StyleSheet.create({
     },
     buttonsField: {
         flexDirection: 'row',
-        marginTop: 10,
+        marginVertical: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        marginHorizontal: 12
     },
     buttonText: {
         textAlign: 'center',
         color: 'white',
         fontWeight: '500',
-        width: 200,
+        paddingHorizontal: 24
     },
     loading: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center"
-    },
+    }
 });

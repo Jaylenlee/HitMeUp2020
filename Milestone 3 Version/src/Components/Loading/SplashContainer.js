@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Text } from 'react-native';
 
 export default class SplashContainer extends React.Component {
     render() {
-        setTimeout(() => { this.props.navigation.navigate('Loading'); }, 3000);
+        setTimeout(() => { this.props.navigation.navigate('Loading'); }, 1);
         return (
             <View style={styles.pageStyle}>
                 <Image

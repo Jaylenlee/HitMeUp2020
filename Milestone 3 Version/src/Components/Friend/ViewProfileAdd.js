@@ -104,7 +104,7 @@ export default class ViewProfileAdd extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1
     },
     backArrow: {
         padding: 10
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     buttonsContainer: {
-        paddingTop: 15,
+        paddingTop: 15
     },
     buttonText: {
         textAlign: 'center',

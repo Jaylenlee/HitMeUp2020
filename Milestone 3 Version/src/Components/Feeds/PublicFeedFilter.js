@@ -43,9 +43,6 @@ export default class PublicFeedFilter extends React.Component {
     }
 
     filterTime(text, events) {
-        if(text == "") {
-            // resolve erro later. null time
-        } else {
         const dateTime = text.toString();
         var n = dateTime.indexOf(":");
         const time = dateTime.slice(n-2,n+6);
@@ -61,7 +58,7 @@ export default class PublicFeedFilter extends React.Component {
                             .filter(event => event.activityDetails.toLowerCase().includes(words[3].toLowerCase()))
                             .filter(event => event.eventName.toLowerCase().includes(words[4].toLowerCase()))
                             .filter(event => event.creator.toLowerCase().includes(words[5].toLowerCase()))
-        })}    
+        })    
     }
 
     filterLocation(text, events) {
@@ -124,10 +121,12 @@ export default class PublicFeedFilter extends React.Component {
                         <View style={{flex: 1}}>
                             <View style={styles.titleBar}>
                                 <Text style={styles.eventTitle}>{event.eventName}</Text>
-                                <TouchableOpacity style={{alignSelf: "flex-end"}}
-                                    onPress={() => this.pressHandleRemove(event.eventUID)}>
-                                    <Ionicons name="md-close" size={30}/>
-                                </TouchableOpacity>
+                                <View style={{ flex: 1 }}>
+                                    <TouchableOpacity style={{alignSelf: "flex-end"}}
+                                        onPress={() => this.pressHandleRemove(event.eventUID)}>
+                                        <Ionicons name="md-close" size={18}/>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                             <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
@@ -137,9 +136,9 @@ export default class PublicFeedFilter extends React.Component {
                                 </View>
                                 <Text style={styles.details}>{event.activityDetails}</Text>
                             </View>
-                            <View style={{alignItems: 'flex-end'}}>
+                            <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate("ViewPublicEvent", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={24} color="#607D8B" />
+                                    <Ionicons name="ios-more" size={20} color="#607D8B" />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -162,12 +161,6 @@ export default class PublicFeedFilter extends React.Component {
         return(
             <View style={styles.container}>
                 <View style={styles.top}>
-                    <TouchableOpacity
-                            style={styles.backArrow}
-                            onPress={() => this.props.navigation.goBack()}
-                        >
-                            <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
-                    </TouchableOpacity>
                     <View style={styles.header}>
                         <Text style={styles.headerTitle}>Public Feeds</Text>
                     </View>
@@ -177,92 +170,111 @@ export default class PublicFeedFilter extends React.Component {
                         style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('Feeds')}}
                     >
-                        <Text style={styles.textStyle}>My Feeds</Text>
+                        <Text style={styles.textStyleS}>My Feeds</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('History')}}
                     >
-                        <Text style={styles.textStyle}>History</Text>
+                        <Text style={styles.textStyleS}>History</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.toggleButtonNS}>
-                        <Text style={styles.textStyle}>Public Feeds</Text>
+                        <Text style={styles.textStyleNS}>Public Feeds</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={{marginTop: 5, alignItems: "center"}}>Filter Public Event By</Text>
-                <View style={styles.searchBar}>
-                    <View style={styles.iconSearch}>
-                        <Feather name="search" size={18} style={styles.searchIcon}/>
-                        <DatePicker
-                            placeholder={"Event Start Date"}
-                            style={{ marginRight: "10px"}}
-                            format="YYYY-MM-DD"
-                            onChange={text => {this.filterDate(text, events)}}
-                        />
-                        <DatePicker
-                            placeholder={"Event Start Date"}
-                            style={{ marginRight: "10px"}}
-                            format="YYYY-MM-DD"
-                            onChange={text => {this.filterDate(text, events)}}
-                        />
-                    </View>
-                    <View style={styles.iconSearch}>
-                        <Feather name="search" size={18} style={styles.searchIcon}/>
-                        <TimePicker
-                            placeholder={"Event Start Time"}
-                            style={{ marginRight: "10px"}}
-                            format="HH:mm:ss"
-                            onChange={text => {this.filterTime(text, events)}}
-                        />
-                        <TimePicker
-                            placeholder={"Event Start Time"}
-                            style={{ marginRight: "10px"}}
-                            format="HH:mm:ss"
-                            onChange={text => {this.filterTime(text, events)}}
-                        />
-                    </View>
-                    <View style={styles.iconSearch}>
-                        <Feather name="search" size={18} style={styles.searchIcon}/>
-                        <TextInput
-                            style={styles.searching}
-                            placeholder="Location"
-                            onChangeText={text => {this.filterLocation(text, events)}}
-                        />
-                    </View>
-                    <View style={styles.iconSearch}>
-                        <Feather name="search" size={18} style={styles.searchIcon}/>
-                        <TextInput
-                            style={styles.searching}
-                            placeholder="Activity"
-                            onChangeText={text => {this.filterActivity(text, events)}}
-                        />
-                    </View>
-                    <View style={styles.iconSearch}>
-                        <Feather name="search" size={18} style={styles.searchIcon}/>
-                        <TextInput
-                            style={styles.searching}
-                            placeholder="Event Name"
-                            onChangeText={text => {this.filterEventName(text, events)}}
-                        />
-                    </View>
-                    <View style={styles.iconSearch}>
-                        <Feather name="search" size={18} style={styles.searchIcon}/>
-                        <TextInput
-                            style={styles.searching}
-                            placeholder="Organiser"
-                            onChangeText={text => {this.filterOrgainser(text, events)}}
-                        />
-                    </View>
+
+                <View style={styles.divider}>
+                    <Text style={{ fontSize: 14, paddingLeft: 5 }}>Filter public events by:</Text>
                 </View>
-                <ScrollView>
-                    <FlatList
-                        style={styles.feed}
-                        data={filtered}
-                        renderItem={({ item }) => this.renderEvent(item)}
-                        keyExtractor={item => item.eventName}
+
+                <View style={{height: 100, marginTop: 10, marginBottom: 2, marginHorizontal: 5, borderColor: "#BBDEFB", paddingTop: 2,
+                              borderRadius: 3, borderWidth: 2, shadowOffset: {height: 2, width: 2}, shadowOpacity: 0.1}}>
+                    <ScrollView
+                        showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
-                    />
-                </ScrollView>
+                    >
+                        <View style={styles.searches}>
+                            <View style={styles.iconSearch}>
+                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <DatePicker
+                                    placeholder={"Event Start Date"}
+                                    style={{ marginRight: "10px"}}
+                                    format="YYYY-MM-DD"
+                                    onChange={text => {this.filterDate(text, events)}}
+                                />
+                                <DatePicker
+                                    placeholder={"Event Start Date"}
+                                    style={{ marginRight: "10px"}}
+                                    format="YYYY-MM-DD"
+                                    onChange={text => {this.filterDate(text, events)}}
+                                />
+                            </View>
+                            <View style={styles.iconSearch}>
+                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <TimePicker
+                                    placeholder={"Event Start Time"}
+                                    style={{ marginRight: "10px"}}
+                                    format="HH:mm:ss"
+                                    onChange={text => {this.filterTime(text, events)}}
+                                />
+                                <TimePicker
+                                    placeholder={"Event Start Time"}
+                                    style={{ marginRight: "10px"}}
+                                    format="HH:mm:ss"
+                                    onChange={text => {this.filterTime(text, events)}}
+                                />
+                            </View>
+                            <View style={styles.iconSearch}>
+                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <TextInput
+                                    style={styles.searching}
+                                    placeholder="Location"
+                                    onChangeText={text => {this.filterLocation(text, events)}}
+                                />
+                            </View>
+                            <View style={styles.iconSearch}>
+                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <TextInput
+                                    style={styles.searching}
+                                    placeholder="Activity"
+                                    onChangeText={text => {this.filterActivity(text, events)}}
+                                />
+                            </View>
+                            <View style={styles.iconSearch}>
+                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <TextInput
+                                    style={styles.searching}
+                                    placeholder="Event Name"
+                                    onChangeText={text => {this.filterEventName(text, events)}}
+                                />
+                            </View>
+                            <View style={styles.iconSearch}>
+                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <TextInput
+                                    style={styles.searching}
+                                    placeholder="Organiser"
+                                    onChangeText={text => {this.filterOrgainser(text, events)}}
+                                />
+                            </View>
+                        </View>
+                    </ScrollView>
+                </View>
+
+                <View style={{flex: 1, marginVertical: 10, marginHorizontal: 8,
+                              borderTopColor: '#42A5F5', paddingTop: 5, borderTopWidth: 1}}>
+                    <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                    >
+                        <FlatList
+                            style={styles.feed}
+                            data={filtered}
+                            renderItem={({ item }) => this.renderEvent(item)}
+                            keyExtractor={item => item.eventName}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    </ScrollView>
+                </View>
             </View>
         )
     }
@@ -304,18 +316,18 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         position: 'absolute'
     },
-    searchBar: {
-        marginTop: 10,
-        backgroundColor: '#f2f9ff',
-        padding: 5,
-        borderColor: "#BBDEFB",
+    divider: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#42A5F5',
+        paddingVertical: 10,
+        marginHorizontal: 8
+    },
+    searches: {
+        backgroundColor: '#f2f9ff'
     },
     iconSearch: {
         backgroundColor: '#FFF',
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
         height: 30,
-        borderRadius: 15,
         flexDirection: 'row'
     },
     searchIcon: {
@@ -325,8 +337,6 @@ const styles = StyleSheet.create({
     searching: {
         fontSize: 14,
         borderRadius: 15,
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
         paddingLeft: 5,
         height: 30,
         flex: 1
@@ -368,10 +378,10 @@ const styles = StyleSheet.create({
     details: {
         fontSize: 14,
         color: '#455A64',
-        paddingLeft: 20
+        paddingLeft: 5
     },
     feed: {
-        paddingHorizontal: 16
+        paddingHorizontal: 8
     },
     toggleTabs: {
         flexDirection: 'row',
@@ -385,18 +395,23 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         shadowOffset: {height: 1, width: 1},
         shadowColor: '#455A64',
-        shadowOpacity: 0.6,
-        borderRadius: 3,
+        shadowOpacity: 0.2,
+        borderRadius: 2,
         borderRightWidth: 1,
+        borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.4)'
     },
     toggleButtonNS: {
         backgroundColor: '#64B5F6',
         padding: 5,
         paddingHorizontal: 10,
-        borderRadius: 3
+        borderRadius: 2
     },
-    textStyle: {
+    textStyleS: {
         fontSize: 14
     },
+    textStyleNS: {
+        fontSize: 14,
+        color: 'rgba(0, 0, 0, 0.8)'
+    }
 })
