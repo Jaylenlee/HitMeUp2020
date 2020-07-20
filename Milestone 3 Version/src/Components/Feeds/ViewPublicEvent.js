@@ -61,9 +61,9 @@ export default class ViewPublicEvent extends React.Component {
     pressHandleUnattend = () => {
         this.setState({isLoading: true});
         const currUser = this.state.currUser;
-
-        firebaseDb.db.collection('events').doc(this.state.eventUID).update({
-            invitees: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
+        const eventDoc = firebaseDb.db.collection('events').doc(this.state.eventUID)
+        eventDoc.update({
+            attendees: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
         })
     
         var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
@@ -73,17 +73,24 @@ export default class ViewPublicEvent extends React.Component {
     }
 
     pressHandleAttend = () => {
-        this.setState({isLoading: true});
         const currUser = this.state.currUser;
-        
-        firebaseDb.db.collection('events').doc(this.state.eventUID).update({
-            invitees: firebase.firestore.FieldValue.arrayUnion(currUser.uid)
+        const eventDoc = firebaseDb.db.collection('events').doc(this.state.eventUID)
+
+        eventDoc.get().then(docSnapshot => {
+            const attendees = docSnapshot.data().attendees;
+            if(attendees.length < this.state.estimatedSize) {
+                eventDoc.update({
+                    attendees: firebase.firestore.FieldValue.arrayUnion(currUser.uid)
+                })
+                
+                var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
+                currNotification.update({
+                    eventOngoing: firebase.firestore.FieldValue.arrayUnion(this.state.eventUID)
+                }).then(() => this.props.navigation.navigate("Feeds")).catch(err => console.error(err));
+            } else {
+                alert("Event max size have been reached. Unable to attend.");  
+            }
         })
-        
-        var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
-        currNotification.update({
-            eventOngoing: firebase.firestore.FieldValue.arrayUnion(this.state.eventUID)
-        }).then(() => this.props.navigation.navigate("Feeds")).catch(err => console.error(err));
     }
 
     pressHandleEdit = () => {
