@@ -37,7 +37,7 @@ export default class FlatListComponent extends React.Component {
                                             newStatus ? this.props.invite() : this.props.remove()
                                         }}
                                     > 
-                                        <Text style={styles.addButtonText}>{status ? "Don't Invite" : "Send Invite"}</Text>
+                                        <Text style={styles.addButtonText}>{status ? "Cancel Invite" : "Send Invite"}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     addButton: {
-        shadowOffset: {height: 1, width: 1},
+        shadowOffset: {height: 2, width: 2},
         shadowOpacity: 0.4,
         margin: 25,
         padding: 8,
@@ -100,13 +100,11 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     addButton2: {
-        shadowOffset: {height: 1, width: 1},
-        shadowOpacity: 0.4,
         margin: 25,
         padding: 8,
         marginLeft: 100,
         borderRadius: 2,
-        backgroundColor: '#56DC9F',
+        backgroundColor: 'rgba(220, 86, 153, 0.4)',
         alignSelf: 'flex-end'
     },
     addButtonText: {
