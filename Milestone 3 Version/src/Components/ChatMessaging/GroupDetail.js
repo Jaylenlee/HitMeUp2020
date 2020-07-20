@@ -5,12 +5,14 @@ import firebaseDb from '../Database/firebaseDb';
 import UserPermission from '../Login/UserPermission';
 import * as ImagePicker from 'expo-image-picker';
 import {Ionicons} from "@expo/vector-icons";
+import * as firebase from 'firebase';
 
 class GroupDetail extends React.Component {
     state = {
         members: this.props.navigation.getParam("groupInfo", null),
         groupName: '',
-        photo: ''
+        photo: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png',
+        isLoading: true
     }
 
     updatePhoto = async () => {
@@ -20,34 +22,35 @@ class GroupDetail extends React.Component {
             allowsEditing: true,
             aspect: [4, 3]
         })
-
         if(!result.cancelled) {
             setPhoto(result.uri)
         }
     }
 
+    setGroupName = (name) => this.setState({ groupName: name });
+
     createChat() {
         this.setState({isLoading: true});
         const user = firebaseDb.auth.currentUser;
         const uid = user.uid;
-        const people = this.state.invitees;
+        const people = this.state.members;
         people.push(uid);
         firebaseDb
             .db
             .collection('messages')
             .add({
                 chat: [],
-                groupName: "static test", //change this
+                groupName: this.state.groupName, //change this
                 users: people,
-                groupPic: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png', // change this
+                groupPic: this.state.photo, // change this
             }).then((docRef) => {
                 const friendRef = firebaseDb.db.collection('friendlist');
                 const promise = [];
                 const obj = {
                     chatUID: docRef.id,
-                    groupName: "static test",
+                    groupName: this.state.groupName,
                     users: people,
-                    groupPic: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png' //change this
+                    groupPic: this.state.photo //change this
                 }
 
                 promise.push(friendRef.doc(uid).update({
@@ -58,7 +61,7 @@ class GroupDetail extends React.Component {
                         chatUID: firebase.firestore.FieldValue.arrayUnion(obj)
                     }))
                 }
-                Promise.all(promise).then(() => {this.props.navigation.navigate("ChatList")})
+                Promise.all(promise).then(() => {this.props.navigation.navigate("ChatList"), this.setState({ isLoading: false })})
             }).catch(err => console.error(err))
     }
 
@@ -112,10 +115,14 @@ class GroupDetail extends React.Component {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
-                            this.createChat();
+                            if (this.state.members.length && this.state.groupName.length) {
+                                this.createChat();
+                            } else {
+                                alert("Please add friends into the group & give your group a name.")
+                            }
                         }}
                      >
-                        <Text style={styles.nextButtonText}>Done</Text>
+                        <Text style={styles.nextButtonText}>Create</Text>
                         <Ionicons name="md-arrow-forward" size={16} color='#73788B'></Ionicons>
                     </TouchableOpacity>
                 </View>

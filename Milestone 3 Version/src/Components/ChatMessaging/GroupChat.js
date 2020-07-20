@@ -154,7 +154,7 @@ export default class GroupChat extends React.Component {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
-                            this.props.navigation.navigate("GroupDetail", {groupInfo: this.state})
+                            this.props.navigation.navigate("GroupDetail", {groupInfo: this.state.invitees})
                         }}
                      >
                         <Text style={styles.nextButtonText}>Next</Text>
