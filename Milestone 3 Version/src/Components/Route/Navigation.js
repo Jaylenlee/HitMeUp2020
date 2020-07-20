@@ -34,6 +34,7 @@ import ChatList from '../ChatMessaging/ChatList';
 import GroupChat from '../ChatMessaging/GroupChat';
 import IndivChat from '../ChatMessaging/IndivChat';
 //import ChatScreen from '../ChatMessaging/ChatScreen';
+import GroupD from '../ChatMessaging/GroupDetail';
 
 const AuthScreens = {
 
@@ -234,6 +235,12 @@ const ChatScreens = {
             header: null,
         }
     },
+    GroupDetail: {
+        screen: GroupD,
+        navigationOptions: {
+            header: null
+        }
+    }
 }
 
 const AuthStackNavigator = createStackNavigator(AuthScreens)
