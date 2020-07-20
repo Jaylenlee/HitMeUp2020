@@ -4,6 +4,8 @@ import { View, TextInput, Text, StyleSheet, ScrollView,
 import { Ionicons } from '@expo/vector-icons';
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
+import { DatePicker, TimePicker } from 'antd';
+import 'antd/dist/antd.css';
 
 class EditEvent extends React.Component {
     state = {
@@ -27,6 +29,8 @@ class EditEvent extends React.Component {
     handleUpdateActivityDetails = (activityDetails) => this.setState({ activityDetails });
     handleUpdatePublic = () => this.setState({isPrivate: false });
     handleUpdatePrivate = () => this.setState({isPrivate: true });
+    handleDatePickerChange = (date, dateString) => this.setState({ date: dateString });
+    handleTimePickerChange = (time, timeString) => this.setState({ time: timeString });
 
     handleSave = () => {
         this.setState({isLoading: true});
@@ -117,159 +121,146 @@ class EditEvent extends React.Component {
             );
         }                        
         return (
-            <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+            <View style={styles.container}>
+                <View style={styles.top}>
+                    <View style={styles.header}>
+                        <TouchableOpacity
+                            style={styles.backArrow}
+                            onPress={() => this.props.navigation.goBack()}>
+                            <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
+                        </TouchableOpacity>
+                        <Text style={styles.headerTitle}>Edit Event</Text>
+                    </View>
+                </View>
+
                 <ScrollView style={{flex: 1}}>
-                    <TouchableOpacity
-                        style={styles.backArrow}
-                        onPress={() => this.props.navigation.goBack()}
-                    >
-                        <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
-                    </TouchableOpacity>
-                    <View style={styles.container}>
-                        <View style={styles.top}>
-                            <View style={styles.header}>
-                                <Text style={styles.headerTitle}>Edit Event</Text>
-                            </View>
+                    <View style={styles.form}>
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Event Name</Text>
+                            <TextInput
+                                style={styles.input}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholder={eventName}
+                                onChangeText={this.handleUpdateEventName}
+                                value={eventName}
+                                returnKeyType="next"
+                                onSubmitEditing={() => this.dateInput.focus()}
+                            />
                         </View>
-
-                        <View style={styles.form}>
-                            <View style={{ marginTop: 32 }}>
-                                <Text style={styles.inputTitle}>Event Name</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    placeholder={eventName}
-                                    onChangeText={this.handleUpdateEventName}
-                                    value={eventName}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.dateInput.focus()}
-                                />
-                            </View>
-                            <View style={{ marginTop: 32 }}>
-                                <Text style={styles.inputTitle}>Date</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    placeholder={date}
-                                    onChangeText={this.handleUpdateDate}
-                                    value={date}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.timeInput.focus()}
-                                    ref={(input) => {this.dateInput = input}}
-                                />
-                            </View>
-                            <View style={{ marginTop: 32 }}>
-                                <Text style={styles.inputTitle}>Time</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    placeholder={time}
-                                    onChangeText={this.handleUpdateTime}
-                                    value={time}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.locationInput.focus()}
-                                    ref={(input) => {this.timeInput = input}}
-                                />
-                            </View>
-                            <View style={{ marginTop: 32 }}>
-                                <Text style={styles.inputTitle}>Location</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    placeholder={location}
-                                    onChangeText={this.handleUpdateLocation}
-                                    value={location}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.sizeInput.focus()}
-                                    ref={(input) => {this.locationInput = input}}
-                                />
-                            </View>
-                            <View style={{ marginTop: 32 }}>
-                                <Text style={styles.inputTitle}>Size</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    placeholder={estimatedSize}
-                                    onChangeText={this.handleUpdateEstimatedSize}
-                                    value={estimatedSize}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => this.detailsInput.focus()}
-                                    ref={(input) => {this.sizeInput = input}}
-                                />
-                            </View>
-                            <View style={{ marginTop: 32 }}>
-                                <Text style={styles.inputTitle}>Activity Details</Text>
-                                <TextInput
-                                    style={styles.inputLast}
-                                    autoCapitalize="none"
-                                    multiline
-                                    autoCorrect={false}
-                                    placeholder={activityDetails}
-                                    onChangeText={this.handleUpdateActivityDetails}
-                                    value={activityDetails}
-                                    returnKeyType="go"
-                                    ref={(input) => {this.detailsInput = input}}
-                                />
-                            </View>
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Date</Text>
+                            <DatePicker
+                                placeholder={"Event Start Date"}
+                                style={{ marginRight: "10px"}}
+                                format="YYYY-MM-DD"
+                                onChange={this.handleDatePickerChange}
+                             />
                         </View>
-
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={styles.divider} />
-                            <View style={styles.displayPrivacy}>
-                                <Text style={styles.privacyText}>{isPrivate? "Private" : "Public"}</Text>
-                            </View>
-                            <View style={styles.divider} />
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Time</Text>
+                            <TimePicker
+                                placeholder={"Event Start Time"}
+                                style={{ marginRight: "10px"}}
+                                format="HH:mm:ss"
+                                onChange={this.handleTimePickerChange}
+                             />
                         </View>
-
-                        <View style={styles.tabStyle}>
-                            <TouchableOpacity
-                                style={[isPrivate? styles.addButtonNS: styles.addButtonS]}
-                                onPress={this.handleUpdatePublic}
-                            >
-                                <Text style={styles.toggButtonText}>Public</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[isPrivate? styles.addButtonS: styles.addButtonNS]}
-                                onPress={this.handleUpdatePrivate}
-                            >
-                                <Text style={styles.toggButtonText}>Private</Text>
-                            </TouchableOpacity>
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Location</Text>
+                            <TextInput
+                                style={styles.input}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholder={location}
+                                onChangeText={this.handleUpdateLocation}
+                                value={location}
+                                returnKeyType="next"
+                                onSubmitEditing={() => this.sizeInput.focus()}
+                                ref={(input) => {this.locationInput = input}}
+                            />
                         </View>
-
-                        <View style={styles.cancelButtonPosition}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={() => {
-                                    this.handleCancel();
-                                }}
-                            >
-                                <Text style={styles.nextButtonText}>Cancel the Event</Text>
-                            </TouchableOpacity>
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Size</Text>
+                            <TextInput
+                                style={styles.input}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholder={estimatedSize}
+                                onChangeText={this.handleUpdateEstimatedSize}
+                                value={estimatedSize}
+                                returnKeyType="next"
+                                onSubmitEditing={() => this.detailsInput.focus()}
+                                ref={(input) => {this.sizeInput = input}}
+                            />
                         </View>
-
-                        <View style={styles.buttonPosition}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={() => {
-                                    if (eventName.length && date.length && time.length && location.length &&
-                                        estimatedSize.length && activityDetails.length) {
-                                        this.handleSave()
-                                    }
-                                }}
-                            >
-                                <Text style={styles.nextButtonText}>Save</Text>
-                                <Ionicons name="md-arrow-forward" size={16} color='#B630A2'></Ionicons>
-                            </TouchableOpacity>
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Activity Details</Text>
+                            <TextInput
+                                style={styles.inputLast}
+                                autoCapitalize="none"
+                                multiline
+                                autoCorrect={false}
+                                placeholder={activityDetails}
+                                onChangeText={this.handleUpdateActivityDetails}
+                                value={activityDetails}
+                                returnKeyType="go"
+                                ref={(input) => {this.detailsInput = input}}
+                            />
                         </View>
                     </View>
+
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.divider} />
+                        <View style={styles.displayPrivacy}>
+                            <Text style={styles.privacyText}>{isPrivate? "Private" : "Public"}</Text>
+                        </View>
+                        <View style={styles.divider} />
+                    </View>
+
+                    <View style={styles.tabStyle}>
+                        <TouchableOpacity
+                            style={[isPrivate? styles.addButtonNS: styles.addButtonS]}
+                            onPress={this.handleUpdatePublic}
+                        >
+                            <Text style={styles.toggButtonText}>Public</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[isPrivate? styles.addButtonS: styles.addButtonNS]}
+                            onPress={this.handleUpdatePrivate}
+                        >
+                            <Text style={styles.toggButtonText}>Private</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.cancelButtonPosition}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                this.handleCancel();
+                            }}
+                        >
+                            <Text style={styles.nextButtonText}>Cancel the Event</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.buttonPosition}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                if (eventName.length && date.length && time.length && location.length &&
+                                    estimatedSize.length && activityDetails.length) {
+                                    this.handleSave()
+                                }
+                            }}
+                        >
+                            <Text style={styles.nextButtonText}>Save</Text>
+                            <Ionicons name="md-arrow-forward" size={16} color='#B630A2'></Ionicons>
+                        </TouchableOpacity>
+                    </View>
                 </ScrollView>
-            </KeyboardAvoidingView>
+            </View>
         );
     }
 }
@@ -291,20 +282,23 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 5},
         shadowOpacity: 0.4,
         zIndex: 10,
-        padding: 10
     },
     header: {
         flex: 1,
         padding: 16,
+        paddingBottom: 15,
         flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'center'
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        borderBottomColor: '#EBECF4',
+        borderBottomWidth: 1
     },
     headerTitle: {
         fontSize: 20,
         fontWeight: '500',
         alignSelf: 'center',
-        position: 'absolute'
+        position: 'absolute',
+        paddingLeft: '40%'
     },
     form: {
         marginBottom: 48,
