@@ -50,33 +50,61 @@ export default class IndivChat extends React.Component {
         })
     }
 
-    createChat(friendUID) {
+    handleChat(friendUID) {
+        console.log("handle");
         this.setState({isLoading: true});
         const user = firebaseDb.auth.currentUser;
         const uid = user.uid;
-        const chatees = [uid, friendUID]
+        const friendRef = firebaseDb.db.collection("friendlist");
+        friendRef.doc(uid).get().then(docSnapshot => {
+            const chatUID = docSnapshot.data().chatUID;
+            const chatInfo = chatUID.filter(chatInfo => chatInfo.groupName == "")
+                                    .filter(chatInfo => chatInfo.users[0] == friendUID);                   
+            chatInfo[0] ? this.openChat(friendUID, chatInfo[0]) : this.createChat(friendUID, uid, friendRef);                        
+        })
+    }
 
+    createChat(friendUID, uid, friendRef) {
+        console.log("create");
         firebaseDb
             .db
             .collection('messages')
             .add({
                 chat: [],
                 groupName: "",
-                users: chatees,
+                users: [uid, friendUID],
+                groupPic: "",
             }).then((docRef) => {
-                const friendRef = firebaseDb.db.collection('friendlist');
                 const promise = []
-                const obj = {chatUID: docRef.id, groupName: "", users: chatees}
+                const obj = {chatUID: docRef.id, groupName: "", users: [friendUID], groupPic: ""};
+                const obj2 = {chatUID: docRef.id, groupName: "", users: [uid], groupPic: ""};
                 promise.push(friendRef.doc(uid).update({
                     chatUID: firebase.firestore.FieldValue.arrayUnion(obj)
                 }))
-            
+                console.log(uid)
                 promise.push(friendRef.doc(friendUID).update({
-                    chatUID: firebase.firestore.FieldValue.arrayUnion(obj)
-                }))       
-            
+                    chatUID: firebase.firestore.FieldValue.arrayUnion(obj2)
+                }))      
+                
                 Promise.all(promise).then(() => {this.props.navigation.navigate("ChatList")})
             }).catch(err => console.error(err))    
+    }
+
+    openChat(friendUID, chatInfo) {
+        console.log("open");
+        const chatUID = chatInfo.chatUID;
+        
+        firebaseDb.db.collection("profile").doc(friendUID).onSnapshot(docSnapshot => {
+            const info = docSnapshot.data();
+            const chatName = info.username;
+            const chatPic = info.photo;
+            this.props.navigation.navigate('ChatScreen', {
+                chatUID: chatUID, 
+                chatName: chatName, 
+                chatPic: chatPic,
+            })
+            this.setState({isLoading: false})
+        })
     }
 
     renderFriend = friend => {
@@ -90,7 +118,7 @@ export default class IndivChat extends React.Component {
                                 <View style={styles.avatarContainer}>
                                     <Image
                                         style={styles.thumbnail}
-                                        source={{uri: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png'}}
+                                        source={{uri: friend.photo}}
                                     />
                                 </View>
                                 <View style={styles.details}>
@@ -100,7 +128,7 @@ export default class IndivChat extends React.Component {
                                 <View style={styles.buttonPos}>
                                     <TouchableOpacity
                                         style={styles.addButton}
-                                        onPress={() => this.createChat(friend.uid)}
+                                        onPress={() => this.handleChat(friend.uid)}
                                     >
                                         <Text style={styles.addButtonText}>Chat</Text>
                                     </TouchableOpacity>
