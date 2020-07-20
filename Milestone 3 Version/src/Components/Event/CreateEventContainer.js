@@ -19,14 +19,35 @@ class CreateEventContainer extends React.Component {
         isPrivate: false
     };
 
+    componentDidMount() {
+        /*this.focusListener = this.props.navigation.addListener('didFocus', () => {
+           this.setState({
+                eventName: '',
+                date: '',
+                time: '',
+                location: '',
+                estimatedSize: '',
+                activityDetails: '',
+                createSuccessful: false,
+                privacyInput: '',
+                isPublic: false,
+                isPrivate: false
+           })
+        })*/
+    }
+
+    componentWillUnmount() {
+        /*this.focusListener.remove();*/
+    }
+
     handleUpdateEventName = (eventName) => this.setState({ eventName });
     handleUpdateDate = (date) => this.setState({ date });
     handleUpdateTime = (time) => this.setState({ time });
     handleUpdateLocation = (location) => this.setState({ location });
     handleUpdateEstimatedSize = (estimatedSize) => this.setState({ estimatedSize });
     handleUpdateActivityDetails = (activityDetails) => this.setState({ activityDetails });
-    handleUpdatePublic = (privacy) => this.setState({ privacyInput: 'Public', isPublic: true, isPrivate: false });
-    handleUpdatePrivate = (privacy) => this.setState({ privacyInput: 'Private', isPrivate: true, isPublic: false });
+    handleUpdatePublic = () => this.setState({ privacyInput: 'Public', isPublic: true, isPrivate: false });
+    handleUpdatePrivate = () => this.setState({ privacyInput: 'Private', isPrivate: true, isPublic: false });
     handleDatePickerChange = (date, dateString) => this.setState({ date: dateString });
     handleTimePickerChange = (time, timeString) => this.setState({ time: timeString });
 
@@ -40,7 +61,7 @@ class CreateEventContainer extends React.Component {
 
     render() {
         const { eventName, date, time, location, estimatedSize,
-                activityDetails} = this.state
+                activityDetails, isPrivate, isPublic} = this.state
         return (
             <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
                 <ScrollView style={{flex: 1}}>
@@ -152,7 +173,7 @@ class CreateEventContainer extends React.Component {
                                 style={styles.button}
                                 onPress={() => {
                                     if (eventName.length && date.length && time.length && location.length &&
-                                        estimatedSize.length && activityDetails.length) {
+                                        estimatedSize.length && activityDetails.length && (isPrivate || isPublic)) {
                                         this.handleSelectInvitees()
                                     }
                                 }}

@@ -58,7 +58,7 @@ class PrivateInviteContainer extends React.Component {
                         eventInvite: firebase.firestore.FieldValue.arrayUnion(docRef.id)
                     }))
                 }
-                Promise.all(promise).then(() => {this.props.navigation.navigate("Feeds")})
+                Promise.all(promise).then(() => {this.setState({isLoading: false}); this.props.navigation.navigate("EventCreate")})
             }).catch(err => console.error(err))    
     }
 
