@@ -56,13 +56,14 @@ class GroupDetail extends React.Component {
                 promise.push(friendRef.doc(uid).update({
                     chatUID: firebase.firestore.FieldValue.arrayUnion(obj)
                 }))
-                for(let uid in this.state.invitees) {
-                    promise.push(friendRef.doc(this.state.invitees[uid]).update({
+                for(let uid in this.state.members) {
+                    promise.push(friendRef.doc(this.state.members[uid]).update({
                         chatUID: firebase.firestore.FieldValue.arrayUnion(obj)
                     }))
                 }
                 Promise.all(promise).then(() => {this.props.navigation.navigate("ChatList"), this.setState({ isLoading: false })})
             }).catch(err => console.error(err))
+            console.log(this.state.members)
     }
 
     render() {

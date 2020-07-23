@@ -90,6 +90,7 @@ export default class GroupChat extends React.Component {
 
     addToInviteList(uid) {
         this.state.invitees.push(uid);
+        console.log(this.state.invitees);
     }
 
     removeFromInviteList(uid) {

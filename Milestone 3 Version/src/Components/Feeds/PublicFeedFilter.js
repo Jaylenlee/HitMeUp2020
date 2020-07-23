@@ -290,8 +290,8 @@ export default class PublicFeedFilter extends React.Component {
                 <View style={{height: 100, marginTop: 10, marginBottom: 2, marginHorizontal: 5, borderColor: "#BBDEFB", paddingTop: 2,
                               borderRadius: 3, borderWidth: 2, shadowOffset: {height: 2, width: 2}, shadowOpacity: 0.1}}>
                     <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
+                        //showsHorizontalScrollIndicator={false}
+                        //showsVerticalScrollIndicator={false}
                     >
                         <View style={styles.searches}>
                             <View style={styles.iconSearch}>
@@ -363,8 +363,8 @@ export default class PublicFeedFilter extends React.Component {
                 <View style={{flex: 1, marginVertical: 10, marginHorizontal: 8,
                               borderTopColor: '#42A5F5', paddingTop: 5, borderTopWidth: 1}}>
                     <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
+                        //showsHorizontalScrollIndicator={false}
+                        //showsVerticalScrollIndicator={false}
                     >
                         <FlatList
                             style={styles.feed}
