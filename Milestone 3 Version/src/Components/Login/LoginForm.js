@@ -70,7 +70,7 @@ export default class LoginForm extends React.Component {
                     >
                         <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
-
+    
                     <TouchableOpacity
                         style={{ alignSelf: 'center', marginTop: 32, marginBottom: 24 }}
                         onPress={() => this.props.navigation.navigate('Register')}
@@ -79,6 +79,15 @@ export default class LoginForm extends React.Component {
                             New to Phovent? <Text style={styles.signUpText}>Sign Up here!</Text>
                         </Text>
                     </TouchableOpacity>
+                            
+                    <TouchableOpacity
+                        style={{ alignSelf: 'center', marginTop: 32, marginBottom: 24 }}
+                        onPress={() => {this.props.navigation.navigate('Reset')}}
+                    >
+                        <Text style={styles.buttonText}>
+                            Forgot Password? <Text style={styles.signUpText}>Click here!</Text>
+                        </Text>
+                    </TouchableOpacity>        
                 </ScrollView>
             </KeyboardAvoidingView>
         )
