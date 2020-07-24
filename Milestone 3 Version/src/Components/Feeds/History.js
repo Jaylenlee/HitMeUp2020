@@ -105,22 +105,25 @@ class History extends React.Component {
                     </View>
                 </View>
                 <View style={styles.toggleTabs}>
-                        <TouchableOpacity
-                            style={styles.toggleButtonS}
-                            onPress= {() => {this.props.navigation.navigate('Feeds')}}
-                        >
-                            <Text style={styles.textStyleS}>My Feeds</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.toggleButtonNS}>
-                            <Text style={styles.textStyleNS}>History</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.toggleButtonS}
-                            onPress= {() => {this.props.navigation.navigate('PublicFeedFilter')}}
-                        >
-                            <Text style={styles.textStyleS}>Public Feeds</Text>
-                        </TouchableOpacity>
+                    <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity 
+                        style={styles.toggleButtonS}
+                        onPress= {() => {this.props.navigation.navigate('Feeds')}}
+                    >
+                        <Text style={styles.textStyleS}>My Events</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.toggleButtonS}
+                        onPress= {() => {this.props.navigation.navigate('PublicFeedFilter')}}
+                    >
+                        <Text style={styles.textStyleS}>Public Feeds</Text>
+                    </TouchableOpacity>
                     </View>
+
+                    <TouchableOpacity style={styles.toggleButtonNS}>
+                        <Text style={styles.textStyleNS}>History</Text>
+                    </TouchableOpacity>
+                </View>
                 <ScrollView>
                     <FlatList
                         style={styles.feed}
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
     toggleTabs: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         marginTop: 5
     },
     toggleButtonS: {
