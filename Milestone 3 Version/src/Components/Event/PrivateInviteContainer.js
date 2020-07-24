@@ -14,6 +14,7 @@ class PrivateInviteContainer extends React.Component {
         invitees: [],
         event: this.props.navigation.getParam("event", null),
         isLoading: true,
+        hasCreated: false,
     }
 
     addToInviteList(uid) {
@@ -66,7 +67,12 @@ class PrivateInviteContainer extends React.Component {
     componentWillMount() {
         this.updateFriends();
     }
-
+    
+    componentWillUnmount() {
+        if(this.state.hasCreated) {
+            alert("Event has been created and sent to invitees.");
+        }
+    }
     updateFriends = () => {
         const user = firebaseDb.auth.currentUser;
         const uid = user.uid;
