@@ -12,8 +12,8 @@ export default class PublicFeedFilter extends React.Component {
         keywords: ["","","",""],
         startDate:[0,0,0],
         endDate:[9999,13,32],
-        startTime:[-1,-1,-1],
-        endTime:[24,61,61],
+        startTime:[-1,-1],//,-1],
+        endTime:[24,61], //,61],
         filtered: [],
     }
 
@@ -131,21 +131,21 @@ export default class PublicFeedFilter extends React.Component {
             if (isStart) {
                 this.state.startTime[0] = timeArr[0];
                 this.state.startTime[1] = timeArr[1];
-                this.state.startTime[2] = timeArr[2];
+                //this.state.startTime[2] = timeArr[2];
             } else {
                 this.state.endTime[0] = timeArr[0];
                 this.state.endTime[1] = timeArr[1];
-                this.state.endTime[2] = timeArr[2];
+                //this.state.endTime[2] = timeArr[2];
             }
         } else {
             if (isStart) {
                 this.state.startTime[0] = -1;
                 this.state.startTime[1] = -1;
-                this.state.startTime[2] = -1;
+               //this.state.startTime[2] = -1;
             } else {
                 this.state.endTime[0] = 24;
                 this.state.endTime[1] = 61;
-                this.state.endTime[2] = 61;
+                //this.state.endTime[2] = 61;
             }
         }  
         this.setFilter();
@@ -163,7 +163,7 @@ export default class PublicFeedFilter extends React.Component {
             } else if (min < timeArr[1]) {
                 return false;
             } else {
-                return sec >= timeArr[2];
+                return true; //sec >= timeArr[2];
             }
         } else if (hr > timeArr[0]) {
             return true;
@@ -184,7 +184,7 @@ export default class PublicFeedFilter extends React.Component {
             } else if (min > timeArr[1]) {
                 return false;
             } else {
-                return sec <= timeArr[2];
+                return true; //sec <= timeArr[2];
             }
         } else if (hr < timeArr[0]) {
             return true;
@@ -313,13 +313,13 @@ export default class PublicFeedFilter extends React.Component {
                                 <TimePicker
                                     placeholder={"Event Start Time"}
                                     style={{ marginRight: "10px"}}
-                                    format="HH:mm:ss"
+                                    format="HH:mm"
                                     onChange={text => {this.filterTime(text, true)}}
                                 />
                                 <TimePicker
                                     placeholder={"Event End Time"}
                                     style={{ marginRight: "10px"}}
-                                    format="HH:mm:ss"
+                                    format="HH:mm"
                                     onChange={text => {this.filterTime(text, false)}}
                                 />
                             </View>
