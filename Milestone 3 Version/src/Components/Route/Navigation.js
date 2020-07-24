@@ -35,6 +35,7 @@ import GroupChat from '../ChatMessaging/GroupChat';
 import IndivChat from '../ChatMessaging/IndivChat';
 //import ChatScreen from '../ChatMessaging/ChatScreen';
 import GroupD from '../ChatMessaging/GroupDetail';
+import GroupM from '../ChatMessaging/GroupMembers';
 
 const AuthScreens = {
 
@@ -237,6 +238,12 @@ const ChatScreens = {
     },
     GroupDetail: {
         screen: GroupD,
+        navigationOptions: {
+            header: null
+        }
+    },
+    GroupMembers: {
+        screen: GroupM,
         navigationOptions: {
             header: null
         }
