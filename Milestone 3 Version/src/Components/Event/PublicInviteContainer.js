@@ -41,6 +41,10 @@ export default class PublicInviteContainer extends React.Component{
             }).catch(err => console.error(err))                
     }
 
+    componentWillUnmount() {
+        alert("Event has been created and posted to Public Feeds.");
+    }
+
     render() {
         const {isLoading} = this.state
         if (isLoading) {
