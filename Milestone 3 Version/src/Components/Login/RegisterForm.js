@@ -24,7 +24,11 @@ class RegisterForm extends React.Component {
     handleUpdateUsername = (username) => this.setState({username});
     handleUpdateEmail = (email) => this.setState({email});
     handleUpdatePassword = (password) => this.setState({password});
-    handleUpdateGender = (gender) => this.setState({gender});
+    handleUpdateGender = (gender) => {if (gender === "") {
+                                        gender = "Not Specified"
+                                        } else {}
+                                      this.setState({gender})
+                                      };
     handleUpdateAge = (age) => this.setState({age});
     handleUpdateLocation = (location) => this.setState({location});
     handleUpdateOccupation = (occupation) => this.setState({occupation});
@@ -115,6 +119,10 @@ class RegisterForm extends React.Component {
                         <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                     </TouchableOpacity>
 
+                    <View style={{marginBottom: 16}}>
+                        <Text style={styles.greeting}>{'To connect better with people, please complete your profile details.'}</Text>
+                    </View>
+
                     <View style={{flexDirection: 'row', marginTop: 24, alignItems: 'flex-start'}}>
                         <View style={{marginLeft: 30}}>
                             <View style={styles.avatarContainer}>
@@ -134,7 +142,7 @@ class RegisterForm extends React.Component {
                             </View>
                         </View>
 
-                        <Text style={styles.greeting}>{'To connect better with people, please fill in your account details.'}</Text>
+                        <Text style={styles.greeting}>{'Upload your profile picture here!'}</Text>
                     </View>
 
                     <View style={styles.errorMessage}>
@@ -142,7 +150,7 @@ class RegisterForm extends React.Component {
                     </View>
 
                     <View style={styles.form}>
-                        <View style={{ marginTop: 32 }}>
+                        <View style={{ marginTop: 24 }}>
                             <Text style={styles.inputTitle}>Username</Text>
                             <TextInput
                                 onChangeText={this.handleUpdateUsername}
@@ -183,7 +191,7 @@ class RegisterForm extends React.Component {
                             />
                         </View>
                         <View style={{ marginTop: 32 }}>
-                            <Text style={styles.inputTitle}>Gender</Text>
+                            <Text style={styles.inputTitle}>Gender (Optional)</Text>
                             <TextInput
                                 onChangeText={this.handleUpdateGender}
                                 value={gender}
@@ -196,7 +204,7 @@ class RegisterForm extends React.Component {
                             />
                         </View>
                         <View style={{ marginTop: 32 }}>
-                            <Text style={styles.inputTitle}>Age</Text>
+                            <Text style={styles.inputTitle}>Age (Optional)</Text>
                             <TextInput
                                 onChangeText={this.handleUpdateAge}
                                 value={age}
@@ -210,7 +218,7 @@ class RegisterForm extends React.Component {
                             />
                         </View>
                         <View style={{ marginTop: 32 }}>
-                            <Text style={styles.inputTitle}>Location</Text>
+                            <Text style={styles.inputTitle}>Location (by nearest MRT station)</Text>
                             <TextInput
                                 onChangeText={this.handleUpdateLocation}
                                 value={location}
