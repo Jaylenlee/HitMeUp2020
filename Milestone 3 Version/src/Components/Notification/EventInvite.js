@@ -44,30 +44,32 @@ class EventInvite extends React.Component {
 
     renderEvent = event => {
         return (
-            <View style={styles.eventItem}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View style={{flex: 1}}>
-                            <View style={styles.titleBar}>
-                                <Text style={styles.eventTitle}>{event.eventName}</Text>
-                            </View>
-
-                            <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
-                                <View style={{width: 80}}>
-                                    <Text style={styles.eventDate}>{event.date}</Text>
-                                    <Text style={styles.eventTime}>{event.time}</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate("ViewEventInvite", {eventUID: event.eventUID})}>
+                <View style={styles.eventItem}>
+                    <View style={{ flex: 1 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <View style={{flex: 1}}>
+                                <View style={styles.titleBar}>
+                                    <Text style={styles.eventTitle}>{event.eventName}</Text>
                                 </View>
-                                <Text style={styles.details}>{event.activityDetails}</Text>
-                            </View>
-                            <View style={{alignItems: 'flex-end'}}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate("ViewEventInvite", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={24} color="#607D8B" />
-                                </TouchableOpacity>
+
+                                <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
+                                    <View style={{width: 80}}>
+                                        <Text style={styles.eventDate}>{event.date}</Text>
+                                        <Text style={styles.eventTime}>{event.time}</Text>
+                                    </View>
+                                    <Text style={styles.details}>{event.activityDetails}</Text>
+                                </View>
+                                <View style={{alignItems: 'flex-end'}}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate("ViewEventInvite", {eventUID: event.eventUID})}>
+                                        <Ionicons name="ios-more" size={24} color="#607D8B" />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
