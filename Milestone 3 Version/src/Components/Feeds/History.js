@@ -50,40 +50,43 @@ class History extends React.Component {
         currNotification.update({
             history: firebase.firestore.FieldValue.arrayRemove(eventUID)
         })
+        alert("This event will be permanently deleted!")
     }
 
     renderEvent = event => {
         return (
-            <View style={styles.eventItem}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View style={{flex: 1}}>
-                            <View style={styles.titleBar}>
-                                <Text style={styles.eventTitle}>{event.eventName}</Text>
-                                <View style={{ flex: 1 }}>
-                                    <TouchableOpacity style={{alignSelf: "flex-end"}}
-                                        onPress={() => this.pressHandleRemove(event.eventUID)}>
-                                        <Ionicons name="md-close" size={18}/>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
+                <View style={styles.eventItem}>
+                    <View style={{ flex: 1 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <View style={{flex: 1}}>
+                                <View style={styles.titleBar}>
+                                    <Text style={styles.eventTitle}>{event.eventName}</Text>
+                                    <View style={{ flex: 1 }}>
+                                        <TouchableOpacity style={{alignSelf: "flex-end"}}
+                                            onPress={() => this.pressHandleRemove(event.eventUID)}>
+                                            <Ionicons name="md-close" size={18}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
+                                <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
+                                    <View style={{width: 80}}>
+                                        <Text style={styles.eventDate}>{event.date}</Text>
+                                        <Text style={styles.eventTime}>{event.time}</Text>
+                                    </View>
+                                    <Text style={styles.details}>{event.activityDetails}</Text>
+                                </View>
+                                <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
+                                        <Ionicons name="ios-more" size={20} color="#607D8B" />
                                     </TouchableOpacity>
                                 </View>
-                            </View>
-
-                            <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
-                                <View style={{width: 80}}>
-                                    <Text style={styles.eventDate}>{event.date}</Text>
-                                    <Text style={styles.eventTime}>{event.time}</Text>
-                                </View>
-                                <Text style={styles.details}>{event.activityDetails}</Text>
-                            </View>
-                            <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate("View", {eventUID: event.eventUID})}>
-                                    <Ionicons name="ios-more" size={20} color="#607D8B" />
-                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
@@ -106,7 +109,7 @@ class History extends React.Component {
                 </View>
                 <View style={styles.toggleTabs}>
                     <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('Feeds')}}
                     >
