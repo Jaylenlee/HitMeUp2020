@@ -93,7 +93,7 @@ export default class ViewProfileDelete extends React.Component {
                             <TouchableOpacity style = {styles.buttonContainer}
                                 onPress={() => this.pressHandleDelete()}
                             >
-                                <Text style={styles.buttonText}>Delete</Text>
+                                <Text style={styles.buttonText}>Delete Friend</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
