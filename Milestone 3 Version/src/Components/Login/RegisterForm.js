@@ -49,42 +49,54 @@ class RegisterForm extends React.Component {
             .createUserWithEmailAndPassword(email, password)
             .then(userCredentials => {
                 const user = userCredentials.user;
-                firebaseDb.db
-                .collection('profile')
-                .doc(user.uid)
-                .set({
-                    username: username,
-                    email: email,
-                    gender: gender,
-                    age: Number(age),
-                    location: location,
-                    occupation: occupation,
-                    interests: interests,
-                    photo: photo,
-                    uid: user.uid,
-                }).catch(error => this.setState({errorMessage: error.message}));
+                const promise = [];
 
-                firebaseDb.db
-                .collection('friendlist')
-                .doc(user.uid)
-                .set({
-                    friendlist: [],
-                    chatUID: [],
-                }).catch(error => this.setState({errorMessage: error.message}));
+                promise.push(
+                    firebaseDb.db
+                    .collection('profile')
+                    .doc(user.uid)
+                    .set({
+                        username: username,
+                        email: email,
+                        gender: gender,
+                        age: Number(age),
+                        location: location,
+                        occupation: occupation,
+                        interests: interests,
+                        photo: photo,
+                        uid: user.uid,
+                    }).catch(error => this.setState({errorMessage: error.message}))
+                );
 
-                firebaseDb.db
-                .collection('notification')
-                .doc(user.uid)
-                .set({
-                    friendRequest: [],
-                    eventInvite: [],
-                    eventOngoing: [],
-                    history: [],
-                }).catch(error => this.setState({errorMessage: error.message}));
+                promise.push(
+                    firebaseDb.db
+                    .collection('friendlist')
+                    .doc(user.uid)
+                    .set({
+                        friendlist: [],
+                        chatUID: [],
+                    }).catch(error => this.setState({errorMessage: error.message}))
+                );
 
-                return user.updateProfile({
+                promise.push(
+                    firebaseDb.db
+                    .collection('notification')
+                    .doc(user.uid)
+                    .set({
+                        friendRequest: [],
+                        eventInvite: [],
+                        eventOngoing: [],
+                        history: [],
+                    }).catch(error => this.setState({errorMessage: error.message}))
+                );
+
+                promise.push(
+                    user.updateProfile({
                     displayName: username
-                })
+                    })
+                );
+
+                Promise.all(promise)
              }).catch(error => this.setState({errorMessage: error.message}));
     }
 
