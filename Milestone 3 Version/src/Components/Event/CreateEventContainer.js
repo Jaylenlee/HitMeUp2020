@@ -8,6 +8,7 @@ import 'antd/dist/antd.css';
 class CreateEventContainer extends React.Component {
     state = {
         eventName: '',
+        eventDuration: 0,
         date: '',
         time: '',
         location: '',
@@ -41,8 +42,9 @@ class CreateEventContainer extends React.Component {
     }
 
     handleUpdateEventName = (eventName) => this.setState({ eventName });
-    handleUpdateDate = (date) => this.setState({ date });
-    handleUpdateTime = (time) => this.setState({ time });
+    handleUpdateEventDuration = (eventDuration) => this.setState({eventDuration});
+    //handleUpdateDate = (date) => this.setState({ date });
+    //handleUpdateTime = (time) => this.setState({ time });
     handleUpdateLocation = (location) => this.setState({ location });
     handleUpdateEstimatedSize = (estimatedSize) => this.setState({ estimatedSize });
     handleUpdateActivityDetails = (activityDetails) => this.setState({ activityDetails });
@@ -60,7 +62,7 @@ class CreateEventContainer extends React.Component {
     }
 
     render() {
-        const { eventName, date, time, location, estimatedSize,
+        const { eventName, eventDuration, date, time, location, estimatedSize,
                 activityDetails, isPrivate, isPublic} = this.state
         return (
             <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
@@ -82,7 +84,7 @@ class CreateEventContainer extends React.Component {
                                     onChangeText={this.handleUpdateEventName}
                                     value={eventName}
                                     returnKeyType="next"
-                                    onSubmitEditing={() => this.dateInput.focus()}
+                                    /*onSubmitEditing={() => this.dateInput.focus()}*/
                                 />
                             </View>
                             <View style={{ marginTop: 16 }}>
@@ -93,6 +95,18 @@ class CreateEventContainer extends React.Component {
                                     format="YYYY-MM-DD"
                                     onChange={this.handleDatePickerChange}
                                  />
+                            </View>
+                            <View style={{ marginTop: 16 }}>
+                                <Text style={styles.inputTitle}>Event Duration </Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    onChangeText={this.handleUpdateEventDuration}
+                                    value={eventDuration}
+                                    returnKeyType="next"
+                                    /*onSubmitEditing={() => this.dateInput.focus()}*/
+                                />
                             </View>
                             <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Time</Text>
@@ -112,8 +126,8 @@ class CreateEventContainer extends React.Component {
                                     onChangeText={this.handleUpdateLocation}
                                     value={location}
                                     returnKeyType="next"
-                                    onSubmitEditing={() => this.sizeInput.focus()}
-                                    ref={(input) => {this.locationInput = input}}
+                                    /*onSubmitEditing={() => this.sizeInput.focus()}*/
+                                    /*ref={(input) => {this.locationInput = input}}*/
                                 />
                             </View>
                             <View style={{ marginTop: 16 }}>
@@ -125,8 +139,8 @@ class CreateEventContainer extends React.Component {
                                     onChangeText={this.handleUpdateEstimatedSize}
                                     value={estimatedSize}
                                     returnKeyType="next"
-                                    onSubmitEditing={() => this.detailsInput.focus()}
-                                    ref={(input) => {this.sizeInput = input}}
+                                   // onSubmitEditing={() => this.detailsInput.focus()}
+                                   // ref={(input) => {this.sizeInput = input}}
                                 />
                             </View>
                             <View style={{ marginTop: 16 }}>
@@ -139,7 +153,7 @@ class CreateEventContainer extends React.Component {
                                     onChangeText={this.handleUpdateActivityDetails}
                                     value={activityDetails}
                                     returnKeyType="go"
-                                    ref={(input) => {this.detailsInput = input}}
+                                   // ref={(input) => {this.detailsInput = input}}
                                 />
                             </View>
                         </View>

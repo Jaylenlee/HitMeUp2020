@@ -35,6 +35,7 @@ class PrivateInviteContainer extends React.Component {
             .collection('events')
             .add({
                 eventName: this.state.event.eventName,
+                eventDuration: this.state.event.eventDuration,
                 date: this.state.event.date,
                 time: this.state.event.time,
                 location: this.state.event.location,
@@ -155,8 +156,6 @@ class PrivateInviteContainer extends React.Component {
                         style={styles.button}
                         onPress={() => {
                             this.createEvent();
-                            alert("Your PRIVATE event is created and can be viewed under Feed > My Events! " +
-                                    "\nYour event invites have been sent to your selected friends!")
                         }}
                      >
                         <Text style={styles.nextButtonText}>Done</Text>

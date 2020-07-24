@@ -18,6 +18,7 @@ export default class PublicInviteContainer extends React.Component{
             .collection('events')
             .add({
                 eventName: info.eventName,
+                eventDuration: info.eventDuration,
                 date: info.date,
                 time: info.time,
                 location: info.location,
