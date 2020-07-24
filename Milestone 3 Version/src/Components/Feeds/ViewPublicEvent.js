@@ -20,6 +20,7 @@ export default class ViewPublicEvent extends React.Component {
         isLoading: true,
         currUser: '',
         isAttending: false,
+        duration: ''
     }
 
     componentDidMount() {
@@ -52,6 +53,7 @@ export default class ViewPublicEvent extends React.Component {
                         isCreator: info.creatorUID == firebaseDb.auth.currentUser.uid,
                         currUser: currUser,
                         isLoading: false,
+                        duration: info.duration
                     })
                 })
             }
@@ -102,9 +104,8 @@ export default class ViewPublicEvent extends React.Component {
     }
 
     render(){
-
         const {eventName, date, time, location, estimatedSize, activityDetails, 
-            isPrivate, creator, isCreator, isLoading, isAttending} = this.state;
+            isPrivate, creator, isCreator, isLoading, isAttending, duration} = this.state;
         if (isLoading) {
             return(
                 <View style = {styles.loading}>
@@ -126,11 +127,12 @@ export default class ViewPublicEvent extends React.Component {
                     <View style={{marginTop: -15, flex: 1, padding: 20}}>
                         <Text style={styles.userStyle}>{eventName}</Text>
 
+                        <View style={styles.infoA}>
+                            <Text style={styles.titleA}>Organiser</Text>
+                            <Text style={styles.textA}>{creator}</Text>
+                        </View>
+
                         <View style={styles.infoContainer}>
-                            <View style={styles.info}>
-                                <Text style={styles.title}>Organiser</Text>
-                                <Text style={styles.text}>{creator}</Text>
-                            </View>
                             <View style={styles.info}>
                                 <Text style={styles.title}>Date</Text>
                                 <Text style={styles.text}>{date}</Text>
@@ -138,6 +140,10 @@ export default class ViewPublicEvent extends React.Component {
                             <View style={styles.info}>
                                 <Text style={styles.title}>Time</Text>
                                 <Text style={styles.text}>{time}</Text>
+                            </View>
+                            <View style={styles.info}>
+                                <Text style={styles.title}>Duration</Text>
+                                <Text style={styles.text}>{duration}</Text>
                             </View>
 
                         </View>
@@ -207,6 +213,22 @@ const styles = StyleSheet.create({
         //alignItems: 'space-around',
         marginHorizontal: 16,
         marginTop: 20
+    },
+    infoA: {
+        alignItems: 'flex-start',
+        marginHorizontal: '10%',
+        marginTop: 24
+    },
+    titleA: {
+        color: '#C3C5CD',
+        fontSize: 17,
+        fontWeight: '500'
+    },
+    textA: {
+        marginTop: 4,
+        color: '#4F566D',
+        fontSize: 20,
+        fontWeight: '300'
     },
     info: {
         alignItems: 'flex-start',
