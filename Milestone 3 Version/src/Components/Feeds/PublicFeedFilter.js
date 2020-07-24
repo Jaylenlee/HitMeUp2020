@@ -221,12 +221,6 @@ export default class PublicFeedFilter extends React.Component {
                         <View style={{flex: 1}}>
                             <View style={styles.titleBar}>
                                 <Text style={styles.eventTitle}>{event.eventName}</Text>
-                                <View style={{ flex: 1 }}>
-                                    <TouchableOpacity style={{alignSelf: "flex-end"}}
-                                        onPress={() => this.pressHandleRemove(event.eventUID)}>
-                                        <Ionicons name="md-close" size={18}/>
-                                    </TouchableOpacity>
-                                </View>
                             </View>
 
                             <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
@@ -284,10 +278,10 @@ export default class PublicFeedFilter extends React.Component {
                 </View>
 
                 <View style={styles.divider}>
-                    <Text style={{ fontSize: 14, paddingLeft: 5 }}>Filter public events by:</Text>
+                    <Text style={{ fontSize: 14, paddingLeft: 5 }}>Filter public events via these selections:</Text>
                 </View>
 
-                <View style={{height: 100, marginTop: 10, marginBottom: 2, marginHorizontal: 5, borderColor: "#BBDEFB", paddingTop: 2,
+                <View style={{height: 85, marginTop: 10, marginBottom: 2, marginHorizontal: 5, borderColor: "#BBDEFB", paddingTop: 2,
                               borderRadius: 3, borderWidth: 2, shadowOffset: {height: 2, width: 2}, shadowOpacity: 0.1}}>
                     <ScrollView
                         //showsHorizontalScrollIndicator={false}
@@ -295,7 +289,7 @@ export default class PublicFeedFilter extends React.Component {
                     >
                         <View style={styles.searches}>
                             <View style={styles.iconSearch}>
-                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <Feather name="moon" size={16} style={styles.searchIcon}/>
                                 <DatePicker
                                     placeholder={"Event Start Date"}
                                     style={{ marginRight: "10px"}}
@@ -310,7 +304,7 @@ export default class PublicFeedFilter extends React.Component {
                                 />
                             </View>
                             <View style={styles.iconSearch}>
-                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <Feather name="watch" size={16} style={styles.searchIcon}/>
                                 <TimePicker
                                     placeholder={"Event Start Time"}
                                     style={{ marginRight: "10px"}}
@@ -325,7 +319,7 @@ export default class PublicFeedFilter extends React.Component {
                                 />
                             </View>
                             <View style={styles.iconSearch}>
-                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <Feather name="map" size={16} style={styles.searchIcon}/>
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Location"
@@ -333,7 +327,7 @@ export default class PublicFeedFilter extends React.Component {
                                 />
                             </View>
                             <View style={styles.iconSearch}>
-                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <Feather name="activity" size={16} style={styles.searchIcon}/>
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Activity"
@@ -349,7 +343,7 @@ export default class PublicFeedFilter extends React.Component {
                                 />
                             </View>
                             <View style={styles.iconSearch}>
-                                <Feather name="search" size={16} style={styles.searchIcon}/>
+                                <Feather name="user" size={16} style={styles.searchIcon}/>
                                 <TextInput
                                     style={styles.searching}
                                     placeholder="Organiser"
