@@ -8,9 +8,8 @@ class GroupMembers extends React.Component {
     state = {
         groupPic: this.props.navigation.getParam("chatPhoto", ""),
         groupName: this.props.navigation.getParam("chatName", ""),
-        chatMembers: this.props.navigation.getParam("chatM", ""),
+        chatUID: this.props.navigation.getParam("chatUID", ""),
         users: [],
-        members: ['naruto', 'pain', 'itachi', 'ichigo', 'gerald']
     }
 
     renderMember = member => {
@@ -22,12 +21,20 @@ class GroupMembers extends React.Component {
     };
 
     componentDidMount() {
-        var tempUsers = [];
-        for(let uid in this.state.chatMembers)
-        firebaseDb.db.collection("messages").doc(uid).get().then(docSnapshot => {
-            tempUsers.push(docSnapshot.data().user)
+        const members = [];
+        const profileRef = firebaseDb.db.collection("profile");
+        firebaseDb.db.collection("messages").doc(this.state.chatUID).get().then(docSnapshot => {
+            const memberUID = docSnapshot.data().users;
+            const promise = [];
+            for(let uid in memberUID) {
+                promise.push(profileRef.doc(memberUID[uid]).get().then(docSnapshot => {
+                    const name = docSnapshot.data().username;
+                    members.push(name);
+                }))
+            }
+
+            Promise.all(promise).then(() => this.setState({users: members, isLoading: false}))
         });
-        this.setState({users: tempUsers})
     }
 
     render() {

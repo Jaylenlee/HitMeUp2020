@@ -16,16 +16,90 @@ export default class ChatList extends React.Component {
         const currUID = currUser.uid;
 
         firebaseDb.db.collection("friendlist").doc(currUID).onSnapshot(docSnapshot => {
-            this.getChat(docSnapshot);
+            this.setUpChat(docSnapshot);
+            
+            //const promise = [];
+            //const chats = []
+            //this.getChat(docSnapshot, promise, chats);
+            //Promise.all(promise).then(() => this.setState({chatList: chats, filteredChatList: chats, isLoading: false}))
         })
     }
 
-    async getChat(docSnapshot) {
+    // updated
+    async setUpChat(docSnapshot) {
+        const chatInfo = await this.processChat(docSnapshot);
+        const sorted = chatInfo.sort(this.compareTime).reverse();
+        this.setState({chatList: sorted, filteredChatList: sorted, isLoading: false}) 
+    }
+
+    compareTime(chatInfoA, chatInfoB) {
+        const chatA = chatInfoA.chat;
+        const chatB = chatInfoB.chat;
+        
+        if(chatA.length == 0) {
+            if(chatB.length == 0) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else if (chatB.length == 0) {
+            return 1;
+        } else {
+            const timeA = chatA[0].message[0].createdAt.valueOf();
+            const timeB = chatB[0].message[0].createdAt.valueOf();
+
+            return timeA -timeB;
+        }
+    }
+
+    async processChat(docSnapshot) {
+        const currUser = firebaseDb.auth.currentUser;
+        const currUID = currUser.uid;
+        const info = await docSnapshot.data();
+        const chatUIDs = await info.chatUID;
+        const chatRef = firebaseDb.db.collection("messages");
+        const profileRef = firebaseDb.db.collection("profile");
+        const chatInfo = [];
+
+        for(let uid in chatUIDs) {
+            const chatUID = chatUIDs[uid].chatUID;
+          
+            await chatRef.doc(chatUID).get().then(docSnapshot => {
+                const data = docSnapshot.data();
+                const chat = data.chat.reverse();
+                if (data.groupName == "") {
+                    const friendUID = data.users.filter(uid => uid != currUID)[0];
+                    profileRef.doc(friendUID).get().then(docSnapshot => {
+                        const username = docSnapshot.data().username;
+                        const photo = docSnapshot.data().photo;
+                        chatInfo.push({
+                            chatName: username,
+                            chat: chat,
+                            chatPic: photo,
+                            chatUID: chatUID,
+                        })
+                    })
+                } else {
+                    chatInfo.push({
+                        chatName: data.groupName,
+                        chat: chat,
+                        chatPic: data.groupPic,
+                        chatUID: chatUID,
+                    })
+                }
+            })
+        }
+        Promise.all(chatInfo)
+        return chatInfo;
+    }
+
+    // old
+    /*async getChat(docSnapshot, promise, chats) {
         const info = docSnapshot.data();
         const chatUID = info.chatUID;
         const profileRef = firebaseDb.db.collection("profile");
-        const promise = [];
-        const chats = [];
+        //const promise = [];
+        //const chats = [];
        
         for(let uid in chatUID) {
             const chatInfo = chatUID[uid];
@@ -35,7 +109,7 @@ export default class ChatList extends React.Component {
             if(groupName == "") {
                 await profileRef.doc(users[0]).onSnapshot(docSnapshot => {
                     promise.push(this.pushIndivChat(chats, docSnapshot, chatInfo))
-                    Promise.all(promise).then(() => this.setState({chatList: chats, filteredChatList: chats, isLoading: false}))
+                   // Promise.all(promise).then(() => this.setState({chatList: chats, filteredChatList: chats, isLoading: false}))
                 })
             } else {
                 chats.push({
@@ -55,7 +129,7 @@ export default class ChatList extends React.Component {
             chatUID: chatInfo.chatUID,
             chatPic: photo,
         })
-    }
+    }*/
 
     searchChat(searchText) {
         this.setState({
@@ -70,7 +144,9 @@ export default class ChatList extends React.Component {
                 style={styles.eventItem}
                 onPress={() => {
                     this.props.navigation.navigate('ChatScreen', {
-                        chatUID: chat.chatUID, 
+                        //chat: chat.chatUID,
+                        chatUID: chat.chatUID,
+                        chat: chat.chat,
                         chatName: chat.chatName, 
                         chatPic: chat.chatPic,
                     })

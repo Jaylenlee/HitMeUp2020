@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default class ChatScreen extends React.Component {
     state = {
+        chat: this.props.navigation.getParam("chat", ""),
         chatUID: this.props.navigation.getParam("chatUID", ""),
         user: null,
         messages: [],
@@ -17,8 +18,22 @@ export default class ChatScreen extends React.Component {
     };
 
     componentDidMount() {
-        console.log(this.state.chatPic)
-        firebaseDb.db.collection("messages").doc(this.state.chatUID).onSnapshot(docSnapshot => {
+        const messages = [];
+    
+        this.state.chat.forEach(async item => {
+            const input = await item.message[0];
+            const date = input.createdAt;
+
+            if(Object.prototype.toString.call(date) === '[object Date]') {
+                messages.push(input)
+                console.log("is date")
+            } else {
+                input.createdAt = input.createdAt.valueOf().toDate();
+                messages.push(input)
+            }
+        })
+        this.setState({isLoading: false, messages: messages});
+        /*firebaseDb.db.collection("messages").doc(this.state.chat).onSnapshot(docSnapshot => {
             const info = docSnapshot.data();
             // to get chat messages
             const chat = info.chat;
@@ -29,7 +44,7 @@ export default class ChatScreen extends React.Component {
                 messages.push(input)
             })
             this.setState({messages: messages, isLoading: false});
-        })
+        })*/
     };
 
     componentWillMount() {
@@ -58,18 +73,18 @@ export default class ChatScreen extends React.Component {
             const chat = <GiftedChat messages={this.state.messages} onSend={newMessage => this.sendChat(newMessage)} user={this.state.user} />;
             if (Platform.OS === 'android') {
                 return (
-                <KeyboardAvoidingView style={{ flex: 1 }}>
-                    <View style={styles.top}>
-                        <TouchableOpacity
-                            style={styles.backArrow}
-                            onPress={() => this.props.navigation.goBack()}>
-                            <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
+                    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={30} enabled>
+                        <View style={styles.top}>
+                            <View style={styles.header}>
+                                <TouchableOpacity
+                                    style={styles.backArrow}
+                                    onPress={() => this.props.navigation.goBack()}>
+                                    <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
                                                                                         chatName: this.state.chatHeader,
                                                                                         chatPhoto: this.state.chatPic,
-                                                                                        chatM: this.state.chatUID})}
+                                                                                        chatUID: this.state.chatUID})}
                         >
                             <Text style={styles.headerTitle}>{chatHeader}</Text>
                         </TouchableOpacity>
@@ -77,7 +92,7 @@ export default class ChatScreen extends React.Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
                                                                                         chatName: this.state.chatHeader,
                                                                                         chatPhoto: this.state.chatPic,
-                                                                                        chatM: this.state.chatUID})}
+                                                                                        chatUID: this.state.chatUID})}
                         >
                             <View style={styles.avatarContainer}>
                                 <Image
@@ -86,7 +101,8 @@ export default class ChatScreen extends React.Component {
                                 />
                             </View>
                         </TouchableOpacity>
-                    </View>
+                            </View>
+                        </View>
 
                         {chat}
                     </KeyboardAvoidingView>
@@ -96,16 +112,17 @@ export default class ChatScreen extends React.Component {
             return (
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={styles.top}>
-                        <TouchableOpacity
-                            style={styles.backArrow}
-                            onPress={() => this.props.navigation.goBack()}>
-                            <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
+                        <View style={styles.header}>
+                            <TouchableOpacity
+                                style={styles.backArrow}
+                                onPress={() => this.props.navigation.goBack()}>
+                                <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
+                            </TouchableOpacity>
+                        
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
                                                                                         chatName: this.state.chatHeader,
                                                                                         chatPhoto: this.state.chatPic,
-                                                                                        chatM: this.state.chatUID})}
+                                                                                        chatUID: this.state.chatUID})}
                         >
                             <Text style={styles.headerTitle}>{chatHeader}</Text>
                         </TouchableOpacity>
@@ -113,7 +130,7 @@ export default class ChatScreen extends React.Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
                                                                                         chatName: this.state.chatHeader,
                                                                                         chatPhoto: this.state.chatPic,
-                                                                                        chatM: this.state.chatUID})}
+                                                                                        chatUID: this.state.chatUID})}
                         >
                             <View style={styles.avatarContainer}>
                                 <Image
@@ -122,8 +139,8 @@ export default class ChatScreen extends React.Component {
                                 />
                             </View>
                         </TouchableOpacity>
+                        </View>
                     </View>
-
                     {chat}
                 </SafeAreaView>
             );
@@ -133,6 +150,7 @@ export default class ChatScreen extends React.Component {
 
 const styles = StyleSheet.create({
     backArrow: {
+        flex: 1,
         alignSelf: 'flex-start'
     },
     top: {
@@ -143,10 +161,6 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 5},
         shadowOpacity: 0.4,
         zIndex: 10,
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'space-between',
-        alignItems: 'center'
     },
     header: {
         flex: 1,
@@ -156,8 +170,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'center',
         borderBottomColor: '#EBECF4',
-        borderBottomWidth: 1,
-        backgroundColor: 'green'
+        borderBottomWidth: 1
     },
     avatarContainer: {
         shadowColor: '#00695C',
@@ -172,7 +185,9 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
-        fontWeight: '500'
+        fontWeight: '500',
+        alignSelf: 'center',
+        position: 'absolute'
     },
     loading: {
         flex: 1,
