@@ -37,6 +37,38 @@ class GroupMembers extends React.Component {
         });
     }
 
+    handleLeaveChat() {
+        /*Remove chat + alert that all chat messages will be removed*/
+        /*const currUser = firebaseDb.auth.currentUser;
+        const uid = currUser.uid;
+        const name = currUser.username;
+
+        const newMessage = {
+            _id: 1,
+            text: name + " has left the chat. Your chat will be unable to reach the user now.",
+            createdAt: new Date().getTime(),
+            user: {
+              _id: 2,
+              name: 'Admin Bot'
+            }
+        }
+
+        const obj = {message: newMessage};
+
+        const friendChatDoc = firebaseDb.db.collection("friendlist").doc(uid)
+        
+        friendChatDoc.get().then(docSnapshot => {
+            const chatUID = docSnapshot.data().chatUID;
+            const toDelete = chatUID.filter(chatInfo => chatInfo.chatUID == this.state.chatUID)[0];
+            friendChatDoc.update({
+                chatUID: firebase.firestore.FieldValue.arrayRemove(toDelete)
+            }).then(() => firebaseDb.db.collection("messages").doc(this.state.chatUID).update({
+            chat: firebase.firestore.FieldValue.arrayUnion(obj)
+        }))
+        })
+        */
+    }
+
     render() {
         return(
         <SafeAreaView style={styles.container}>
@@ -81,8 +113,8 @@ class GroupMembers extends React.Component {
 
                 <TouchableOpacity
                     style={{alignSelf: 'center', marginTop: 16}}
-                    onPress={() => {/*Remove chat + alert that all chat messages will be removed*/}}>
-                    <Text style={styles.removeGroupText}>Delete Group Chat</Text>
+                    onPress={() => {this.handleLeaveChat()}}>
+                    <Text style={styles.removeGroupText}>Leave Chat</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

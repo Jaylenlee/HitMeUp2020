@@ -28,6 +28,7 @@ export default class ChatList extends React.Component {
     // updated
     async setUpChat(docSnapshot) {
         const chatInfo = await this.processChat(docSnapshot);
+       
         const sorted = chatInfo.sort(this.compareTime).reverse();
         this.setState({chatList: sorted, filteredChatList: sorted, isLoading: false}) 
     }
@@ -35,7 +36,7 @@ export default class ChatList extends React.Component {
     compareTime(chatInfoA, chatInfoB) {
         const chatA = chatInfoA.chat;
         const chatB = chatInfoB.chat;
-        
+       
         if(chatA.length == 0) {
             if(chatB.length == 0) {
                 return 0;
@@ -64,12 +65,12 @@ export default class ChatList extends React.Component {
         for(let uid in chatUIDs) {
             const chatUID = chatUIDs[uid].chatUID;
           
-            await chatRef.doc(chatUID).get().then(docSnapshot => {
+            await chatRef.doc(chatUID).get().then(async docSnapshot => {
                 const data = docSnapshot.data();
                 const chat = data.chat.reverse();
                 if (data.groupName == "") {
                     const friendUID = data.users.filter(uid => uid != currUID)[0];
-                    profileRef.doc(friendUID).get().then(docSnapshot => {
+                    await profileRef.doc(friendUID).get().then(docSnapshot => {
                         const username = docSnapshot.data().username;
                         const photo = docSnapshot.data().photo;
                         chatInfo.push({
