@@ -176,7 +176,7 @@ class NewsFeedContainer extends React.Component {
             <View style={styles.container}>
                 <View style={styles.top}>
                     <View style={styles.header}>
-                        <Text style={styles.headerTitle}>Feeds</Text>
+                        <Text style={styles.headerTitle}>My Events</Text>
                     </View>
                 </View>
                 <View style={styles.toggleTabs}>
