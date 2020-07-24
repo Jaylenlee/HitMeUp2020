@@ -97,6 +97,15 @@ class CreateEventContainer extends React.Component {
                                  />
                             </View>
                             <View style={{ marginTop: 16 }}>
+                                <Text style={styles.inputTitle}>Time</Text>
+                                <TimePicker
+                                    placeholder={"Event Start Time"}
+                                    style={{ marginRight: "10px"}}
+                                    format="HH:mm"
+                                    onChange={this.handleTimePickerChange}
+                                 />
+                            </View>
+                            <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Event Duration (Hours)</Text>
                                 <TextInput
                                     style={styles.input}
@@ -107,15 +116,6 @@ class CreateEventContainer extends React.Component {
                                     returnKeyType="next"
                                     /*onSubmitEditing={() => this.dateInput.focus()}*/
                                 />
-                            </View>
-                            <View style={{ marginTop: 16 }}>
-                                <Text style={styles.inputTitle}>Time</Text>
-                                <TimePicker
-                                    placeholder={"Event Start Time"}
-                                    style={{ marginRight: "10px"}}
-                                    format="HH:mm"
-                                    onChange={this.handleTimePickerChange}
-                                 />
                             </View>
                             <View style={{ marginTop: 16 }}>
                                 <Text style={styles.inputTitle}>Location</Text>
