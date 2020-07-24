@@ -34,36 +34,30 @@ class SearchFilterContainer extends React.Component {
 
     renderUser = user => {
         return (
-            <View style={styles.eventItem}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <View style={{flex: 1}}>
+            <TouchableOpacity onPress = {() => {this.props.navigation.navigate("ViewProfileAdd",
+                                                {displayName: user.username, uid: user.uid})}}>
+                <View style={styles.eventItem}>
+                    <View style={{ flex: 1 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <View style={{flex: 1}}>
 
-                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-                                <View style={styles.avatarContainer}>
-                                    <Image
-                                        style={styles.thumbnail}
-                                        source={{uri: user.photo}}
-                                    />
-                                </View>
-                                <View style={styles.details}>
-                                    <Text style={styles.eventTitle}>{user.username}</Text>
-                                    <Text style={styles.eventTime}>{user.email}</Text>
-                                </View>
-                                <View style={styles.buttonPos}>
-                                    <TouchableOpacity
-                                        style={styles.addButton}
-                                        onPress = {() => {this.props.navigation.navigate("ViewProfileAdd",
-                                                          {displayName: user.username, uid: user.uid})}}
-                                    >
-                                        <Text style={styles.addButtonText}>View Profile</Text>
-                                    </TouchableOpacity>
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+                                    <View style={styles.avatarContainer}>
+                                        <Image
+                                            style={styles.thumbnail}
+                                            source={{uri: user.photo}}
+                                        />
+                                    </View>
+                                    <View style={styles.details}>
+                                        <Text style={styles.eventTitle}>{user.username}</Text>
+                                        <Text style={styles.eventTime}>{user.email}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
@@ -220,7 +214,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginVertical: 8,
         shadowOpacity: 0.1,
-        shadowOffset: {height: 2, width: 2}
+        shadowOffset: {height: 3, width: 3},
+        shadowRadius: 4
     },
     avatarContainer: {
         shadowColor: '#00695C',
@@ -247,24 +242,6 @@ const styles = StyleSheet.create({
     },
     details: {
         paddingLeft: 40
-    },
-    buttonPos: {
-        flex: 1,
-        alignItems: 'flex-end'
-    },
-    addButton: {
-        shadowOffset: {height: 1, width: 1},
-        shadowOpacity: 0.4,
-        margin: 25,
-        padding: 8,
-        marginLeft: 100,
-        borderRadius: 2,
-        backgroundColor: '#4DB6AC',
-        alignSelf: 'flex-end'
-    },
-    addButtonText: {
-        fontSize: 12,
-        fontWeight: '400'
     },
     loading: {
         flex: 1,
