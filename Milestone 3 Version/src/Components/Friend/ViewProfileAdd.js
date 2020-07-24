@@ -92,7 +92,7 @@ export default class ViewProfileAdd extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.pressHandleAdd()}
                             >
-                                <Text style={styles.buttonText}>Add</Text>
+                                <Text style={styles.buttonText}>Add Friend</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
