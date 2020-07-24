@@ -93,17 +93,21 @@ export default class IndivChat extends React.Component {
     openChat(friendUID, chatInfo) {
         console.log("open");
         const chatUID = chatInfo.chatUID;
-        
+        const chatDoc = firebaseDb.db.collection("messages").doc(chatUID).get();
         firebaseDb.db.collection("profile").doc(friendUID).onSnapshot(docSnapshot => {
             const info = docSnapshot.data();
             const chatName = info.username;
             const chatPic = info.photo;
-            this.props.navigation.navigate('ChatScreen', {
-                chatUID: chatUID, 
-                chatName: chatName, 
-                chatPic: chatPic,
+            chatDoc.then(docSnapshot => {
+                const chat = docSnapshot.data().chat;
+                this.props.navigation.navigate('ChatScreen', {
+                    chatUID: chatUID,
+                    chat: chat,
+                    chatName: chatName, 
+                    chatPic: chatPic,
+                })
+                this.setState({isLoading: false})
             })
-            this.setState({isLoading: false})
         })
     }
 
@@ -185,17 +189,6 @@ export default class IndivChat extends React.Component {
                         showsVerticalScrollIndicator={false}
                     />
                 </ScrollView>
-
-                <View style={styles.buttonPosition}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                        }}
-                     >
-                        <Text style={styles.nextButtonText}>Done</Text>
-                        <Ionicons name="md-arrow-forward" size={16} color='#73788B'></Ionicons>
-                    </TouchableOpacity>
-                </View>
             </View>
         );
     }
