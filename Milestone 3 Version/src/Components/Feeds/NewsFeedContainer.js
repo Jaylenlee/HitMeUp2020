@@ -176,20 +176,23 @@ class NewsFeedContainer extends React.Component {
                     </View>
                 </View>
                 <View style={styles.toggleTabs}>
+                    <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity style={styles.toggleButtonNS}>
-                        <Text style={styles.textStyleNS}>My Feeds</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.toggleButtonS}
-                        onPress= {() => {this.props.navigation.navigate('History')}}
-                    >
-                        <Text style={styles.textStyleS}>History</Text>
+                        <Text style={styles.textStyleNS}>My Events</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.toggleButtonS}
                         onPress= {() => {this.props.navigation.navigate('PublicFeedFilter')}}
                     >
                         <Text style={styles.textStyleS}>Public Feeds</Text>
+                    </TouchableOpacity>
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.toggleButtonS}
+                        onPress= {() => {this.props.navigation.navigate('History')}}
+                    >
+                        <Text style={styles.textStyleS}>History</Text>
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
@@ -287,7 +290,7 @@ const styles = StyleSheet.create({
     toggleTabs: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         marginTop: 5
     },
     toggleButtonS: {
