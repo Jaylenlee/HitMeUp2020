@@ -36,6 +36,7 @@ import IndivChat from '../ChatMessaging/IndivChat';
 //import ChatScreen from '../ChatMessaging/ChatScreen';
 import GroupD from '../ChatMessaging/GroupDetail';
 import GroupM from '../ChatMessaging/GroupMembers';
+import ForgotPasswordForm from '../Login/ForgotPasswordForm';
 
 const AuthScreens = {
 
@@ -52,6 +53,13 @@ const AuthScreens = {
             header: null,
         }
     },
+
+    Reset: {
+        screen: ForgotPasswordForm,
+        navigationOptions: {
+            header: null,
+        }
+    }
 }
 
 const ProfileScreens = {
