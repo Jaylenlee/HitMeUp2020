@@ -40,8 +40,76 @@ class NewsFeedContainer extends React.Component {
                 }))
             }
             
-            Promise.all(promise).then(() => this.setState({isLoading: false, events: events}))
+            Promise.all(promise).then(() => this.setUpState(events)/*this.setState({isLoading: false, events: events})*/)
         })
+    }
+
+    setUpState(events) {
+        const sorted = events.sort(this.compareDate);
+        this.setState({isLoading: false, events: sorted})
+    }
+
+    compareDate(eventA, eventB) {
+        const dateA = eventA.date;
+        const dateB = eventB.date;
+      
+        const yearA = Number(dateA.slice(0,4));
+        const mthA = Number(dateA.slice(5,7));
+        const dayA = Number(dateA.slice(8,10));
+
+        const yearB = Number(dateB.slice(0,4));
+        const mthB = Number(dateB.slice(5,7));
+        const dayB = Number(dateB.slice(8,10));
+
+        if (yearA == yearB) {
+            if (mthA > mthB) {
+                return -1;
+            } else if (mthA < mthB) {
+                return 1;
+            } else {
+                if(dayA > dayB) {
+                    return -1;
+                } else if (dayA < dayB) {
+                    return 1;
+                } else {
+                    const timeA = eventA.time;
+                    const timeB = eventB.time;
+                   
+                    const hrA = Number(timeA.slice(0,2));
+                    const minA = Number(timeA.slice(3,5));
+                   // const secA = Number(timeA.slice(6,8));
+
+                    const hrB = Number(timeB.slice(0,2));
+                    const minB = Number(timeB.slice(3,5));
+                    //const secB = Number(timeB.slice(6,8));
+                    
+                    if (hrA == hrB) {
+                        if (minA > minB) {
+                            return -1;
+                        } else if (minA < minB) {
+                            return 1;
+                        } else {
+                            return 0;
+                            /*if(secA > secB) {
+                                return -1;
+                            } else if (secA < secB) {
+                                return 1;
+                            } else {
+                                return 0;
+                            };*/
+                        }
+                    } else if (hrA > hrB) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            }
+        } else if (yearA > yearB) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 
     pressHandleRemove = (eventUID) => {
