@@ -97,7 +97,7 @@ class CreateEventContainer extends React.Component {
                                  />
                             </View>
                             <View style={{ marginTop: 16 }}>
-                                <Text style={styles.inputTitle}>Event Duration </Text>
+                                <Text style={styles.inputTitle}>Event Duration (Hours)</Text>
                                 <TextInput
                                     style={styles.input}
                                     autoCapitalize="none"
