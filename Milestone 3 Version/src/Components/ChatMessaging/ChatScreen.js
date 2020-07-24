@@ -112,17 +112,16 @@ export default class ChatScreen extends React.Component {
             return (
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={styles.top}>
-                        <View style={styles.header}>
-                            <TouchableOpacity
-                                style={styles.backArrow}
-                                onPress={() => this.props.navigation.goBack()}>
-                                <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
-                            </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.backArrow}
+                            onPress={() => this.props.navigation.goBack()}>
+                            <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
+                        </TouchableOpacity>
                         
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
-                                                                                        chatName: this.state.chatHeader,
-                                                                                        chatPhoto: this.state.chatPic,
-                                                                                        chatUID: this.state.chatUID})}
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("GroupMembers", {
+                                                                                    chatName: this.state.chatHeader,
+                                                                                    chatPhoto: this.state.chatPic,
+                                                                                    chatUID: this.state.chatUID})}
                         >
                             <Text style={styles.headerTitle}>{chatHeader}</Text>
                         </TouchableOpacity>
@@ -139,7 +138,6 @@ export default class ChatScreen extends React.Component {
                                 />
                             </View>
                         </TouchableOpacity>
-                        </View>
                     </View>
                     {chat}
                 </SafeAreaView>
@@ -150,8 +148,7 @@ export default class ChatScreen extends React.Component {
 
 const styles = StyleSheet.create({
     backArrow: {
-        flex: 1,
-        alignSelf: 'flex-start'
+
     },
     top: {
         backgroundColor: '#FFF',
@@ -161,16 +158,10 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 5},
         shadowOpacity: 0.4,
         zIndex: 10,
-    },
-    header: {
-        flex: 1,
-        padding: 16,
-        paddingBottom: 15,
         flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        borderBottomColor: '#EBECF4',
-        borderBottomWidth: 1
+        padding: 10,
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     avatarContainer: {
         shadowColor: '#00695C',
@@ -185,9 +176,7 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
-        fontWeight: '500',
-        alignSelf: 'center',
-        position: 'absolute'
+        fontWeight: '500'
     },
     loading: {
         flex: 1,
