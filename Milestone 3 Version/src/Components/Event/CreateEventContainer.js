@@ -8,11 +8,11 @@ import 'antd/dist/antd.css';
 class CreateEventContainer extends React.Component {
     state = {
         eventName: '',
-        eventDuration: 0,
+        eventDuration: null,
         date: '',
         time: '',
         location: '',
-        estimatedSize: '',
+        estimatedSize: null,
         activityDetails: '',
         createSuccessful: false,
         privacyInput: '',
@@ -113,6 +113,7 @@ class CreateEventContainer extends React.Component {
                                     autoCorrect={false}
                                     onChangeText={this.handleUpdateEventDuration}
                                     value={eventDuration}
+                                    keyboardType= "numeric"
                                     returnKeyType="next"
                                     /*onSubmitEditing={() => this.dateInput.focus()}*/
                                 />
@@ -138,6 +139,7 @@ class CreateEventContainer extends React.Component {
                                     autoCorrect={false}
                                     onChangeText={this.handleUpdateEstimatedSize}
                                     value={estimatedSize}
+                                    keyboardType= "numeric"
                                     returnKeyType="next"
                                    // onSubmitEditing={() => this.detailsInput.focus()}
                                    // ref={(input) => {this.sizeInput = input}}
