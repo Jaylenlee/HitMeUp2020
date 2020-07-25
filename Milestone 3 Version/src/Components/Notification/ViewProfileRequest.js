@@ -52,6 +52,7 @@ export default class ViewProfileRequest extends React.Component {
         
         Promise.all([promise1, promise2, promise3]).then(() => this.props.navigation.goBack()).catch(err => console.error(err));
         console.log("accept")
+        alert("You have accepted the friend request")
     }
 
 
@@ -63,6 +64,7 @@ export default class ViewProfileRequest extends React.Component {
         currNotification.update({
             friendRequest: firebase.firestore.FieldValue.arrayRemove(this.state.viewingUID)
         }).then(() => this.props.navigation.goBack()).catch(err => console.error(err));
+        alert("You have rejected the friend request")
     }
 
     render(){
