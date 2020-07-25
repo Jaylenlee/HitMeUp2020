@@ -40,6 +40,7 @@ export default class ViewProfileDelete extends React.Component {
         currFriendlist.update({
             friendlist: firebase.firestore.FieldValue.arrayRemove(this.state.viewingUID)
         }).then(() => this.props.navigation.goBack()).catch(err => console.error(err));
+        alert("This friend has been deleted")
     }
 
     render(){
