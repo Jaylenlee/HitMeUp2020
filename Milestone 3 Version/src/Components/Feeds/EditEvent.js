@@ -11,10 +11,11 @@ class EditEvent extends React.Component {
     state = {
         eventUID: "",
         eventName: "",
+        duration: null,
         date: "",
         time: "",
         location: "",
-        estimatedSize: "",
+        estimatedSize: null,
         activityDetails: "",
         isPrivate: null,
         isLoading: true,
@@ -22,6 +23,7 @@ class EditEvent extends React.Component {
     };
 
     handleUpdateEventName = (eventName) => this.setState({ eventName });
+    handleUpdateDuration = (duration) => this.setState({ duration });
     handleUpdateDate = (date) => this.setState({ date });
     handleUpdateTime = (time) => this.setState({ time });
     handleUpdateLocation = (location) => this.setState({ location });
@@ -110,7 +112,7 @@ class EditEvent extends React.Component {
     }
 
     render() {
-        const { eventName, date, time, location, estimatedSize,
+        const { eventName, duration, date, time, location, estimatedSize,
                 activityDetails, isPrivate, isLoading} = this.state;
         if (isLoading) {
             return(
@@ -143,11 +145,26 @@ class EditEvent extends React.Component {
                                 onChangeText={this.handleUpdateEventName}
                                 value={eventName}
                                 returnKeyType="next"
-                                onSubmitEditing={() => this.dateInput.focus()}
+                                onSubmitEditing={() => this.durationInput.focus()}
                             />
                         </View>
                         <View style={{ marginTop: 16 }}>
-                            <Text style={styles.inputTitle}>Date</Text>
+                            <Text style={styles.inputTitle}>Event Duration (hours)</Text>
+                            <TextInput
+                                style={styles.input}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholder={duration}
+                                onChangeText={this.handleUpdateDuration}
+                                value={duration}
+                                keyboardType= "numeric"
+                                returnKeyType="next"
+                                //onSubmitEditing={() => this.dateInput.focus()}
+                                ref={(input) => {this.durationInput = input}}
+                            />
+                        </View>
+                        <View style={{ marginTop: 16 }}>
+                            <Text style={styles.inputTitle}>Start Date</Text>
                             <DatePicker
                                 placeholder={"Event Start Date"}
                                 style={{ marginRight: "10px"}}
@@ -187,6 +204,7 @@ class EditEvent extends React.Component {
                                 placeholder={estimatedSize}
                                 onChangeText={this.handleUpdateEstimatedSize}
                                 value={estimatedSize}
+                                keyboardType= "numeric"
                                 returnKeyType="next"
                                 onSubmitEditing={() => this.detailsInput.focus()}
                                 ref={(input) => {this.sizeInput = input}}

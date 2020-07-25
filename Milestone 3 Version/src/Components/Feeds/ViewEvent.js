@@ -37,7 +37,7 @@ export default class ViewEvent extends React.Component {
                     creator: info.creator,
                     isCreator: info.creatorUID == firebaseDb.auth.currentUser.uid,
                     isLoading: false,
-                    duration: info.duration
+                    duration: info.eventDuration
                 })
             }
         })

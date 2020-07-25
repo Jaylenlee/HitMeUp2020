@@ -53,7 +53,7 @@ export default class ViewPublicEvent extends React.Component {
                         isCreator: info.creatorUID == firebaseDb.auth.currentUser.uid,
                         currUser: currUser,
                         isLoading: false,
-                        duration: info.duration
+                        duration: info.eventDuration
                     })
                 })
             }
