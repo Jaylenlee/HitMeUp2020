@@ -201,8 +201,6 @@ const styles = StyleSheet.create({
     },
     iconSearch: {
         backgroundColor: '#FFF',
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
         height: 30,
         borderRadius: 15,
         flexDirection: 'row'
