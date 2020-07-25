@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
         fontWeight: '300'
     },
     feed: {
-        marginTop: 8,
+        marginBottom: 8,
         paddingHorizontal: 8
     },
     eventItem: {
