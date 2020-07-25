@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 export default class PublicInviteContainer extends React.Component{
     state = {
         isLoading: true,
+        hasCreated: false,
     }
     componentDidMount() {
         const info = this.props.navigation.getParam("event", "");
@@ -37,12 +38,14 @@ export default class PublicInviteContainer extends React.Component{
                 promise.push(notificationRef.doc(uid).update({
                     eventOngoing: firebase.firestore.FieldValue.arrayUnion(docRef.id)
                 }))
-                Promise.all(promise).then(() => {this.setState({isLoading: false}); this.props.navigation.navigate("EventCreate")})
+                Promise.all(promise).then(() => {this.setState({isLoading: false, hasCreated: true}); this.props.navigation.navigate("EventCreate")})
             }).catch(err => console.error(err))                
     }
 
     componentWillUnmount() {
-        alert("Event has been created and posted to Public Feeds.");
+        if(this.state.hasCreated) {
+            alert("Event has been created and posted to Public Feeds.");
+        }
     }
 
     render() {
