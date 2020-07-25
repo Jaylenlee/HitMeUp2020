@@ -290,7 +290,8 @@ const styles = StyleSheet.create({
     indivGrp: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginVertical: 5
     },
     grpIcon: {
         alignItems: 'center',
