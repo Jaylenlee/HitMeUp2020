@@ -48,7 +48,7 @@ export default class ViewInviteAttendance extends React.Component{
 
             const data = [
                 {
-                name: "Accepted",
+                name: "Attending",
                 population: info.attendees.length,
                 color: "green",
                 legendFontColor: "green",
