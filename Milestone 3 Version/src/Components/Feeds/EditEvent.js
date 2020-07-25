@@ -123,14 +123,12 @@ class EditEvent extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.top}>
-                    <View style={styles.header}>
                         <TouchableOpacity
                             style={styles.backArrow}
                             onPress={() => this.props.navigation.goBack()}>
                             <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Edit Event</Text>
-                    </View>
                 </View>
 
                 <ScrollView style={{flex: 1}}>
@@ -236,12 +234,11 @@ class EditEvent extends React.Component {
 
                     <View style={styles.cancelButtonPosition}>
                         <TouchableOpacity
-                            style={styles.button}
                             onPress={() => {
                                 this.handleCancel();
                             }}
                         >
-                            <Text style={styles.nextButtonText}>Cancel the Event</Text>
+                            <Text style={{color: '#E53935', fontSize: 14}}>Cancel the Event</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -256,7 +253,7 @@ class EditEvent extends React.Component {
                             }}
                         >
                             <Text style={styles.nextButtonText}>Save</Text>
-                            <Ionicons name="md-arrow-forward" size={16} color='#B630A2'></Ionicons>
+                            <Ionicons name="md-arrow-forward" size={16} color='#0D47A1'></Ionicons>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -268,7 +265,7 @@ class EditEvent extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFEBEE'
+        backgroundColor: '#dbf0ff'
     },
     backArrow: {
         flex: 1,
@@ -282,6 +279,7 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 5},
         shadowOpacity: 0.4,
         zIndex: 10,
+        padding: 10
     },
     header: {
         flex: 1,
@@ -297,8 +295,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: '500',
         alignSelf: 'center',
-        position: 'absolute',
-        paddingLeft: '40%'
+        position: 'absolute'
     },
     form: {
         marginBottom: 48,
@@ -331,7 +328,7 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     divider: {
-        backgroundColor: '#F06292',
+        backgroundColor: '#007bde',
         height: 2,
         flex: 1,
         alignSelf: 'center',
@@ -345,7 +342,7 @@ const styles = StyleSheet.create({
     },
     privacyText: {
         fontWeight: '300',
-        color: '#B71C1C',
+        color: '#005fab',
         fontSize: 18,
         paddingHorizontal: 64,
         textTransform:'uppercase'
@@ -359,7 +356,7 @@ const styles = StyleSheet.create({
     },
     addButtonS: {
         width: 80,
-        backgroundColor: 'rgba(239, 154, 154, 0.3)',
+        backgroundColor: 'rgba(66, 165, 245, 0.3)',
         alignItems: 'center',
         justifyContent: 'center',
         height: 35,
@@ -367,7 +364,7 @@ const styles = StyleSheet.create({
     },
     addButtonNS: {
         width: 80,
-        backgroundColor: '#EF9A9A',
+        backgroundColor: '#42A5F5',
         alignItems: 'center',
         justifyContent: 'center',
         height: 35,
@@ -382,14 +379,13 @@ const styles = StyleSheet.create({
         fontWeight: '300'
     },
     buttonPosition: {
-        alignItems: 'flex-end',
-        marginTop: 10,
+        alignItems: 'flex-end'
     },
     button: {
         flexDirection: 'row',
         margin: 25,
         padding: 10,
-        backgroundColor: '#DF476C',
+        backgroundColor: '#4199e0',
         borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',
@@ -403,7 +399,7 @@ const styles = StyleSheet.create({
     },
     cancelButtonPosition: {
         alignItems: "center",
-        marginTop: 10,
+        marginTop: 25,
     },
     loading: {
         flex: 1,
@@ -411,8 +407,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     backArrow: {
-        padding: 10
-    },
+    }
 });
 
 export default EditEvent;
