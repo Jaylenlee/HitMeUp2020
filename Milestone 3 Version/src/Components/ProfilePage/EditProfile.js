@@ -35,6 +35,9 @@ export default function EditProfile({navigation}) {
     let locationInput = null;
     let occupationInput = null;
     let interestInput = null;
+    let male = false;
+    let female = false;
+    let notSpecified = false;
 
     return(
         <KeyboardAvoidingView style={styles.container}>
@@ -91,16 +94,30 @@ export default function EditProfile({navigation}) {
                         </View>
                         <View style={styles.info}>
                             <Text style={styles.title}>Gender</Text>
-                            <TextInput
-                                onChangeText={(value) => setGender(value)}
-                                value={gender}
-                                returnKeyType="next"
-                                onSubmitEditing={() => ageInput.focus()}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                style = {styles.input}
-                                ref={(input) => {genderInput = input}}
-                            />
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginVertical: 15,
+                                          paddingLeft: 5, paddingLeft: 10, paddingRight: '20%', width: 300}}>
+                                <TouchableOpacity
+                                    style={male? styles.textU : styles.textNU}
+                                    value={"Male"}
+                                    onPress={(value) => {setGender(value), male=true, female=false, notSpecified=false}}
+                                >
+                                    <Text style={{fontSize: 13, fontWeight: '200'}}>Male</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={female? styles.textU : styles.textNU}
+                                    value={"Female"}
+                                    onPress={(value) => {setGender(value), male=false, female=true, notSpecified=false}}
+                                >
+                                    <Text style={{fontSize: 13, fontWeight: '200'}}>Female</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={notSpecified? styles.textU : styles.textNU}
+                                    value={"Not Specified"}
+                                    onPress={(value) => {setGender(value), male=false, female=false, notSpecified=true}}
+                                >
+                                    <Text style={{fontSize: 13, fontWeight: '200'}}>Not Specified</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={styles.info}>
                             <Text style={styles.title}>Age</Text>
@@ -189,7 +206,7 @@ export default function EditProfile({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#C3C5CD",
+        backgroundColor: "#d8dae6",
     },
     backArrow: {
         padding: 10
@@ -261,5 +278,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '500',
         width: 200,
+    },
+    textU: {
+        borderBottomWidth: 1,
+        borderColor: '#8A8F9E',
+        paddingBottom: 2
+    },
+    textNU: {
+        paddingBottom: 2
     }
 });
