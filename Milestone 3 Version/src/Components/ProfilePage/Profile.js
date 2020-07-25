@@ -215,8 +215,6 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     infoC: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#DFD8C8',
         alignSelf: 'flex-start',
         alignItems: 'flex-start',
         flex: 1,
