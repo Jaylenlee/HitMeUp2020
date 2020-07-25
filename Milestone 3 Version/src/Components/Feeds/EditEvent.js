@@ -177,7 +177,7 @@ class EditEvent extends React.Component {
                             <TimePicker
                                 placeholder={"Event Start Time"}
                                 style={{ marginRight: "10px"}}
-                                format="HH:mm:ss"
+                                format="HH:mm"
                                 onChange={this.handleTimePickerChange}
                              />
                         </View>
