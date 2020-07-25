@@ -237,7 +237,7 @@ export default class ChatList extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f2f9ff'
+        backgroundColor: '#F3E5F5'
     },
     backArrow: {
         flex: 1,
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         marginTop: 5,
-        backgroundColor: '#d6fdff',
+        backgroundColor: '#CE93D8',
         padding: 5
     },
     iconSearch: {

@@ -71,6 +71,7 @@ class GroupMembers extends React.Component {
 
     render() {
         return(
+        <ScrollView>
         <SafeAreaView style={styles.container}>
             <TouchableOpacity
                 style={styles.backArrow}
@@ -79,7 +80,7 @@ class GroupMembers extends React.Component {
                 <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
             </TouchableOpacity>
 
-            <View style={{marginTop: 24, alignSelf:"center"}}>
+            <View style={{marginTop: 16, alignSelf:"center"}}>
                 <View style={styles.avatarContainer}>
                     <Image
                        source={this.state.groupPic}
@@ -94,10 +95,10 @@ class GroupMembers extends React.Component {
                 </View>
 
                 <View style={styles.titleList}>
-                    <View style={{borderBottomWidth: 1, borderBottomColor: 'blue', paddingBottom: 20}}>
+                    <View style={{borderBottomWidth: 1, borderBottomColor: '#e242fc', paddingBottom: 20}}>
                         <Text style={styles.titleText}>Group Members</Text>
                     </View>
-                    <View style={{height: 200, marginTop: 10, borderColor: "purple", paddingHorizontal: 5,
+                    <View style={{height: 200, marginTop: 10, borderColor: "#d000f2", paddingHorizontal: 5,
                                   borderRadius: 3, borderWidth: 2, shadowOffset: {height: 3, width: 3}, shadowOpacity: 0.1}}>
                         <ScrollView>
                             <FlatList
@@ -118,6 +119,7 @@ class GroupMembers extends React.Component {
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
+        </ScrollView>
         );
     }
 }
@@ -125,7 +127,7 @@ class GroupMembers extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#C3C5CD",
+        backgroundColor: "#fce8ff",
     },
     backArrow: {
         padding: 10
@@ -145,19 +147,20 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         justifyContent: "center",
         margin: 32,
-        marginTop: 24,
+        marginTop: 16,
         width: 250
     },
     groupNamae: {
-        fontSize: 18,
-        marginTop: 24,
+        fontSize: 32,
+        marginTop: 16,
         textTransform: 'uppercase',
-        fontWeight: '400',
+        fontWeight: '200',
+        alignSelf: 'center'
     },
     titleList: {
         marginVertical: 24,
         borderBottomWidth: 1,
-        borderBottomColor: 'blue',
+        borderBottomColor: '#e242fc',
         paddingBottom: 10
     },
     titleText: {
@@ -171,8 +174,8 @@ const styles = StyleSheet.create({
         marginTop: 12
     },
     memba: {
-        fontSize: 16,
-        fontWeight: '300',
+        fontSize: 18,
+        fontWeight: '200',
     },
     removeGroupText: {
         color: '#F44336',

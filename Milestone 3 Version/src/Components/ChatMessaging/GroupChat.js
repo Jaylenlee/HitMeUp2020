@@ -170,7 +170,7 @@ export default class GroupChat extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFEBEE'
+        backgroundColor: '#ecd3f0'
     },
     backArrow: {
         flex: 1,
@@ -203,13 +203,11 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         marginTop: 5,
-        backgroundColor: '#80CBC4',
+        backgroundColor: '#e48ff2',
         padding: 5
     },
     iconSearch: {
         backgroundColor: '#FFF',
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
         height: 30,
         borderRadius: 15,
         flexDirection: 'row'
@@ -221,8 +219,6 @@ const styles = StyleSheet.create({
     searching: {
         fontSize: 14,
         borderRadius: 15,
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
         paddingLeft: 5,
         height: 30,
         flex: 1
@@ -283,7 +279,8 @@ const styles = StyleSheet.create({
     },
     addButtonText: {
         fontSize: 14,
-        fontWeight: '400'
+        fontWeight: '400',
+        marginRight: 10
     },
     loading: {
         flex: 1,
@@ -291,14 +288,13 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     buttonPosition: {
-        alignItems: 'flex-end',
-        marginTop: 10
+        alignItems: 'flex-end'
     },
     button: {
         flexDirection: 'row',
-        margin: 25,
+        margin: 10,
         padding: 10,
-        backgroundColor: '#DC5699',
+        backgroundColor: '#c84ede',
         borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',
@@ -309,31 +305,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '400',
         marginRight: 10
-    },
-    searchBar: {
-        marginTop: 5,
-        backgroundColor: '#DF476C',
-        padding: 5
-    },
-    iconSearch: {
-        backgroundColor: '#FFF',
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
-        height: 30,
-        borderRadius: 15,
-        flexDirection: 'row'
-    },
-    searchIcon: {
-        padding: 5,
-        marginLeft: 5
-    },
-    searching: {
-        fontSize: 14,
-        borderRadius: 15,
-        borderRightWidth: 1,
-        borderRightColor: '#00695C',
-        paddingLeft: 5,
-        height: 30,
-        flex: 1
-    },
+    }
 })

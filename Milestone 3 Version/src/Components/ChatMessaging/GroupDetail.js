@@ -135,7 +135,7 @@ class GroupDetail extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFEBEE'
+        backgroundColor: '#ecd3f0'
     },
     backArrow: {
         flex: 1,
@@ -218,9 +218,9 @@ const styles = StyleSheet.create({
     },
     button: {
         flexDirection: 'row',
-        margin: 25,
+        margin: 15,
         padding: 10,
-        backgroundColor: '#DC5699',
+        backgroundColor: '#c84ede',
         borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',
