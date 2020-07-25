@@ -333,19 +333,18 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     buttonPosition: {
-        alignItems: 'flex-end',
-        marginTop: 10
+        alignItems: 'flex-end'
     },
     button: {
         flexDirection: 'row',
-        margin: 25,
         padding: 10,
         backgroundColor: '#DF476C',
         borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',
         shadowOffset: {height: 1, width: 1},
-        shadowOpacity: 0.3
+        shadowOpacity: 0.3,
+        margin: 10
     },
     nextButtonText: {
         fontSize: 16,
