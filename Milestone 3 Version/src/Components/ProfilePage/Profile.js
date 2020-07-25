@@ -2,7 +2,10 @@ import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView, Image,
          ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
+import * as firebase from 'firebase';
 import { Ionicons, Feather } from '@expo/vector-icons';
+import UserPermission from '../Login/UserPermission';
+import * as ImagePicker from 'expo-image-picker';
 
 export default class Profile extends React.Component {
     state = {
@@ -15,9 +18,7 @@ export default class Profile extends React.Component {
         occupation: "",
         interests: "",
         photo: "",
-        media: ["https://i.ytimg.com/vi/ruxB29F5hZY/maxresdefault.jpg",
-                "https://cache.desktopnexus.com/thumbseg/498/498008-bigthumbnail.jpg",
-                "https://wallpaperaccess.com/full/24243.jpg"]
+        media: [],
     }
 
     componentDidMount() {
@@ -34,13 +35,38 @@ export default class Profile extends React.Component {
                 location: info.location,
                 occupation: info.occupation,
                 interests: info.interests,
-                photo: info.photo
+                photo: info.photo,
+                media: info.photoStorage,
             })
         })
     }
 
     handleSignOutUser = () => {
         firebaseDb.auth.signOut();
+    }
+
+    async handleUploadMedia() {
+        const upload = await this.updatePhoto();
+        if(upload != "") {
+            firebaseDb.db.collection("profile").doc(this.state.uid).update({
+                photoStorage: firebase.firestore.FieldValue.arrayUnion(upload)
+            })
+        }
+    }
+
+    updatePhoto = async () => {
+        UserPermission.getCameraPermission()
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3]
+        })
+
+        if(!result.cancelled) {
+            return result.uri;
+        } else {
+            return "";
+        }
     }
 
     renderMedia = media => {
@@ -113,7 +139,7 @@ export default class Profile extends React.Component {
 
                             <TouchableOpacity
                                 style={styles.mediaCount}
-                                onPress={()=>{/*Upload photo*/}}
+                                onPress={()=>{this.handleUploadMedia()}}
                             >
                                 <Text style={styles.addMedia}>Upload</Text>
                                 <Feather name="upload" size={16} color={"#FFF"}/>
