@@ -31,7 +31,7 @@ export default class ViewEventInvite extends React.Component {
                 activityDetails: info.activityDetails,
                 isPrivate: info.isPrivate,
                 creator: info.creator,
-                duration: info.duration
+                duration: info.eventDuration
             })
         })
     }
