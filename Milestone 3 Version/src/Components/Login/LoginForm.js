@@ -64,30 +64,30 @@ export default class LoginForm extends React.Component {
                         </View>
                     </View>
 
+                    <View style={{alignSelf: 'flex-end', marginRight: 30}}>
+                    <TouchableOpacity
+                        style={{ alignSelf: 'center', marginBottom: 28 }}
+                        onPress={() => {this.props.navigation.navigate('Reset')}}
+                    >
+                        <Text style={styles.buttonTextA}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                    </View>
+
                     <TouchableOpacity
                         style={styles.buttonContainer}
                         onPress={() => this.handleLoginUser()}
                     >
                         <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
-    
+
                     <TouchableOpacity
-                        style={{ alignSelf: 'center', marginTop: 32, marginBottom: 24 }}
+                        style={{ alignSelf: 'center', marginTop: 32, marginBottom: 36 }}
                         onPress={() => this.props.navigation.navigate('Register')}
                     >
                         <Text style={styles.buttonText}>
                             New to Phovent? <Text style={styles.signUpText}>Sign Up here!</Text>
                         </Text>
                     </TouchableOpacity>
-                            
-                    <TouchableOpacity
-                        style={{ alignSelf: 'center', marginTop: 32, marginBottom: 24 }}
-                        onPress={() => {this.props.navigation.navigate('Reset')}}
-                    >
-                        <Text style={styles.buttonText}>
-                            Forgot Password? <Text style={styles.signUpText}>Click here!</Text>
-                        </Text>
-                    </TouchableOpacity>        
                 </ScrollView>
             </KeyboardAvoidingView>
         )
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     form: {
-        marginBottom: 48,
+        marginBottom: 16,
         marginHorizontal: 30
     },
     inputTitle: {
@@ -159,6 +159,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         shadowOpacity: 0.4,
         shadowOffset: {width: 2, height: 2}
+    },
+    buttonTextA: {
+        color: '#414959',
+        fontSize: 12
+    },
+    signUpTextA: {
+        fontWeight: '400',
+        color: '#E9446A'
     },
     buttonText: {
         color: '#414959',
