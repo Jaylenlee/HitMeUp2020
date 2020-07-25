@@ -121,12 +121,17 @@ export default class Profile extends React.Component {
                             <Text style={styles.text}>{location}</Text>
                         </View>
 
-                        <View style={styles.infoB}>
+                        <View style={styles.infoC}>
                             <Text style={styles.title}>Interests/Hobbies</Text>
                             <Text style={styles.text}>{interests}</Text>
                         </View>
 
-                        <View style={{ marginTop: 52, width: 350 }}>
+                        <View style={{marginTop: 10}}>
+                            <Text style={{color: '#4a4a4a'}}>Beautify your profile?</Text>
+                            <Text style={{color: '#4a4a4a'}}>Upload photos now!</Text>
+                        </View>
+
+                        <View style={{ marginTop: 36, width: 350 }}>
                             <FlatList
                                 style={styles.feed}
                                 data={this.state.media}
@@ -188,7 +193,7 @@ const styles = StyleSheet.create({
     },
     userStyle: {
         marginTop : 24,
-        fontSize: 36,
+        fontSize: 32,
         fontWeight: '200',
     },
     infoContainer: {
@@ -209,16 +214,26 @@ const styles = StyleSheet.create({
         marginHorizontal: 24,
         marginVertical: 10
     },
+    infoC: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#DFD8C8',
+        alignSelf: 'flex-start',
+        alignItems: 'flex-start',
+        flex: 1,
+        marginHorizontal: 24,
+        marginVertical: 10,
+        paddingBottom: 20
+    },
     title: {
         color: '#C3C5CD',
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: '400',
         textTransform: 'uppercase'
     },
     text: {
         marginTop: 4,
         color: '#4F566D',
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '300'
     },
     logoutS: {
