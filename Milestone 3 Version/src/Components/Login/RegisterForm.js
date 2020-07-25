@@ -18,7 +18,10 @@ class RegisterForm extends React.Component {
         location: '',
         occupation: '',
         interests: '',
-        photo: ''
+        photo: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png',
+        male: false,
+        female: false,
+        notSpecified: false
     };
 
     handleUpdateUsername = (username) => this.setState({username});
@@ -42,10 +45,11 @@ class RegisterForm extends React.Component {
         })
         if(!result.cancelled) {
             this.setState({photo: result.uri})
-        } else {
-            this.setState({photo: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png'})
-        }
+        } else {}
     };
+    handleUpdateMale = () => this.setState({gender: "Male"});
+    handleUpdateFemale = () => this.setState({gender: "Female"});
+    handleUpdateNotSpecified = () => this.setState({gender: "Not Specified"});
 
     handleCreateUser = () => {
         const {username, email, password, signUpSuccess, errorMessage, gender, age, location, occupation, interests, photo} = this.state;
@@ -192,20 +196,36 @@ class RegisterForm extends React.Component {
                                 ref={(input) => {this.passwordInput = input}}
                             />
                         </View>
+
                         <View style={{ marginTop: 32 }}>
-                            <Text style={styles.inputTitle}>Gender (Optional)</Text>
-                            <TextInput
-                                onChangeText={this.handleUpdateGender}
-                                value={gender}
-                                returnKeyType="next"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                style = {styles.input}
-                                onSubmitEditing={() => this.ageInput.focus()}
-                                ref={(input) => {this.genderInput = input}}
-                            />
+                            <Text style={styles.inputTitle}>Gender</Text>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between',
+                                          marginTop: 24, paddingLeft: 5, paddingRight: '20%'}}>
+                                <TouchableOpacity
+                                    style={this.state.male? styles.textU : styles.textNU}
+                                    onPress={() => {this.setState({male: true, female: false, notSpecified: false})
+                                                    this.handleUpdateMale()}}
+                                >
+                                    <Text style={{fontSize: 13, fontWeight: '200'}}>Male</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.state.female? styles.textU : styles.textNU}
+                                    onPress={() => {this.setState({male: false, female: true, notSpecified: false})
+                                                    this.handleUpdateFemale()}}
+                                >
+                                    <Text style={{fontSize: 13, fontWeight: '200'}}>Female</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={this.state.notSpecified? styles.textU : styles.textNU}
+                                    onPress={() => {this.setState({male:false, female: false, notSpecified: true})
+                                                    this.handleUpdateNotSpecified()}}
+                                >
+                                    <Text style={{fontSize: 13, fontWeight: '200'}}>Not Specified</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                        <View style={{ marginTop: 32 }}>
+
+                        <View style={{ marginTop: 24 }}>
                             <Text style={styles.inputTitle}>Age (Optional)</Text>
                             <TextInput
                                 onChangeText={this.handleUpdateAge}
@@ -369,6 +389,14 @@ const styles = StyleSheet.create({
     signUpText: {
         fontWeight: '500',
         color: '#E9446A'
+    },
+    textU: {
+        borderBottomWidth: 1,
+        borderColor: '#8A8F9E',
+        paddingBottom: 2
+    },
+    textNU: {
+        paddingBottom: 2
     }
 })
 
