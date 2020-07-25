@@ -12,12 +12,23 @@ export default class ChatList extends React.Component {
     }
 
     async componentDidMount() {
+        this.startPage();
+        /*this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            this.setState({isLoading: true})
+            this.startPage();
+        })*/
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    startPage() {
         const currUser = firebaseDb.auth.currentUser;
         const currUID = currUser.uid;
 
         firebaseDb.db.collection("friendlist").doc(currUID).onSnapshot(docSnapshot => {
             this.setUpChat(docSnapshot);
-            
             //const promise = [];
             //const chats = []
             //this.getChat(docSnapshot, promise, chats);

@@ -18,7 +18,7 @@ export default class ChatScreen extends React.Component {
     };
 
     componentDidMount() {
-        const messages = [];
+        /*const messages = [];
     
         this.state.chat.forEach(async item => {
             const input = await item.message[0];
@@ -32,19 +32,31 @@ export default class ChatScreen extends React.Component {
                 messages.push(input)
             }
         })
-        this.setState({isLoading: false, messages: messages});
-        /*firebaseDb.db.collection("messages").doc(this.state.chat).onSnapshot(docSnapshot => {
+        this.setState({isLoading: false, messages: messages});*/
+        console.log("did mount")
+        firebaseDb.db.collection("messages").doc(this.state.chatUID).onSnapshot(docSnapshot => {
             const info = docSnapshot.data();
             // to get chat messages
             const chat = info.chat;
             const messages = [];
-            chat.reverse().forEach(item => {
-                const input = item.message[0];
-                input.createdAt = input.createdAt.toDate();
-                messages.push(input)
+            chat.reverse().forEach(async item => {
+                const input = await item.message[0];
+                const date = input.createdAt;
+
+                if(Object.prototype.toString.call(date) === '[object Date]') {
+                    messages.push(input)
+                    console.log("is date")
+                } else {
+                    input.createdAt = input.createdAt.valueOf().toDate();
+                    messages.push(input)
+                }
+
+                //const input = item.message[0];
+                //input.createdAt = input.createdAt.toDate();
+                //messages.push(input)
             })
             this.setState({messages: messages, isLoading: false});
-        })*/
+        })
     };
 
     componentWillMount() {
@@ -52,11 +64,17 @@ export default class ChatScreen extends React.Component {
         this.setState({user: {_id: currUser.uid, name: currUser.displayName}})
     }
 
+    componentWillUnmount() {
+        console.log("will unmount")
+    }
+
     sendChat(newMessage) {
+        console.log("send")
         const obj = {message: newMessage};
         firebaseDb.db.collection("messages").doc(this.state.chatUID).update({
             chat: firebase.firestore.FieldValue.arrayUnion(obj)
         })
+        this.state.chat.push(obj);
         this.setState({messages: GiftedChat.append(this.state.messages, newMessage)});
     }
 
