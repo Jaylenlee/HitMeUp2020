@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView, Image,
-         ScrollView, TouchableOpacity } from 'react-native';
+         ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import firebaseDb from '../Database/firebaseDb';
+import { Ionicons, Feather } from '@expo/vector-icons';
 
 export default class Profile extends React.Component {
     state = {
@@ -14,6 +15,9 @@ export default class Profile extends React.Component {
         occupation: "",
         interests: "",
         photo: "",
+        media: ["https://i.ytimg.com/vi/ruxB29F5hZY/maxresdefault.jpg",
+                "https://cache.desktopnexus.com/thumbseg/498/498008-bigthumbnail.jpg",
+                "https://wallpaperaccess.com/full/24243.jpg"]
     }
 
     componentDidMount() {
@@ -39,11 +43,22 @@ export default class Profile extends React.Component {
         firebaseDb.auth.signOut();
     }
 
+    renderMedia = media => {
+        return (
+            <View style={styles.mediaImageContainer}>
+                <Image
+                    source={media}
+                    style={styles.image}
+                    resizeMode="cover">
+                </Image>
+            </View>
+        );
+    };
+
     render(){
         const pressHandle = () => {
             this.props.navigation.navigate('EditProfile', {info: this.state});
         }
-
         const {username, email, gender, age, location, occupation, interests, photo} = this.state;//.profile;
         return(
             <SafeAreaView style={styles.container}>
@@ -64,7 +79,8 @@ export default class Profile extends React.Component {
                                 <Text style={styles.title}>Gender</Text>
                                 <Text style={styles.text}>{gender}</Text>
                             </View>
-                            <View style={styles.info}>
+                            <View style={{alignItems: 'center', flex: 1, borderColor: '#DFD8C8',
+                                          borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 20}}>
                                 <Text style={styles.title}>Occupation</Text>
                                 <Text style={styles.text}>{occupation}</Text>
                             </View>
@@ -84,6 +100,26 @@ export default class Profile extends React.Component {
                             <Text style={styles.text}>{interests}</Text>
                         </View>
 
+                        <View style={{ marginTop: 52, width: 350 }}>
+                            <FlatList
+                                style={styles.feed}
+                                data={this.state.media}
+                                renderItem={({ item }) => this.renderMedia(item)}
+                                keyExtractor={item => item.eventName}
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={true}
+                                showsVerticalScrollIndicator={true}
+                            />
+
+                            <TouchableOpacity
+                                style={styles.mediaCount}
+                                onPress={()=>{/*Upload photo*/}}
+                            >
+                                <Text style={styles.addMedia}>Upload</Text>
+                                <Feather name="upload" size={16} color={"#FFF"}/>
+                            </TouchableOpacity>
+                        </View>
+
                         <View style={styles.logoutS}>
                             <TouchableOpacity
                                 onPress={this.handleSignOutUser}
@@ -91,7 +127,6 @@ export default class Profile extends React.Component {
                                 <Text style={styles.logoutText}>Log Out</Text>
                             </TouchableOpacity>
                         </View>
-                        
 
                         <View style={styles.buttonsContainer}>
                             <TouchableOpacity style = {styles.buttonContainer}
@@ -127,21 +162,19 @@ const styles = StyleSheet.create({
     },
     userStyle: {
         marginTop : 24,
-        fontSize: 18,
-        fontWeight: '600',
+        fontSize: 36,
+        fontWeight: '200',
     },
     infoContainer: {
         flexDirection: 'row',
         width: 300,
-        justifyContent: 'space-between',
         marginHorizontal: 32,
         marginBottom: 10,
         marginTop: 16
     },
     info: {
         alignItems: 'center',
-        flex: 1,
-        margin: 5
+        flex: 1
     },
     infoB: {
         alignSelf: 'flex-start',
@@ -153,7 +186,8 @@ const styles = StyleSheet.create({
     title: {
         color: '#C3C5CD',
         fontSize: 14,
-        fontWeight: '500'
+        fontWeight: '400',
+        textTransform: 'uppercase'
     },
     text: {
         marginTop: 4,
@@ -183,5 +217,38 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '500',
         width: 200,
+    },
+    mediaImageContainer: {
+        width: 180,
+        height: 200,
+        borderRadius: 12,
+        overflow: "hidden",
+        marginHorizontal: 10
+    },
+    image: {
+        flex: 1,
+        width: undefined,
+        height: undefined
+    },
+    mediaCount: {
+        backgroundColor: "#41444B",
+        position: 'absolute',
+        top: '10%',
+        marginTop: -50,
+        marginLeft: 20,
+        width: 50,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.38)',
+        shadowOffset: { height: 5, width: 5 },
+        shadowRadius: 7,
+        shadowOpacity: 1
+    },
+    addMedia: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: '200'
     }
 })
