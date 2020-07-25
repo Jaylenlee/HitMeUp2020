@@ -60,7 +60,7 @@ class PrivateInviteContainer extends React.Component {
                         eventInvite: firebase.firestore.FieldValue.arrayUnion(docRef.id)
                     }))
                 }
-                Promise.all(promise).then(() => {this.setState({isLoading: false}); this.props.navigation.navigate("EventCreate")})
+                Promise.all(promise).then(() => {this.setState({isLoading: false, hasCreated: true}); this.props.navigation.navigate("EventCreate")})
             }).catch(err => console.error(err))    
     }
 
@@ -162,8 +162,6 @@ class PrivateInviteContainer extends React.Component {
                         style={styles.button}
                         onPress={() => {
                             this.createEvent();
-                            alert("Your PRIVATE event is created and can be viewed under Feed > My Events! " +
-                                    "\nYour event invites have been sent to your selected friends!")
                         }}
                      >
                         <Text style={styles.nextButtonText}>Done</Text>
