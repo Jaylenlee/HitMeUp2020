@@ -42,6 +42,8 @@ class RegisterForm extends React.Component {
         })
         if(!result.cancelled) {
             this.setState({photo: result.uri})
+        } else {
+            this.setState({photo: 'https://f0.pngfuel.com/png/981/645/default-profile-picture-png-clip-art.png'})
         }
     };
 
