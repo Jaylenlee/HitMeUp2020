@@ -133,7 +133,7 @@ class CreateEventContainer extends React.Component {
                                 />
                             </View>
                             <View style={{ marginTop: 16 }}>
-                                <Text style={styles.inputTitle}>Size</Text>
+                                <Text style={styles.inputTitle}>Participant Count (Including yourself)</Text>
                                 <TextInput
                                     style={styles.input}
                                     autoCapitalize="none"
