@@ -38,10 +38,14 @@ export default class ViewProfileDelete extends React.Component {
 
     pressHandleDelete = () => {
         const currUser = firebaseDb.auth.currentUser;
-        var currFriendlist = firebaseDb.db.collection('friendlist').doc(currUser.uid);
-        currFriendlist.update({
+        var currFriendRef = firebaseDb.db.collection('friendlist');
+        currFriendRef.doc(currUser.uid).update({
             friendlist: firebase.firestore.FieldValue.arrayRemove(this.state.viewingUID)
         }).then(() => {alert("This friend has been deleted"); this.props.navigation.goBack()}).catch(err => console.error(err));
+
+        currFriendRef.doc(this.state.viewingUID).update({
+            friendlist: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
+        }).then(() => {this.props.navigation.goBack()}).catch(err => console.error(err));
     }
 
     renderMedia = media => {
