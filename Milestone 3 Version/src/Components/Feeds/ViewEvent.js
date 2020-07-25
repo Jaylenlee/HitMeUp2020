@@ -48,7 +48,8 @@ export default class ViewEvent extends React.Component {
         const currUser = firebaseDb.auth.currentUser;
 
         firebaseDb.db.collection('events').doc(this.state.eventUID).update({
-            invitees: firebase.firestore.FieldValue.arrayRemove(currUser.uid)
+            attendees: firebase.firestore.FieldValue.arrayRemove(currUser.uid),
+            nonAttendees: firebase.firestore.FieldValue.arrayUnion(currUser.uid),
         })
     
         var currNotification = firebaseDb.db.collection('notification').doc(currUser.uid);
