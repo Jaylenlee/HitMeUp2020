@@ -20,7 +20,7 @@ export default class ChatList extends React.Component {
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+       // this.focusListener.remove();
     }
 
     startPage() {
