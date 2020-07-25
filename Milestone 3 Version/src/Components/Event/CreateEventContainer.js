@@ -21,24 +21,25 @@ class CreateEventContainer extends React.Component {
     };
 
     componentDidMount() {
-        /*this.focusListener = this.props.navigation.addListener('didFocus', () => {
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
            this.setState({
                 eventName: '',
-                date: '',
-                time: '',
+                eventDuration: null,    
+                //date: '',
+                //time: '',
                 location: '',
-                estimatedSize: '',
+                estimatedSize: null,
                 activityDetails: '',
                 createSuccessful: false,
                 privacyInput: '',
                 isPublic: false,
                 isPrivate: false
            })
-        })*/
+        })
     }
 
     componentWillUnmount() {
-        /*this.focusListener.remove();*/
+        this.focusListener.remove();
     }
 
     handleUpdateEventName = (eventName) => this.setState({ eventName });
