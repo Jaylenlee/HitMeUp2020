@@ -69,6 +69,7 @@ class RegisterForm extends React.Component {
                         interests: interests,
                         photo: photo,
                         uid: user.uid,
+                        photoStorage: [],
                     }).catch(error => this.setState({errorMessage: error.message}))
                 );
 
