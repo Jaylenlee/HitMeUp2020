@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView, Image,
-         ScrollView, TouchableOpacity} from 'react-native';
+         ScrollView, TouchableOpacity, FlatList} from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
 import firebaseDb from '../Database/firebaseDb';
 import * as firebase from 'firebase';
@@ -15,6 +15,7 @@ export default class ViewProfileDelete extends React.Component {
         occupation: "",
         interests: "",
         photo: "",
+        media: [],
         viewingUID: this.props.navigation.getParam("uid",""),
     }
 
@@ -30,6 +31,7 @@ export default class ViewProfileDelete extends React.Component {
                 occupation: info.occupation,
                 interests: info.interests,
                 photo: info.photo,
+                media: info.photoStorage,
             })
         })
     }
@@ -40,8 +42,23 @@ export default class ViewProfileDelete extends React.Component {
         currFriendlist.update({
             friendlist: firebase.firestore.FieldValue.arrayRemove(this.state.viewingUID)
         }).then(() => this.props.navigation.goBack()).catch(err => console.error(err));
-        alert("This friend has been deleted")
     }
+
+    componentWillUnmount() {
+        alert("This friend has been deleted");
+    }
+
+    renderMedia = media => {
+        return (
+            <View style={styles.mediaImageContainer}>
+                <Image
+                    source={media}
+                    style={styles.image}
+                    resizeMode="cover">
+                </Image>
+            </View>
+        );
+    };
 
     render(){
 
@@ -88,6 +105,18 @@ export default class ViewProfileDelete extends React.Component {
                         <View style={styles.info}>
                             <Text style={styles.title}>Interests/Hobbies</Text>
                             <Text style={styles.text}>{interests}</Text>
+                        </View>
+
+                        <View style={{ marginTop: 52, width: 350 }}>
+                            <FlatList
+                                style={styles.feed}
+                                data={this.state.media}
+                                renderItem={({ item }) => this.renderMedia(item)}
+                                keyExtractor={item => item.eventName}
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={true}
+                                showsVerticalScrollIndicator={true}
+                            />
                         </View>
 
                         <View style={styles.buttonsContainer}>
@@ -171,5 +200,38 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '500',
         width: 200,
+    },
+    mediaImageContainer: {
+        width: 180,
+        height: 200,
+        borderRadius: 12,
+        overflow: "hidden",
+        marginHorizontal: 10
+    },
+    image: {
+        flex: 1,
+        width: undefined,
+        height: undefined
+    },
+    mediaCount: {
+        backgroundColor: "#41444B",
+        position: 'absolute',
+        top: '10%',
+        marginTop: -50,
+        marginLeft: 20,
+        width: 50,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.38)',
+        shadowOffset: { height: 5, width: 5 },
+        shadowRadius: 7,
+        shadowOpacity: 1
+    },
+    addMedia: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: '200'
     }
 })

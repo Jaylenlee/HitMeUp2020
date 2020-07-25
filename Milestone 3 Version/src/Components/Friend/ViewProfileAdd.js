@@ -40,7 +40,10 @@ export default class ViewProfileAdd extends React.Component {
         currFriendDoc.update({
             friendRequest: firebase.firestore.FieldValue.arrayUnion(currUser.uid)
         }).then(() => this.props.navigation.goBack()).catch(err => console.error(err));
-        alert("Friend request has been sent")
+    }
+
+    componentWillUnmount() {
+        alert("This friend has been addded");
     }
 
     render(){
