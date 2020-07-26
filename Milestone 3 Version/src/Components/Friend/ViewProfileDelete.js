@@ -136,7 +136,7 @@ export default class ViewProfileDelete extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        bottomMargin: 16
+        //bottomMargin: 16
     },
     backArrow: {
         padding: 10
