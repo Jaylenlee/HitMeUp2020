@@ -193,11 +193,6 @@ class CreateEventContainer extends React.Component {
                                         estimatedSize.length && activityDetails.length && (isPrivate || isPublic)) {
                                         this.handleSelectInvitees()
                                     }
-                 
-
-                                    if (isPublic) {
-                                        alert("Your PUBLIC event has been created and will be reflected under Public Feeds")
-                                    }
                                 }}
                             >
                                 <Text style={styles.nextButtonText}>Next</Text>
