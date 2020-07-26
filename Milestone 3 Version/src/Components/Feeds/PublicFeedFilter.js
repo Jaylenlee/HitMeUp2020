@@ -224,10 +224,11 @@ export default class PublicFeedFilter extends React.Component {
                                     <Text style={styles.eventTitle}>{event.eventName}</Text>
                                 </View>
 
-                                <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-start'}}>
+                                <View style={{marginTop: 4, flexDirection: 'row', alignItems: 'flex-start'}}>
                                     <View style={{width: 80}}>
                                         <Text style={styles.eventDate}>{event.date}</Text>
                                         <Text style={styles.eventTime}>{event.time}</Text>
+                                        <Text style={styles.eventPrivacy}>{event.isPrivate? "Private" : "Public"}</Text>
                                     </View>
                                     <Text style={styles.details}>{event.activityDetails}</Text>
                                 </View>
@@ -443,10 +444,10 @@ const styles = StyleSheet.create({
     eventItem: {
         backgroundColor: '#FFF',
         borderRadius: 5,
-        padding: 15,
-        paddingHorizontal: 20,
+        padding: 10,
+        paddingBottom: 5,
         flexDirection: 'row',
-        marginVertical: 8,
+        marginVertical: 4,
         shadowOpacity: 0.1,
         shadowOffset: {height: 3, width: 3},
         shadowRadius: 5
@@ -454,25 +455,32 @@ const styles = StyleSheet.create({
     titleBar: {
         borderBottomWidth: 1,
         borderBottomColor: '#B0BEC5',
-        paddingBottom: 8,
+        paddingBottom: 4,
         flexDirection: "row",
     },
     eventTitle: {
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: '500',
         color: '#607D8B',
         paddingBottom: 5,
         textTransform: 'uppercase'
     },
     eventDate: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#0097A7',
-        marginTop: 4
+        fontWeight: '300'
     },
     eventTime: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#9fcffb',
-        marginTop: 4
+        marginTop: 6,
+        fontWeight: '300'
+    },
+    eventPrivacy: {
+        fontSize: 15,
+        color: '#1976D2',
+        marginTop: 8,
+        fontWeight: '400'
     },
     details: {
         fontSize: 14,
