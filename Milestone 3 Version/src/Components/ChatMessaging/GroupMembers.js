@@ -111,12 +111,6 @@ class GroupMembers extends React.Component {
                         </ScrollView>
                     </View>
                 </View>
-
-                <TouchableOpacity
-                    style={{alignSelf: 'center', marginTop: 16}}
-                    onPress={() => {this.handleLeaveChat()}}>
-                    <Text style={styles.removeGroupText}>Leave Chat</Text>
-                </TouchableOpacity>
             </View>
         </SafeAreaView>
         </ScrollView>
