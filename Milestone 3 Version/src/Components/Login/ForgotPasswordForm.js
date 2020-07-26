@@ -25,7 +25,7 @@ export default class ForgotPasswordForm extends React.Component {
             <View style={{padding: 10}}>
                 <TouchableOpacity
                     style={styles.backArrow}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => this.props.navigation.goBack()}
                 >
                     <Ionicons name="md-arrow-back" size={24} color='#73788B'></Ionicons>
                 </TouchableOpacity>
