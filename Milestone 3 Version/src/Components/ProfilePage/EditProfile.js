@@ -39,6 +39,14 @@ export default function EditProfile({navigation}) {
     let female = false;
     let notSpecified = false;
 
+    if(gender == "Male") {
+        male = true;
+    } else if (gender == "Female") {
+        female = true;
+    } else {
+        notSpecified = true;
+    }
+
     return(
         <KeyboardAvoidingView style={styles.container}>
             <ScrollView>
@@ -98,22 +106,32 @@ export default function EditProfile({navigation}) {
                                           paddingLeft: 5, paddingLeft: 10, paddingRight: '20%', width: 300}}>
                                 <TouchableOpacity
                                     style={male? styles.textU : styles.textNU}
-                                    value={"Male"}
-                                    onPress={(value) => {setGender(value), male=true, female=false, notSpecified=false}}
+                                    onPress={() => {
+                                        setGender("Male"); 
+                                        male=true;
+                                        female=false; 
+                                        notSpecified=false;}}
                                 >
                                     <Text style={{fontSize: 13, fontWeight: '200'}}>Male</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={female? styles.textU : styles.textNU}
-                                    value={"Female"}
-                                    onPress={(value) => {setGender(value), male=false, female=true, notSpecified=false}}
+                                    onPress={() => {
+                                        setGender("Female"); 
+                                        male=false;
+                                        female=true; 
+                                        notSpecified=false;}}
                                 >
                                     <Text style={{fontSize: 13, fontWeight: '200'}}>Female</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={notSpecified? styles.textU : styles.textNU}
-                                    value={"Not Specified"}
-                                    onPress={(value) => {setGender(value), male=false, female=false, notSpecified=true}}
+                                    onPress={() => {
+                                        setGender("Not Specified"); 
+                                        male=false;
+                                        female=false; 
+                                        notSpecified=true;
+                                    }}
                                 >
                                     <Text style={{fontSize: 13, fontWeight: '200'}}>Not Specified</Text>
                                 </TouchableOpacity>
