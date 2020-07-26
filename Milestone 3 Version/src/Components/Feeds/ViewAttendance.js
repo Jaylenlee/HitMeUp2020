@@ -103,7 +103,9 @@ export default class ViewAttendance extends React.Component{
 
     renderEvent = (item) => {
         return(
-            <Text>{item}</Text>
+            <View style={styles.nameBox}>
+                <Text style={styles.naming}>{item}</Text>
+            </View>
         )
     } 
 
@@ -146,7 +148,7 @@ export default class ViewAttendance extends React.Component{
                         data={data}
                         width={Dimensions.get("window").width}
                         height={220}
-                        chartConfig= {chartConfig}
+                        chartConfig={chartConfig}
                         accessor="population"
                         backgroundColor="transparent"
                         paddingLeft="15"
@@ -155,34 +157,34 @@ export default class ViewAttendance extends React.Component{
                    </View> 
                 </View>
                 <View style={styles.list}>
-                    <View>
-                        <Text> Attending </Text>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={styles.title}>Attending</Text>
                         <FlatList
-                        style={styles.feed}
-                        data={attendees}
-                        renderItem={({ item }) => this.renderEvent(item)}
-                        keyExtractor={item => item.eventName}
-                        showsVerticalScrollIndicator={false}
+                            style={styles.feed}
+                            data={attendees}
+                            renderItem={({ item }) => this.renderEvent(item)}
+                            keyExtractor={item => item.eventName}
+                            showsVerticalScrollIndicator={false}
                         /> 
                     </View>
-                    <View>
-                        <Text> Not Attending </Text>
+                    <View style={{marginHorizontal: 30, alignItems: 'center'}}>
+                        <Text style={styles.title}>Not Attending</Text>
                         <FlatList
-                        style={styles.feed}
-                        data={nonAttendees}
-                        renderItem={({ item }) => this.renderEvent(item)}
-                        keyExtractor={item => item.eventName}
-                        showsVerticalScrollIndicator={false}
+                            style={styles.feed}
+                            data={nonAttendees}
+                            renderItem={({ item }) => this.renderEvent(item)}
+                            keyExtractor={item => item.eventName}
+                            showsVerticalScrollIndicator={false}
                         /> 
                     </View>
-                    <View>
-                        <Text> Pending </Text>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={styles.title}>Pending</Text>
                         <FlatList
-                        style={styles.feed}
-                        data={invitees}
-                        renderItem={({ item }) => this.renderEvent(item)}
-                        keyExtractor={item => item.eventName}
-                        showsVerticalScrollIndicator={false}
+                            style={styles.feed}
+                            data={invitees}
+                            renderItem={({ item }) => this.renderEvent(item)}
+                            keyExtractor={item => item.eventName}
+                            showsVerticalScrollIndicator={false}
                         /> 
                     </View>
                 </View>
@@ -210,5 +212,21 @@ const styles = StyleSheet.create({
     },
     list: {
         flexDirection: "row",
+        alignSelf: 'center',
+        marginTop: 20
     },
+    title: {
+        fontSize: 16,
+        fontWeight: '300',
+        color: '#455A64',
+        marginBottom: 5
+    },
+    nameBox: {
+        marginBottom: 4,
+        alignItems: 'center'
+    },
+    naming: {
+        fontSize: 16,
+        fontWeight: '400'
+    }
 })
