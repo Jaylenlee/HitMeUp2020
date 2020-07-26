@@ -8,11 +8,11 @@ import 'antd/dist/antd.css';
 class CreateEventContainer extends React.Component {
     state = {
         eventName: '',
-        eventDuration: null,
+        eventDuration: '',
         date: '',
         time: '',
         location: '',
-        estimatedSize: null,
+        estimatedSize: '',
         activityDetails: '',
         createSuccessful: false,
         privacyInput: '',
@@ -24,11 +24,11 @@ class CreateEventContainer extends React.Component {
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
            this.setState({
                 eventName: '',
-                eventDuration: null,    
+                eventDuration: '',    
                 //date: '',
                 //time: '',
                 location: '',
-                estimatedSize: null,
+                estimatedSize: '',
                 activityDetails: '',
                 createSuccessful: false,
                 privacyInput: '',
