@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#607D8B',
-        alignItem: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 25,
         paddingTop: 10
