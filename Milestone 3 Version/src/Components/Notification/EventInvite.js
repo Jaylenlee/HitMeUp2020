@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     },
     eventPrivacy: {
         fontSize: 15,
-        color: '',
+        color: '#1976D2',
         marginTop: 8,
         fontWeight: '400',
         alignSelf: 'center'
